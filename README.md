@@ -26,9 +26,17 @@ $ npm install frs-replace
 
 ### Node API usage
 
+FRS-replace package provides 2 methods for synchronous / asynchronous (with promise and ES6 `async`/`await` syntax support) usage:
+
 ```javascript
-require('FRS-replace')({/* options */})
+const FRSReplace = require('FRS-replace');
+
+FRSReplace.sync({/* options */})
+FRSReplace.async({/* options */})
 ```
+
+Where `/* options */` is an object containing:
+> Note: remember that you need to provide some input for FRS-replace to work, so one of the parameters: input or content are **required**
 
 | Option | Type | Default | Description |
   | --- | --- | --- | --- |
@@ -66,11 +74,13 @@ FRS-replace <regex> <replacement> [options]
 
 ### Examples
 
+> Note: while most of examples is using synchronous API method, in all cases `.async` is applicable as well.
+
 Replaces all `a` occurences with `b` from given `foo.js` and save result to `foo_replaced.js` :
 
 ##### API
 ```javascript
-require('FRS-replace')({
+require('FRS-replace').sync({
   input       : 'foo.js',
   regex       : new RegExp('a', 'g'),
   replacement : 'b',
@@ -87,7 +97,7 @@ Replace all `a` occurences with `b` in given `abcd` and save result to `foo_repl
 
 ##### API
 ```javascript
-require('FRS-replace')({
+require('FRS-replace').sync({
   content     : 'abcd',
   regex       : new RegExp('a', 'g'),
   replacement : 'b',
