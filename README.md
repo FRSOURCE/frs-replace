@@ -11,20 +11,20 @@ CLI & Node wrapper around [javascript replace](https://developer.mozilla.org/en-
 * [Examples](#examples)
 
 ## Installation
-### yarn
+#### yarn
 ```
 $ yarn add frs-replace
 ```
 
-### npm
+#### npm
 ```
 $ npm install frs-replace
 ```
 
-### download
+#### download
 [zipped from FRS-replace Releases](https://github.com/FRSource/FRS-replace/releases)
 
-### Node API usage
+## Node API usage
 
 FRS-replace package provides 2 methods for synchronous / asynchronous (with promise and ES6 `async`/`await` syntax support) usage:
 
@@ -48,7 +48,7 @@ Where `/* options */` is an object containing:
   | output | string | *undefined* | Path of an output file |
   | outputOptions  | string or object | utf8 | Passed as options argument of [write's .sync](https://www.npmjs.com/package/write#sync) |
 
-### CLI usage
+## CLI usage
 
 ```bash
 FRS-replace <regex> <replacement> [options]
@@ -72,15 +72,55 @@ FRS-replace <regex> <replacement> [options]
   | &#8209;h, &#8209;&#8209;help  | boolean | *-* | Show help |
   | &#8209;v, &#8209;&#8209;version  | boolean | *-* | Show version number |
 
-### Examples
+## Examples
 
 > Note: while most of examples is using synchronous API method, in all cases `.async` is applicable as well.
 
-Replaces all `a` occurences with `b` from given `foo.js` and save result to `foo_replaced.js` :
+#### 1. Replace all `a` occurences with `b` from given `foo.js` and returns result / writes result to console :
 
-##### API
+###### API
 ```javascript
-require('FRS-replace').sync({
+const FRSReplace = require('FRS-replace')
+
+/* synchronously */
+const resultSync = FRSReplace.sync({
+  input       : 'foo.js',
+  regex       : new RegExp('a', 'g'),
+  replacement : 'b',
+  output      : 'foo_replaced.js'
+})
+// work with result here
+  
+/* asynchronously */
+FRSReplace.async({
+  input       : 'foo.js',
+  regex       : new RegExp('a', 'g'),
+  replacement : 'b'
+})
+.then(resultAsync => {
+  // work with result here */
+})
+
+/* asynchronously ES6 syntax (must be runned inside async function) */
+const resultAsync = await FRSReplace.async({
+  input       : 'foo.js',
+  regex       : new RegExp('a', 'g'),
+  replacement : 'b'
+})
+// work with result here */
+
+```
+
+###### CLI
+```bash
+FRS-replace a b -i foo.js --stdout
+```
+
+#### 2. Replace all `a` occurences with `b` from given `foo.js` and save result to `foo_replaced.js` :
+
+###### API
+```javascript
+const result = require('FRS-replace').sync({
   input       : 'foo.js',
   regex       : new RegExp('a', 'g'),
   replacement : 'b',
@@ -88,16 +128,16 @@ require('FRS-replace').sync({
 })
 ```
 
-##### CLI
+###### CLI
 ```bash
 FRS-replace a b -i foo.js -o foo_replaced.js
 ```
 
-Replace all `a` occurences with `b` in given `abcd` and save result to `foo_replaced.js`
+#### 3. Replace all `a` occurences with `b` in given content string `abcd` and save result to `foo_replaced.js`
 
 ##### API
 ```javascript
-require('FRS-replace').sync({
+const result = require('FRS-replace').sync({
   content     : 'abcd',
   regex       : new RegExp('a', 'g'),
   replacement : 'b',
@@ -105,30 +145,28 @@ require('FRS-replace').sync({
 })
 ```
 
-##### CLI
+###### CLI
 ```bash
 FRS-replace a b --content abcd -o foo_replaced.js
 ```
 
-Replaces all `a` occurences with `b` from piped stream and save it to output file:
+#### 4. Replace all `a` occurences with `b` from piped stream and save it to output file:
 
-##### CLI
+###### CLI
 ```bash
-<read-file> | FRS-replace a b > <output file path>
+<read-file> | FRS-replace a b > <output-file-path>
 ```
  
-Replaces all `a` occurences with `b` from piped stream and pass it through `stdout` stream to next command
+#### 5. Replaces all `a` occurences with `b` from piped stream and pass it through `stdout` stream to next command
 
-##### CLI
+###### CLI
 ```bash
-<read-file> | FRS-replace a b | <next command>
+<read-file> | FRS-replace a b | <next-command>
 ```
 
-Both pipe & options styles can be mixed together, here - getting input from `i` argument and passing output down the stream to next command
+#### 6. Both pipe & options styles can be mixed together, here - getting input from `i` argument and passing output down the stream to next command
 
-##### CLI
+###### CLI
 ```bash
-FRS-replace a b -i foo.js | <next command>
+FRS-replace a b -i foo.js | <next-command>
 ```
-
-
