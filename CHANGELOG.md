@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.0.5"></a>
+## [0.0.5](https://github.com/FRSource/FRS-replace/compare/v0.0.4...v0.0.5) (2018-10-15)
+
+
+### Bug Fixes
+
+* **docs:** styling & API usage/examples ([cba85dc](https://github.com/FRSource/FRS-replace/commit/cba85dc)), closes [#1](https://github.com/FRSource/FRS-replace/issues/1)
+* **node:** expose public node API ([c727dff](https://github.com/FRSource/FRS-replace/commit/c727dff)), closes [#5](https://github.com/FRSource/FRS-replace/issues/5)
+
+
+
 <a name="0.0.4"></a>
 ## [0.0.4](https://github.com/FRSource/FRS-replace/compare/v0.0.3...v0.0.4) (2018-10-15)
 
