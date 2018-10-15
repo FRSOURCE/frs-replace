@@ -56,9 +56,9 @@ FRS-replace <regex> <replacement> [options]
 
 #### Positionals:                             
   | Option | Type | Description |
-    | --- | --- | --- |
-    | \<regex\>       | string | First parameter to [RegExp constructor](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp#Syntax) |
-    | \<replacement\> | string | String or path to replacement function file (see &#8209;&#8209;replace&#8209;fn switch for details) 
+  | --- | --- | --- |
+  | \<regex\> | string | First parameter to [RegExp constructor](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp#Syntax) |
+  | \<replacement\> | string | String or path to replacement function file (see &#8209;&#8209;replace&#8209;fn switch for details) |
 
 #### Options:
   | Option | Type | Default | Description |
