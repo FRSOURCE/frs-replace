@@ -10,7 +10,7 @@
   "scripts": {
     "prerelease": "standard --fix",
     "release": "standard-version",
-    "postrelease": "git push --follow-tags origin master && npm publish",
+    "postrelease": "git push --follow-tags origin master && yarn publish",
     "pretest": "standard",
     "test": "tap ./src/*.spec.js -J --100",
     "posttest": "tap --coverage-report=html"
