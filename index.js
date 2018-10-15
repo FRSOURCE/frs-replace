@@ -1,1 +1,1 @@
-require('./src/replace')
+module.exports = require('./src/replace')
