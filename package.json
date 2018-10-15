@@ -8,12 +8,13 @@
   "author": "Jakub Freisler <FRSgit@users.noreply.github.com>",
   "license": "Apache",
   "scripts": {
-    "prerelease": "standard --fix",
+    "prerelease": "standard --fix && yarn test",
     "release": "standard-version",
     "postrelease": "git push --follow-tags origin master && yarn publish",
-    "pretest": "standard",
-    "test": "tap ./src/*.spec.js -J --100",
-    "posttest": "tap --coverage-report=html"
+    "test": "yarn test:unit --100",
+    "pretest:unit": "standard",
+    "test:unit": "tap ./src/*.spec.js -J",
+    "posttest:unit": "tap --coverage-report=html"
   },
   "nyc": {
     "exclude": "**/*.spec.js",
