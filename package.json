@@ -1,6 +1,6 @@
 {
   "name": "frs-replace",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Simple wrapper around javascript replace with CLI usage support!",
   "bin": "./src/cli.js",
   "main": "index.js",
@@ -10,6 +10,7 @@
   "scripts": {
     "prerelease": "standard --fix",
     "release": "standard-version",
+    "postrelease": "npm publish",
     "pretest": "standard",
     "test": "tap ./src/*.spec.js -J --100",
     "posttest": "tap --coverage-report=html"
