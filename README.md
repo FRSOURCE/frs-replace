@@ -3,7 +3,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/FRSource/FRS-replace/badge.svg?branch=master)](https://coveralls.io/github/FRSource/FRS-replace?branch=master)
 # FRS-replace
 
-CLI & Node wrapper around [javascript replace](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace) which allows on-the-fly replacing (without changing input file), piping and many more!
+CLI & Node wrapper around [javascript replace](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace) which allows on-the-fly replacing (with or without changing input file), piping and many more!
 
 * [Installation](#installation)
 * [Node API usage](#node-api-usage)
@@ -11,17 +11,17 @@ CLI & Node wrapper around [javascript replace](https://developer.mozilla.org/en-
 * [Examples](#examples)
 
 ## Installation
-#### yarn
+##### yarn
 ```
 $ yarn add frs-replace
 ```
 
-#### npm
+##### npm
 ```
 $ npm install frs-replace
 ```
 
-#### download
+##### download
 [zipped from FRS-replace Releases](https://github.com/FRSource/FRS-replace/releases)
 
 ## Node API usage
@@ -79,6 +79,7 @@ FRS-replace <regex> <replacement> [options]
 #### 1. Replace all `a` occurences with `b` from given `foo.js` and returns result / writes result to console :
 
 ###### API
+
 ```javascript
 const FRSReplace = require('FRS-replace')
 
@@ -135,7 +136,7 @@ FRS-replace a b -i foo.js -o foo_replaced.js
 
 #### 3. Replace all `a` occurences with `b` in given content string `abcd` and save result to `foo_replaced.js`
 
-##### API
+###### API
 ```javascript
 const result = require('FRS-replace').sync({
   content     : 'abcd',
