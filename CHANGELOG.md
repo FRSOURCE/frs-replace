@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.1.0"></a>
+# [0.1.0](https://github.com/FRSource/FRS-replace/compare/v0.0.6...v0.1.0) (2018-10-17)
+
+
+### Features
+
+* **cli:** Input & output options ([06e8363](https://github.com/FRSource/FRS-replace/commit/06e8363)), closes [#7](https://github.com/FRSource/FRS-replace/issues/7)
+
+
+
 <a name="0.0.6"></a>
 ## [0.0.6](https://github.com/FRSource/FRS-replace/compare/v0.0.5...v0.0.6) (2018-10-15)
 

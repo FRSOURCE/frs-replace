@@ -1,6 +1,6 @@
 {
   "name": "frs-replace",
-  "version": "0.0.6",
+  "version": "0.1.0",
   "description": "Simple wrapper around javascript replace with CLI usage support!",
   "bin": "./src/cli.js",
   "main": "index.js",
