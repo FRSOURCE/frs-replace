@@ -1,6 +1,6 @@
 {
   "name": "frs-replace",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Simple wrapper around javascript replace with CLI usage support!",
   "bin": "./src/cli.js",
   "main": "index.js",
@@ -31,7 +31,10 @@
   },
   "nyc": {
     "exclude": "**/*.spec.js",
-    "include": ["src/**", "bin/**"]
+    "include": [
+      "src/**",
+      "bin/**"
+    ]
   },
   "yargs": {
     "camel-case-expansion": false
