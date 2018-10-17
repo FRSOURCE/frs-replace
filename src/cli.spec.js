@@ -18,7 +18,7 @@ const replacement = 'ą|'
 const replaceFn = () => replacement
 const expectedOutput = content.replace(new RegExp(regex, defaultFlags), replacement)
 const defaultEncoding = 'utf8'
-let input, output
+let output
 
 tap.afterEach((done) => {
   fs.existsSync(output) && fs.unlinkSync(output)
@@ -89,6 +89,8 @@ tap.test('stdout argument', (t) => {
 })
 
 tap.test('input argument', async (t) => {
+  let input
+
   t.beforeEach(
     async () => tmp.file({ prefix: tmpPrefix, keep: true }).then(
       async f => {
@@ -122,6 +124,65 @@ tap.test('input argument', async (t) => {
   t.end()
 })
 
+tap.test('input options argument', async (t) => {
+  let input
+
+  t.beforeEach(
+    async () => tmp.file({ prefix: tmpPrefix, keep: true }).then(
+      async f => {
+        input = f
+        return new Promise(
+          (resolve) => fs.appendFile(f.path, content, { encoding: defaultEncoding }, resolve)
+        )
+      })
+  )
+
+  t.afterEach(done => {
+    input.cleanup()
+    input = void 0
+    done()
+  })
+
+  t.test('without input argument', async (ct) => {
+    const result = runCli(
+      [regex, replacement, '--in-opts.encoding', defaultEncoding, '--stdout'],
+      { input: content }
+    )
+
+    ct.is(result.status, 1, 'process should send error status (1)')
+    ct.is(result.parsedOutput, '', 'stdout should be empty')
+    ct.is(result.parsedError, 'in-opts -> i', 'stderr contain error about missing in-opts dependency: i argument')
+
+    ct.end()
+  })
+
+  t.test('wrong with input argument', async (ct) => {
+    const result = runCli(
+      [regex, replacement, '-i', input.path, '--in-opts.encoding', 'incorrect-encoding', '--stdout']
+    )
+
+    ct.is(result.status, 1, 'process should send error status (1)')
+    ct.is(result.parsedOutput, '', 'stdout should be empty')
+    ct.contains(result.parsedError, 'incorrect-encoding', 'stderr should complain wrong encoding argument')
+
+    ct.end()
+  })
+
+  t.test('correct with input argument', async (ct) => {
+    const result = runCli(
+      [regex, replacement, '-i', input.path, '--in-opts.encoding', defaultEncoding, '--stdout']
+    )
+
+    ct.is(result.status, 0, 'process should send success status (0)')
+    ct.is(result.parsedOutput, expectedOutput, 'stdout should contain replaced string')
+    ct.is(result.parsedError, '', 'stderr should be empty')
+
+    ct.end()
+  })
+
+  t.end()
+})
+
 tap.test('output argument', async (t) => {
   const outputPath = output = tmp.tmpNameSync({ prefix: tmpPrefix })
   await checkEachArgCombinations(
@@ -140,6 +201,41 @@ tap.test('output argument', async (t) => {
       ct.end()
     }
   )
+
+  t.end()
+})
+
+tap.test('input options argument', async (t) => {
+  const outputPath = output = tmp.tmpNameSync({ prefix: tmpPrefix })
+
+  t.test('without output argument', async (ct) => {
+    const result = runCli(
+      [regex, replacement, '--out-opts.encoding', defaultEncoding, '--stdout'],
+      { input: content }
+    )
+
+    ct.is(result.status, 1, 'process should send error status (1)')
+    ct.is(result.parsedOutput, '', 'stdout should be empty')
+    ct.is(result.parsedError, 'out-opts -> o', 'stderr contain error about missing in-opts dependency: i argument')
+
+    ct.end()
+  })
+
+  t.test('correct with input argument', async (ct) => {
+    const result = runCli(
+      [regex, replacement, '-o', outputPath, '--out-opts.encoding', defaultEncoding, '--no-stdout'],
+      { input: content }
+    )
+
+    ct.is(result.status, 0, 'process should send success status (0)')
+    ct.is(result.parsedOutput, '', 'stdout should be empty')
+    ct.is(result.parsedError, '', 'stderr should be empty')
+
+    const outputFileContent = fs.readFileSync(outputPath).toString()
+    ct.is(outputFileContent, expectedOutput, 'expected output saved to file')
+
+    ct.end()
+  })
 
   t.end()
 })
@@ -273,7 +369,7 @@ function runCli (_args, _options) {
   const result = childProcess.spawnSync('node', ['./src/cli'].concat(_args || []), _options)
 
   result.parsedOutput = result.stdout.toString().trim()
-  result.parsedError = result.stderr.toString().trim().split('\n').pop()
+  result.parsedError = result.stderr.toString().trim().split('\n').pop().trim()
 
   return result
 }

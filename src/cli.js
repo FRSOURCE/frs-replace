@@ -43,11 +43,21 @@ require('get-stdin')().then((stdin) => {
     .string('i')
     .nargs('i', 1)
 
+    .option('in-opts')
+    .describe('in-opts', 'Passed to fs.readFileSync when reading input file')
+    .default('in-opts', void 0, 'utf8') // will use node's default value
+    .implies('in-opts', 'i')
+
     .option('o')
     .alias('o', 'output')
     .describe('o', 'Output file name/path (replaces the file if it already exists and creates any intermediate directories if they don\'t already exist)')
     .string('o')
     .nargs('o', 1)
+
+    .option('out-opts')
+    .describe('out-opts', 'Passed as options argument of write\'s .sync method')
+    .default('out-opts', void 0, 'utf8') // will use node's default value
+    .implies('out-opts', 'o')
 
     .option('f')
     .alias('f', 'flags')
@@ -88,9 +98,11 @@ require('get-stdin')().then((stdin) => {
     result = require('./replace').sync({
       content: argv.c,
       input: argv.i,
+      inputOptions: argv['in-opts'],
       regex: new RegExp(argv.regex, argv.f),
       replacement: argv.r ? require(argv.replacement) : argv.replacement,
-      output: argv.o
+      output: argv.o,
+      outputOptions: argv['out-opts']
     })
   } catch (e) /* istanbul ignore next */ {
     process.stderr.write(e.toString())
