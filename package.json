@@ -11,14 +11,18 @@
     "prerelease": "standard --fix && yarn test",
     "release": "standard-version",
     "postrelease": "git push --follow-tags origin master && yarn publish",
+    "pretest": "standard",
     "test": "yarn test:unit --100",
-    "pretest:unit": "standard",
-    "test:unit": "tap ./src/*.spec.js -J",
-    "posttest:unit": "tap --coverage-report=html"
+    "posttest": "tap --coverage-report=html",
+    "pretest:unit": "standard --fix",
+    "test:unit": "tap ./src/*.spec.js -J"
   },
   "nyc": {
     "exclude": "**/*.spec.js",
     "include": "src/**"
+  },
+  "yargs": {
+    "camel-case-expansion": false
   },
   "devDependencies": {
     "standard": "^12.0.1",

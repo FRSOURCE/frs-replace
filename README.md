@@ -61,10 +61,16 @@ FRS-replace <regex> <replacement> [options]
   | \<replacement\> | string | String or path to replacement function file (see &#8209;&#8209;replace&#8209;fn switch for details) |
 
 #### Options:
+> Note: Every boolean option can be negated with use of `--no-` prefix, e.g. `--stdout` or `--no-stdout` turn stdout output on or off, respectively. 
+
+> Note: Object types can be set using [dot notation](https://github.com/yargs/yargs-parser#dot-notation). So, e.g. if you want to pass `utf8` value under in-opts encoding field you should write `--in-opts.encoding utf8`.
+
   | Option | Type | Default | Description |
   | --- | --- | --- | --- |
   |&#8209;i, &#8209;&#8209;input       | string | *-* | File to read & replace from |
+  | &#8209;&#8209;in-opts | string or object | utf8 | Passed to [readFileSync](https://nodejs.org/api/fs.html#fs_fs_readfilesync_path_options) when reading input file |
   | &#8209;o, &#8209;&#8209;output     | string | *-* | Output file name/path (replaces the file if it already exists and creates any intermediate directories if they don't already exist) |
+  | &#8209;&#8209;out-opts | string or object | utf8 | Passed as options argument of [write's .sync](https://www.npmjs.com/package/write#sync) |
   | &#8209;f, &#8209;&#8209;flags | combination of *gim* flags | g | [RegExp](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp#Syntax) flags |
   | &#8209;c, &#8209;&#8209;content    | string | *-* | Content to be replaced (takes precedence over stream & file input) |
   | &#8209;&#8209;stdout  | boolean | true if piped input present, false otherwise | Force sending output on stdout |
