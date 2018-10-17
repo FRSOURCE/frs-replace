@@ -95,7 +95,7 @@ require('get-stdin')().then((stdin) => {
   let result
 
   try {
-    result = require('./replace').sync({
+    result = require('../src/replace').sync({
       content: argv.c,
       input: argv.i,
       inputOptions: argv['in-opts'],

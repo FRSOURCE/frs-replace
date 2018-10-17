@@ -366,7 +366,7 @@ async function checkEachArgCombinations (t, args, argCombinations, argValue, tes
 
 function runCli (_args, _options) {
   _options = Object.assign({}, defaultOptions, _options)
-  const result = childProcess.spawnSync('node', ['./src/cli'].concat(_args || []), _options)
+  const result = childProcess.spawnSync('node', ['./bin/cli'].concat(_args || []), _options)
 
   result.parsedOutput = result.stdout.toString().trim()
   result.parsedError = result.stderr.toString().trim().split('\n').pop().trim()

@@ -7,6 +7,18 @@
   "repository": "https://github.com/FRSource/FRS-replace.git",
   "author": "Jakub Freisler <FRSgit@users.noreply.github.com>",
   "license": "Apache",
+  "bugs": {
+    "url": "https://github.com/FRSource/FRS-replace/issues"
+  },
+  "homepage": "https://github.com/FRSource/FRS-replace#readme",
+  "files": [
+    "bin/cli.js",
+    "src/replace.js",
+    "index.js",
+    "LICENSE",
+    "package.json",
+    "yarn.lock"
+  ],
   "scripts": {
     "prerelease": "standard --fix && yarn test",
     "release": "standard-version",
@@ -15,11 +27,11 @@
     "test": "yarn test:unit --100",
     "posttest": "tap --coverage-report=html",
     "pretest:unit": "standard --fix",
-    "test:unit": "tap ./src/*.spec.js -J"
+    "test:unit": "tap ./src/*.spec.js ./bin/*.spec.js -J"
   },
   "nyc": {
     "exclude": "**/*.spec.js",
-    "include": "src/**"
+    "include": ["src/**", "bin/**"]
   },
   "yargs": {
     "camel-case-expansion": false
