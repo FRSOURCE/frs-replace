@@ -19,6 +19,7 @@
     "package.json",
     "yarn.lock"
   ],
+  "keywords" : ["replace", "cli", "streams", "stream", "command-line", "pipes", "pipe", "nodejs", "replacement", "regex", "regexp", "regular-expression", "javascript"],
   "scripts": {
     "prerelease": "standard --fix && yarn test",
     "release": "standard-version",
