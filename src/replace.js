@@ -15,31 +15,37 @@ module.exports = {
 
 function replace ({
   input = void 0,
-  inputOptions = 'utf8',
+  inputReadOptions = 'utf8',
+  inputGlobOptions = void 0,
+  inputJoinString = '\n',
   content = void 0,
   regex,
   replacement,
   output = void 0,
-  outputOptions = 'utf8'
+  outputWriteOptions = 'utf8'
 }) {
   if (!input && !content) {
     writeError('at least one input source must be defined!')
   }
 
-  let path
+  let result
 
-  if (!content) {
-    content = require('fs').readFileSync((path = require('path')).normalize(input), inputOptions)
+  if (content) {
+    result = content.replace(regex, replacement)
+  } else {
+    const fs = require('fs')
+    result = require('fast-glob')
+      .sync(input, inputGlobOptions)
+      .map((path) => fs.readFileSync(path, inputReadOptions).replace(regex, replacement))
+      .join(inputJoinString)
   }
 
-  const result = content.replace(regex, replacement)
-
   if (output) {
-    if (typeof outputOptions === 'string') {
-      outputOptions = { encoding: outputOptions }
+    if (typeof outputWriteOptions === 'string') {
+      outputWriteOptions = { encoding: outputWriteOptions }
     }
 
-    require('write').sync((path || require('path')).normalize(output), result, outputOptions)
+    require('write').sync(require('path').normalize(output), result, outputWriteOptions)
   }
 
   return result

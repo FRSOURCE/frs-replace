@@ -40,13 +40,21 @@ require('get-stdin')().then((stdin) => {
     .option('i', { demandOption: !isContentPresent && !isHelpPresent })
     .alias('i', 'input')
     .describe('i', 'File to read & replace from')
-    .string('i')
-    .nargs('i', 1)
+    .array('i')
 
-    .option('in-opts')
-    .describe('in-opts', 'Passed to fs.readFileSync when reading input file')
-    .default('in-opts', void 0, 'utf8') // will use node's default value
-    .implies('in-opts', 'i')
+    .option('i-read-opts')
+    .describe('i-read-opts', 'Passed to fs.readFileSync when reading input file')
+    .default('i-read-opts', void 0, 'utf8') // will use node's default value
+    .implies('i-read-opts', 'i')
+
+    .option('i-glob-opts')
+    .describe('i-glob-opts', 'Passed to fast-glob.sync when resolving glob patterns')
+    .implies('i-glob-opts', 'i')
+
+    .option('i-join-str')
+    .describe('i-join-str', 'Used when joining multiple files')
+    .default('i-join-str', void 0, 'newline (\\n)') // will use node's default value
+    .implies('i-join-str', 'i')
 
     .option('o')
     .alias('o', 'output')
@@ -54,10 +62,10 @@ require('get-stdin')().then((stdin) => {
     .string('o')
     .nargs('o', 1)
 
-    .option('out-opts')
-    .describe('out-opts', 'Passed as options argument of write\'s .sync method')
-    .default('out-opts', void 0, 'utf8') // will use node's default value
-    .implies('out-opts', 'o')
+    .option('o-write-opts')
+    .describe('o-write-opts', 'Passed as options argument of write\'s .sync method')
+    .default('o-write-opts', void 0, 'utf8') // will use node's default value
+    .implies('o-write-opts', 'o')
 
     .option('f')
     .alias('f', 'flags')
@@ -65,7 +73,7 @@ require('get-stdin')().then((stdin) => {
     .nargs('f', 1)
     .choices('f', ['', 'g', 'm', 'i', 'gm', 'gi', 'mi', 'mg', 'ig', 'im', 'gmi', 'gim', 'mig', 'mgi', 'igm', 'img'])
     .default('f', 'g')
-    .coerce('f', (arg) => arg.trim())
+    .coerce('f', arg => arg.trim())
 
     .option('c', { demandOption: isContentPresent })
     .alias('c', 'content')
@@ -92,26 +100,26 @@ require('get-stdin')().then((stdin) => {
     .epilog('Brought to you with open-source love by FRSource')
     .argv
 
-  let result
-
   try {
-    result = require('../src/replace').sync({
+    const result = require('../src/replace').sync({
       content: argv.c,
       input: argv.i,
-      inputOptions: argv['in-opts'],
+      inputReadOptions: argv['i-read-opts'],
+      inputGlobOptions: argv['i-glob-opts'],
+      inputJoinString: argv['i-join-str'],
       regex: new RegExp(argv.regex, argv.f),
       replacement: argv.r ? require(argv.replacement) : argv.replacement,
       output: argv.o,
-      outputOptions: argv['out-opts']
+      outputWriteOptions: argv['o-write-opts']
     })
+
+    if (argv.stdout) {
+      process.stdout.write(result)
+    }
+
+    return process.exit()
   } catch (e) /* istanbul ignore next */ {
     process.stderr.write(e.toString())
     return process.exit(1)
   }
-
-  if (argv.stdout) {
-    process.stdout.write(result)
-  }
-
-  process.exit()
 })
