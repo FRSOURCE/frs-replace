@@ -3,7 +3,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/FRSource/FRS-replace/badge.svg?branch=master)](https://coveralls.io/github/FRSource/FRS-replace?branch=master)
 # FRS-replace
 
-CLI & Node wrapper around [javascript replace](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace) which allows on-the-fly replacing (with or without changing input file), piping and many more!
+CLI & Node wrapper around [javascript replace](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace) which allows on-the-fly replacing (with or without changing input files), [globbing](https://en.wikipedia.org/wiki/Glob_(programming)), [piping](https://en.wikipedia.org/wiki/Pipeline_(Unix)) and many more!
 
 * [Installation](#installation)
 * [Node API usage](#node-api-usage)
@@ -40,13 +40,15 @@ Where `/* options */` is an object containing:
 
 | Option | Type | Default | Description |
   | --- | --- | --- | --- |
-  | input | string | *undefined* | Path to file to read & replace from |
-  | inputOptions | string or object | utf8 | Options passed to [readFileSync](https://nodejs.org/api/fs.html#fs_fs_readfilesync_path_options) when reading input file |
+  | input | string or \<string\>array | *undefined* | Path/[fast-glob](https://github.com/mrmlnc/fast-glob) pattern to files to read & replace from, if multiple files are specified results are joined with inputJoinString option's value |
+  | inputReadOptions | string or object | utf8 | Options passed to [readFileSync](https://nodejs.org/api/fs.html#fs_fs_readfilesync_path_options) when reading input file |
+  | inputGlobOptions | object | *undefined* | Options passed to [fast-glob](https://github.com/mrmlnc/fast-glob#options-1) when resolving glob patterns |
+  | inputJoinString | string | \n | String used when joining multiple files, passed directly to [javascript join](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/join#Syntax) |
   | content    | string | *undefined* | Content to be replaced (takes precedence over file input) |
   | regex    | string or [RegExp Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp#Syntax)| *-* | Used as a first argument of [javascript replace](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace#Syntax) |
   | replacement  | string | *-* | Passed as a second argument to [javascript replace](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace#Syntax) |
   | output | string | *undefined* | Path of an output file |
-  | outputOptions  | string or object | utf8 | Passed as options argument of [write's .sync](https://www.npmjs.com/package/write#sync) |
+  | outputWriteOptions  | string or object | utf8 | Passed as options argument of [write's .sync](https://www.npmjs.com/package/write#sync) |
 
 ## CLI usage
 
@@ -63,14 +65,16 @@ FRS-replace <regex> <replacement> [options]
 #### Options:
 > Note: Every boolean option can be negated with use of `--no-` prefix, e.g. `--stdout` or `--no-stdout` turn stdout output on or off, respectively. 
 
-> Note: Object types can be set using [dot notation](https://github.com/yargs/yargs-parser#dot-notation). So, e.g. if you want to pass `utf8` value under in-opts encoding field you should write `--in-opts.encoding utf8`.
+> Note: Object types can be set using [dot notation](https://github.com/yargs/yargs-parser#dot-notation). So, e.g. if you want to pass `utf8` value under i-read-opts encoding field you should write `--i-read-opts.encoding utf8`.
 
   | Option | Type | Default | Description |
   | --- | --- | --- | --- |
-  |&#8209;i, &#8209;&#8209;input       | string | *-* | File to read & replace from |
-  | &#8209;&#8209;in-opts | string or object | utf8 | Passed to [readFileSync](https://nodejs.org/api/fs.html#fs_fs_readfilesync_path_options) when reading input file |
+  |&#8209;i, &#8209;&#8209;input       | string or \<string\>array | *-* | Files/[fast-glob](https://github.com/mrmlnc/fast-glob) pattern to files to read & replace from |
+  | &#8209;&#8209;i-read-opts | string or object | utf8 | Passed to [readFileSync](https://nodejs.org/api/fs.html#fs_fs_readfilesync_path_options) when reading input file |
+  | &#8209;&#8209;i-glob-opts | object | *undefined* | Passed to [fast-glob](https://github.com/mrmlnc/fast-glob#options-1) when resolving glob patterns |
+  | &#8209;&#8209;i-join-str | string | \n | Used when joining multiple files, passed directly to [javascript join](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/join#Syntax) |
   | &#8209;o, &#8209;&#8209;output     | string | *-* | Output file name/path (replaces the file if it already exists and creates any intermediate directories if they don't already exist) |
-  | &#8209;&#8209;out-opts | string or object | utf8 | Passed as options argument of [write's .sync](https://www.npmjs.com/package/write#sync) |
+  | &#8209;&#8209;o-write-opts | string or object | utf8 | Passed as options argument of [write's .sync](https://www.npmjs.com/package/write#sync) |
   | &#8209;f, &#8209;&#8209;flags | combination of *gim* flags | g | [RegExp](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp#Syntax) flags |
   | &#8209;c, &#8209;&#8209;content    | string | *-* | Content to be replaced (takes precedence over stream & file input) |
   | &#8209;&#8209;stdout  | boolean | true if piped input present, false otherwise | Force sending output on stdout |
@@ -140,7 +144,50 @@ const result = require('FRS-replace').sync({
 FRS-replace a b -i foo.js -o foo_replaced.js
 ```
 
-#### 3. Replace all `a` occurences with `b` in given content string `abcd` and save result to `foo_replaced.js`
+#### 3. Replace all `a` occurences with `b` from given array of files and save result to `foo_replaced.js` using default `\n` as result-joining string :
+
+###### API
+```javascript
+const result = require('FRS-replace').sync({
+  input       : ['foo.js', 'foo2.js'],
+  regex       : new RegExp('a', 'g'),
+  replacement : 'b',
+  output      : 'foo_replaced.js'
+})
+```
+
+###### CLI
+```bash
+FRS-replace a b -i foo.js foo2.js -o foo_replaced.js --i-join-str "\n/////\n"
+```
+
+*or*
+
+```bash
+FRS-replace a b -i foo.js -i foo2.js -o foo_replaced.js --i-join-str "\n/////\n"
+```
+
+> Note: Arrays can be passed under single flag-entry as a space-separated list *or* under same flag repeated multiple times (all values will be concatenated into single array using, details - [yargs array notation](https://github.com/yargs/yargs-parser#dot-notation)).
+
+#### 4. Replace all `a` occurences with `b` from all `.js` files in `foo` directory and save result to `foo_replaced.js` using `\n/////\n` as result-joining string :
+
+###### API
+```javascript
+const result = require('FRS-replace').sync({
+  input           : 'foo/*.js',
+  regex           : new RegExp('a', 'g'),
+  replacement     : 'b',
+  inputJoinString : '\n/////\n',
+  output          : 'foo_replaced.js'
+})
+```
+
+###### CLI
+```bash
+FRS-replace a b -i foo/*.js -o foo_replaced.js --i-join-str "\n/////\n"
+```
+
+#### 5. Replace all `a` occurences with `b` in given content string `abcd` and save result to `foo_replaced.js`
 
 ###### API
 ```javascript
@@ -157,21 +204,21 @@ const result = require('FRS-replace').sync({
 FRS-replace a b --content abcd -o foo_replaced.js
 ```
 
-#### 4. Replace all `a` occurences with `b` from piped stream and save it to output file:
+#### 6. Replace all `a` occurences with `b` from piped stream and save it to output file:
 
 ###### CLI
 ```bash
 <read-file> | FRS-replace a b > <output-file-path>
 ```
  
-#### 5. Replaces all `a` occurences with `b` from piped stream and pass it through `stdout` stream to next command
+#### 7. Replaces all `a` occurences with `b` from piped stream and pass it through `stdout` stream to next command
 
 ###### CLI
 ```bash
 <read-file> | FRS-replace a b | <next-command>
 ```
 
-#### 6. Both pipe & options styles can be mixed together, here - getting input from `i` argument and passing output down the stream to next command
+#### 8. Both pipe & options styles can be mixed together, here - getting input from `i` argument and passing output down the stream to next command
 
 ###### CLI
 ```bash
