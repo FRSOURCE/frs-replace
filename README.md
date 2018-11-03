@@ -11,6 +11,7 @@ CLI & Node wrapper around [javascript replace](https://developer.mozilla.org/en-
 * [Node API usage](#node-api-usage)
 * [CLI usage](#cli-usage)
 * [Examples](#examples)
+* [Benchmarks](#benchmarks)
 
 ## Installation
 ##### yarn
@@ -226,3 +227,23 @@ FRS-replace a b --content abcd -o foo_replaced.js
 ```bash
 FRS-replace a b -i foo.js | <next-command>
 ```
+
+## Benchmarks
+#### input as glob pattern [1000 iterations x 100 repetitions]
+| Library (best&nbsp;bolded) | Execution time [s] | Difference percentage (comparing&nbsp;to&nbsp;best&nbsp;time) |
+| --- | --- | --- |
+| FRS-replace async | 0.69685816 | 319.4838% |
+| FRS-replace sync | 0.67118157 | 304.0274% |
+| replace-in-file | 1.76974941 | 965.3262% |
+| **replace async** | 0.16612277 | 0.0000% |
+| replace sync | 0.47949551 | 188.6393% |
+| replace-string | *N/A* | *N/A* |
+#### input & replacement as strings [1000 iterations x 100 repetitions]
+| Library (best&nbsp;bolded) | Execution time [s] | Difference percentage (comparing&nbsp;to&nbsp;best&nbsp;time) |
+| --- | --- | --- |
+| FRS-replace async | 0.02088436 | 119.3194% |
+| FRS-replace sync | 0.01082087 | 13.6366% |
+| replace-in-file | *N/A* | *N/A* |
+| replace async | *N/A* | *N/A* |
+| replace sync | *N/A* | *N/A* |
+| **replace-string** | 0.00952235 | 0.0000% |
