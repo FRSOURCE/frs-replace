@@ -39,7 +39,7 @@
     "release": "standard-version",
     "postrelease": "git push --follow-tags origin master && yarn publish",
     "pretest": "standard",
-    "test": "yarn test:unit --100",
+    "test": "yarn test:unit --100 && yarn test:benchmark",
     "posttest": "tap --coverage-report=html",
     "pretest:unit": "standard --fix",
     "test:unit": "tap ./src/*.spec.js ./bin/*.spec.js -J",
