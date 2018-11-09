@@ -105,15 +105,15 @@ tap.test(`input as glob pattern [${iterationsNo} iterations x ${repetitionsNo / 
   const results = await multipleTests(ct, [
     {
       fn: () => FRSreplace.async(testInput.FRSReplace),
-      before: () => (testInput.FRSReplace.input = `${dir}\\${tmpPrefixes.input}*`)
+      before: () => (testInput.FRSReplace.input = `${dir}/${tmpPrefixes.input}*`)
     },
     {
       fn: () => FRSreplace.sync(testInput.FRSReplace),
-      before: () => (testInput.FRSReplace.input = `${dir}\\${tmpPrefixes.input}*`)
+      before: () => (testInput.FRSReplace.input = `${dir}/${tmpPrefixes.input}*`)
     },
     {
       fn: () => replaceInFile(testInput.replaceInFile),
-      before: () => (testInput.replaceInFile.files = dir + require('path').sep + tmpPrefixes.input + '*')
+      before: () => (testInput.replaceInFile.files = `${dir}/${tmpPrefixes.input}*`)
     },
     // {
     //   fn: () => replace(testInput.replaceAsync), before: () => {
