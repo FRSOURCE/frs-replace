@@ -7,7 +7,7 @@
 
 # FRS-replace
 
-CLI & Node wrapper around [javascript replace](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace) which allows on-the-fly replacing (with or without changing input files), [globbing](https://en.wikipedia.org/wiki/Glob_(programming)), [piping](https://en.wikipedia.org/wiki/Pipeline_(Unix)) and many more!
+The fastest ([see benchmarks](#benchmarks)) CLI & Node wrapper around [javascript replace](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace) which allows on-the-fly replacing (with or without changing input files), [globbing](https://en.wikipedia.org/wiki/Glob_(programming)), [piping](https://en.wikipedia.org/wiki/Pipeline_(Unix)) and many more!
 
 * [Installation](#installation)
 * [Node API usage](#node-api-usage)
@@ -234,18 +234,19 @@ FRS-replace a b -i foo.js | <next-command>
 #### input as glob pattern [1000 iterations x 100 repetitions]
 | Library (best&nbsp;bolded) | Execution time [s] | Difference percentage (comparing&nbsp;to&nbsp;best&nbsp;time) |
 | --- | --- | --- |
-| **FRS-replace async** | 0.36640944 | 0.0000% |
-| FRS-replace sync | 0.39553770 | 7.9496% |
-| replace-in-file | 1.78587186 | 387.3979% |
-| replace async | *N/A* | *N/A* |
-| replace sync | 0.44655926 | 21.8744% |
+| **FRS-replace async** | 0.07656150 | 0.0000% |
+| FRS-replace sync | 0.31196953 | 307.4757% |
+| replace-in-file | 0.76240075 | 895.8017% |
+| replace async | 0.11774627 | 53.7931% |
+| replace sync | 0.91518713 | 1095.3620% |
 | replace-string | *N/A* | *N/A* |
 #### input & replacement as strings [1000 iterations x 100 repetitions]
 | Library (best&nbsp;bolded) | Execution time [s] | Difference percentage (comparing&nbsp;to&nbsp;best&nbsp;time) |
 | --- | --- | --- |
-| FRS-replace async | 0.01015828 | 59.0095% |
-| FRS-replace sync | 0.00657347 | 2.8957% |
+| FRS-replace async | 0.00511845 | 77.4972% |
+| **FRS-replace sync** | 0.00288368 | 0.0000% |
 | replace-in-file | *N/A* | *N/A* |
 | replace async | *N/A* | *N/A* |
 | replace sync | *N/A* | *N/A* |
-| **replace-string** | 0.00638847 | 0.0000% |
+| replace-string | 0.00292622 | 1.4752% |
+

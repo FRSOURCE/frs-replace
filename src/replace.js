@@ -1,19 +1,9 @@
 module.exports = {
-  sync: replace,
-  async: (...args) => new Promise((resolve, reject) => {
-    let result
-
-    try {
-      result = replace.apply(this, args)
-    } catch (e) {
-      return reject(e)
-    }
-
-    resolve(result)
-  })
+  sync: replaceSync,
+  async: replaceAsync
 }
 
-function replace ({
+function replaceSync ({
   input,
   inputReadOptions = 'utf8',
   inputGlobOptions,
@@ -58,8 +48,81 @@ function replace ({
   return result
 }
 
+async function replaceAsync ({
+  input,
+  inputReadOptions = 'utf8',
+  inputGlobOptions,
+  inputJoinString = '\n',
+  content,
+  output,
+  outputWriteOptions = 'utf8',
+  regex,
+  replacement
+}) {
+  let result
+  const replaceFn = typeof regex === 'string' ? replaceString : replaceRegex
+
+  if (content !== void 0) {
+    result = replaceFn(content, regex, replacement)
+  } else if (input !== void 0) {
+    const fileStream = await require('fast-glob').stream(input, inputGlobOptions)
+    let filesFound = false
+
+    result = ''
+
+    const fileReaderPromise = multiFileReaderBuilder(require('fs'), inputReadOptions, fileReader => {
+      fileStream.on('data', entry => {
+        filesFound = true
+        return fileReader(
+          entry,
+          content => (result += replaceFn(content, regex, replacement))
+        )
+      })
+      fileStream.once('error', writeError)
+    })
+
+    await new Promise((resolve) => fileStream.once('end', () => {
+      return resolve(filesFound ? fileReaderPromise : void 0)
+    }))
+  } else {
+    writeError('at least one input source must be defined!')
+  }
+
+  if (output !== void 0) {
+    if (typeof outputWriteOptions === 'string') {
+      outputWriteOptions = { encoding: outputWriteOptions }
+    }
+
+    await require('write')(require('path').normalize(output), result, outputWriteOptions)
+  }
+
+  return result
+}
+
 function writeError (msg) {
   throw new Error(`FRS-replace :: ${msg}`)
+}
+
+function multiFileReaderBuilder (fs, inputReadOptions, setup) {
+  let i = 0
+  return new Promise((resolve, reject) => {
+    setup((path, callback) => {
+      if (++i < 1) return
+
+      fs.readFile(path, inputReadOptions, (error, data) => {
+        if (error) {
+          i = -1
+          return reject(error)
+        }
+
+        callback(data)
+
+        if (--i === 0) {
+          resolve()
+        }
+      })
+    })
+  })
 }
 
 function replaceRegex (content, needle, replacement) {
