@@ -202,6 +202,17 @@ tap.test('check api', async t => {
     ct.end()
   })
 
+  await t.test('regex as string', async ct => {
+    testInput.regex = 'a'
+    testInput.content = content
+
+    expectedOutput = content.replace(testInput.regex, replacement)
+
+    await checkSyncAsync(ct, 'is', [testInput, expectedOutput, 'replaced correctly'])
+
+    ct.end()
+  })
+
   t.end()
 })
 
