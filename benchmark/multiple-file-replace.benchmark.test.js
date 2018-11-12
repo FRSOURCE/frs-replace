@@ -16,8 +16,8 @@ const content = `aąbcćdeęfg%hi
 jklmn
 oópqr,stuvwxyZ`
 const tmpPrefixes = {
-  input: 'FRS-replace-replace-in',
-  output: 'FRS-replace-replace-out'
+  input: 'FRS-replace-replace-in-',
+  output: 'FRS-replace-replace-out-'
 }
 const defaults = {
   inputReadOptions: 'utf8',
@@ -26,7 +26,33 @@ const defaults = {
 }
 const repetitionsNo = 100000
 const iterationsNo = 1000
-const testInput = {}
+const inputFilesNo = 40
+const testInput = {
+  FRSReplace: {
+    regex,
+    replacement
+  },
+
+  replace: {
+    regex,
+    replacement,
+    recursive: true,
+    silent: true
+  },
+
+  replaceAsync: {
+    regex,
+    replacement,
+    async: true,
+    recursive: true,
+    silent: true
+  },
+
+  replaceInFile: {
+    from: regex,
+    to: replacement
+  }
+}
 const testedLibraries = [
   'FRS-replace async',
   'FRS-replace sync',
@@ -36,11 +62,9 @@ const testedLibraries = [
   'replace-string'
 ]
 
-let dir, output, input
-
-const readmeContent = fs.readFileSync('./README.md').toString()
-
+let dir; let output; let inputs = []
 let perfyResults = ''
+let tmpFilesPromise
 
 {
   const dirObj = tmp.dirSync() // removing all files similar our tmp
@@ -53,62 +77,42 @@ let perfyResults = ''
     ].map(v => v + '*')
   )
     .forEach(fs.unlinkSync)
+
+  const promises = []
+
+  for (let i = 0; i < inputFilesNo; ++i) {
+    promises.push(
+      tmp.file({ prefix: tmpPrefixes.input + i + '-', keep: true, dir })
+        .then(input => {
+          inputs.push(input)
+          return new Promise(resolve => {
+            fs.appendFile(input.path, content, { encoding: defaults.inputReadOptions }, resolve)
+          })
+        })
+    )
+  }
+
+  tmpFilesPromise = Promise.all(promises)
 }
-
-tap.beforeEach(async () => {
-  testInput.FRSReplace = {
-    regex,
-    replacement
-  }
-
-  testInput.replace = {
-    regex,
-    replacement,
-    recursive: true,
-    silent: true
-  }
-
-  testInput.replaceAsync = {
-    regex,
-    replacement,
-    async: true,
-    recursive: true,
-    silent: true
-  }
-
-  testInput.replaceInFile = {
-    from: regex,
-    to: replacement
-  }
-
-  cleanInputs()
-
-  await tmp.file({ prefix: tmpPrefixes.input, keep: true, dir })
-    .then(
-      async f => {
-        input = f
-        return new Promise(
-          resolve => fs.appendFile(f.path, content, { encoding: defaults.inputReadOptions }, resolve)
-        )
-      })
-})
-
-const cleanInputs = (done) => {
-  input && input.cleanup()
-  input = undefined
-  done && done() // to be runned either by node-tap or manually
-}
-
-tap.afterEach((done) => {
+tap.autoend(false)
+tap.beforeEach(() => tmpFilesPromise)
+tap.afterEach(done => {
   fs.existsSync(output) && fs.unlinkSync(output)
-  cleanInputs()
   done()
 })
 
-tap.test(`input as glob pattern [${iterationsNo} iterations x ${repetitionsNo / iterationsNo} repetitions]`, async ct => {
+tap.teardown(() => {
+  inputs.forEach(input => input.cleanup)
+  inputs = []
+  const readmeContent = fs.readFileSync('./README.md').toString()
+
+  fs.writeFileSync('./README.md', readmeContent.replace(/(##\sBenchmarks \(Node )(?:.*?)(\)\s)[\s\S]*?(?:$|(?:\s##\s))/, `$1${process.version}$2${perfyResults}`))
+})
+
+tap.test(`input as glob pattern [${inputFilesNo} files x ${iterationsNo} iterations x ${repetitionsNo / iterationsNo} repetitions]`, async ct => {
   const results = await multipleTests(ct, [
     {
-      fn: () => { FRSreplace.async(testInput.FRSReplace) }, // IMPORTANT: test doesn't wait for function to finish, because replace (async) doesn't support that kind of behaviour (https://github.com/harthur/replace/issues/25)
+      fn: () => FRSreplace.async(testInput.FRSReplace),
       before: () => (testInput.FRSReplace.input = `${dir}/${tmpPrefixes.input}*`)
     },
     {
@@ -119,12 +123,7 @@ tap.test(`input as glob pattern [${iterationsNo} iterations x ${repetitionsNo / 
       fn: () => replaceInFile(testInput.replaceInFile),
       before: () => (testInput.replaceInFile.files = `${dir}/${tmpPrefixes.input}*`)
     },
-    {
-      fn: () => replace(testInput.replaceAsync),
-      before: () => {
-        testInput.replaceAsync.paths = [dir.replace(/\\/g, '/')]
-      }
-    },
+    undefined, // IMPORTANT: test doesn't checks replace async, because it doesn't returns when (and if) file got replaced(https://github.com/harthur/replace/issues/25)
     {
       fn: () => replace(testInput.replace),
       before: () => {
@@ -133,12 +132,12 @@ tap.test(`input as glob pattern [${iterationsNo} iterations x ${repetitionsNo / 
     },
     undefined
   ])
-  const sortedResults = results.slice().sort(sortByNanoseconds)
 
-  ct.is((sortedResults[0].name.indexOf('FRS-replace') !== -1 || (sortedResults[1].name.indexOf('FRS-replace') !== -1 && sortedResults[1].avgPercentageDifference < 5)), true, 'FRS-replace should be the fastest or second, but at most with 5% difference to best')
-  ct.not(sortedResults[2].name.indexOf('FRS-replace sync'), -1, 'FRS-replace sync should be third (right after async replace)')
+  const result = outputPerfy(ct, results, results.slice().sort(sortByNumberVariable('fullNanoseconds'))[0])
+  const sortedResults = result.results.slice().sort(sortByNumberVariable('avgTime'))
 
-  outputPerfy(ct, results, sortedResults[0])
+  ct.is((sortedResults[0].name.indexOf('FRS-replace sync') !== -1 || (sortedResults[1].name.indexOf('FRS-replace sync') !== -1 && sortedResults[1].avgPercentageDifference < 5)), true, 'FRS-replace sync should be the fastest or second, but at most with 5% difference to best')
+  ct.is(sortedResults[0].name.indexOf('FRS-replace async') !== -1 || sortedResults[1].name.indexOf('FRS-replace async') !== -1, true, 'FRS-replace async should be the fastest or second')
 
   ct.end()
 })
@@ -165,17 +164,12 @@ tap.test(`input & replacement as strings [${iterationsNo} iterations x ${repetit
     { fn: () => replaceString(content, regex.source, replacement) }
   ])
 
-  const result = outputPerfy(ct, results, results.slice().sort(sortByNanoseconds)[0])
-
-  const sortedResults = result.results.slice().sort(sortByNanoseconds)
+  const result = outputPerfy(ct, results, results.slice().sort(sortByNumberVariable('fullNanoseconds'))[0])
+  const sortedResults = result.results.slice().sort(sortByNumberVariable('avgTime'))
 
   ct.is((sortedResults[0].name.indexOf('FRS-replace') !== -1 || (sortedResults[1].name.indexOf('FRS-replace') !== -1 && sortedResults[1].avgPercentageDifference < 10)), true, 'FRS-replace should be the fastest or second, but at most with 10% difference to best')
 
   ct.end()
-})
-
-tap.teardown(() => {
-  fs.writeFileSync('./README.md', readmeContent.replace(/(##\sBenchmarks\s\s)[\s\S]*?(?:$|(?:\s##\s))/, '$1' + perfyResults))
 })
 
 function outputPerfy (t, testResults, best) {
@@ -218,7 +212,7 @@ function outputPerfy (t, testResults, best) {
   )
 
   perfyResults +=
-    '#### ' + result.name + '\n' +
+    '\n### ' + result.name + '\n\n' +
     '| Library (best&nbsp;bolded) | Execution time [s] | Difference percentage (comparing&nbsp;to&nbsp;best&nbsp;time) |\n' +
     '| --- | --- | --- |\n' +
     result.results.reduce(
@@ -250,13 +244,12 @@ async function multipleTests (t, testCfgs, n, iterations) {
 
   const testCfgLen = testCfgs.length
 
-  for (let i = 0; i < n; ++i) {
-    for (let k = testCfgLen - 1; k >= 0; --k) {
-      const { v: testCfg, i: index } = testCfgs[k]
-      const prevResult = results[index]
-      const libName = testedLibraries[index]
-
-      await t.test(`${t.name} - ${libName} #${i}`, async ct => {
+  for (let k = testCfgLen - 1; k >= 0; --k) {
+    const { v: testCfg, i: index } = testCfgs[k]
+    const prevResult = results[index]
+    const libName = testedLibraries[index]
+    await t.test(`${t.name} - ${libName}`, async ct => {
+      for (let i = 0; i < n; ++i) {
         testCfg.before && testCfg.before()
         const result = await singleTest(libName, testCfg.fn, iterations)
 
@@ -270,10 +263,9 @@ async function multipleTests (t, testCfgs, n, iterations) {
             }
           }
         }
-
-        ct.end()
-      })
-    }
+      }
+      ct.end()
+    })
   }
 
   testCfgs.forEach(({ i: index }) => {
@@ -305,14 +297,19 @@ async function singleTest (name, test, n) {
   return result
 }
 
-function sortByNanoseconds (a, b) {
-  if (a.fullNanoseconds === undefined) {
-    return b.fullNanoseconds === undefined ? 0 : 1
-  }
+function sortByNumberVariable (varName) {
+  return (a, b) => {
+    a = a[varName]
+    b = b[varName]
 
-  if (b.fullNanoseconds === undefined) {
-    return -1
-  }
+    if (a === undefined || a === null) {
+      return b === undefined || b === null ? 0 : 1
+    }
 
-  return a.fullNanoseconds - b.fullNanoseconds
+    if (b === undefined || b === null) {
+      return -1
+    }
+
+    return a - b
+  }
 }

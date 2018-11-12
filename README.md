@@ -1,11 +1,11 @@
+# FRS-replace
+
 [![NPM version](https://img.shields.io/npm/v/frs-replace.svg?style=flat)](https://www.npmjs.com/package/frs-replace)
 [![Build Status](https://travis-ci.org/FRSource/FRS-replace.svg?branch=master)](https://travis-ci.org/FRSource/FRS-replace)
 [![Coverage Status](https://coveralls.io/repos/github/FRSource/FRS-replace/badge.svg?branch=master)](https://coveralls.io/github/FRSource/FRS-replace?branch=master)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release) [![Greenkeeper badge](https://badges.greenkeeper.io/FRSource/FRS-replace.svg)](https://greenkeeper.io/)
 [![codebeat badge](https://codebeat.co/badges/5496a006-a13d-48cc-baeb-37c79a1f6444)](https://codebeat.co/projects/github-com-frsource-frs-replace-master)
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
-
-# FRS-replace
 
 The fastest ([see benchmarks](#benchmarks)) CLI & Node wrapper around [javascript replace](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace) which allows on-the-fly replacing (with or without changing input files), [globbing](https://en.wikipedia.org/wiki/Glob_(programming)), [piping](https://en.wikipedia.org/wiki/Pipeline_(Unix)) and many more!
 
@@ -16,17 +16,20 @@ The fastest ([see benchmarks](#benchmarks)) CLI & Node wrapper around [javascrip
 * [Benchmarks](#benchmarks)
 
 ## Installation
-##### yarn
-```
-$ yarn add frs-replace
+
+yarn
+
+```bash
+yarn add frs-replace
 ```
 
-##### npm
-```
-$ npm install frs-replace
+npm
+
+```bash
+npm install frs-replace
 ```
 
-##### download
+download
 [zipped from FRS-replace Releases](https://github.com/FRSource/FRS-replace/releases)
 
 ## Node API usage
@@ -61,14 +64,16 @@ Where `/* options */` is an object containing:
 FRS-replace <regex> <replacement> [options]
 ```
 
-#### Positionals:                             
+### Positionals
+
   | Option | Type | Description |
   | --- | --- | --- |
   | \<regex\> | string | First parameter to [RegExp constructor](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp#Syntax) |
   | \<replacement\> | string | String or path to replacement function file (see &#8209;&#8209;replace&#8209;fn switch for details) |
 
-#### Options:
-> Note: Every boolean option can be negated with use of `--no-` prefix, e.g. `--stdout` or `--no-stdout` turn stdout output on or off, respectively. 
+### Options
+
+> Note: Every boolean option can be negated with use of `--no-` prefix, e.g. `--stdout` or `--no-stdout` turn stdout output on or off, respectively.
 
 > Note: Object types can be set using [dot notation](https://github.com/yargs/yargs-parser#dot-notation). So, e.g. if you want to pass `utf8` value under i-read-opts encoding field you should write `--i-read-opts.encoding utf8`.
 
@@ -91,9 +96,9 @@ FRS-replace <regex> <replacement> [options]
 
 > Note: while most of examples is using synchronous API method, in all cases `.async` is applicable as well.
 
-#### 1. Replace all `a` occurences with `b` from given `foo.js` and returns result / writes result to console :
+### 1. Replace all `a` occurences with `b` from given `foo.js` and returns result / writes result to console
 
-###### API
+#### 1.1 API
 
 ```javascript
 const FRSReplace = require('FRS-replace')
@@ -127,14 +132,16 @@ const resultAsync = await FRSReplace.async({
 
 ```
 
-###### CLI
+#### 1.2 CLI
+
 ```bash
 FRS-replace a b -i foo.js --stdout
 ```
 
-#### 2. Replace all `a` occurences with `b` from given `foo.js` and save result to `foo_replaced.js` :
+### 2. Replace all `a` occurences with `b` from given `foo.js` and save result to `foo_replaced.js`
 
-###### API
+#### 2.1 API
+
 ```javascript
 const result = require('FRS-replace').sync({
   input       : 'foo.js',
@@ -144,14 +151,16 @@ const result = require('FRS-replace').sync({
 })
 ```
 
-###### CLI
+#### 2.2 CLI
+
 ```bash
 FRS-replace a b -i foo.js -o foo_replaced.js
 ```
 
-#### 3. Replace all `a` occurences with `b` from given array of files and save result to `foo_replaced.js` using default `\n` as result-joining string :
+### 3. Replace all `a` occurences with `b` from given array of files and save result to `foo_replaced.js` using default `\n` as result-joining string
 
-###### API
+#### 3.1 API
+
 ```javascript
 const result = require('FRS-replace').sync({
   input       : ['foo.js', 'foo2.js'],
@@ -161,12 +170,13 @@ const result = require('FRS-replace').sync({
 })
 ```
 
-###### CLI
+#### 3.2 CLI
+
 ```bash
 FRS-replace a b -i foo.js foo2.js -o foo_replaced.js --i-join-str "\n/////\n"
 ```
 
-*or*
+or
 
 ```bash
 FRS-replace a b -i foo.js -i foo2.js -o foo_replaced.js --i-join-str "\n/////\n"
@@ -174,9 +184,10 @@ FRS-replace a b -i foo.js -i foo2.js -o foo_replaced.js --i-join-str "\n/////\n"
 
 > Note: Arrays can be passed under single flag-entry as a space-separated list *or* under same flag repeated multiple times (all values will be concatenated into single array using, details - [yargs array notation](https://github.com/yargs/yargs-parser#dot-notation)).
 
-#### 4. Replace all `a` occurences with `b` from all `.js` files in `foo` directory and save result to `foo_replaced.js` using `\n/////\n` as result-joining string :
+### 4. Replace all `a` occurences with `b` from all `.js` files in `foo` directory and save result to `foo_replaced.js` using `\n/////\n` as result-joining string
 
-###### API
+#### 4.1 API
+
 ```javascript
 const result = require('FRS-replace').sync({
   input           : 'foo/*.js',
@@ -187,14 +198,16 @@ const result = require('FRS-replace').sync({
 })
 ```
 
-###### CLI
+#### 4.2 CLI
+
 ```bash
 FRS-replace a b -i foo/*.js -o foo_replaced.js --i-join-str "\n/////\n"
 ```
 
-#### 5. Replace all `a` occurences with `b` in given content string `abcd` and save result to `foo_replaced.js`
+### 5. Replace all `a` occurences with `b` in given content string `abcd` and save result to `foo_replaced.js`
 
-###### API
+#### 5.1 API
+
 ```javascript
 const result = require('FRS-replace').sync({
   content     : 'abcd',
@@ -204,49 +217,56 @@ const result = require('FRS-replace').sync({
 })
 ```
 
-###### CLI
+#### 5.2 CLI
+
 ```bash
 FRS-replace a b --content abcd -o foo_replaced.js
 ```
 
-#### 6. Replace all `a` occurences with `b` from piped stream and save it to output file:
+### 6. Replace all `a` occurences with `b` from piped stream and save it to output file
 
-###### CLI
+#### 6.1 CLI
+
 ```bash
 <read-file> | FRS-replace a b > <output-file-path>
 ```
- 
-#### 7. Replaces all `a` occurences with `b` from piped stream and pass it through `stdout` stream to next command
 
-###### CLI
+### 7. Replaces all `a` occurences with `b` from piped stream and pass it through `stdout` stream to next command
+
+#### 7.1 CLI
+
 ```bash
 <read-file> | FRS-replace a b | <next-command>
 ```
 
-#### 8. Both pipe & options styles can be mixed together, here - getting input from `i` argument and passing output down the stream to next command
+### 8. Both pipe & options styles can be mixed together, here - getting input from `i` argument and passing output down the stream to next command
 
-###### CLI
+#### 8.1 CLI
+
 ```bash
 FRS-replace a b -i foo.js | <next-command>
 ```
 
-## Benchmarks
-#### input as glob pattern [1000 iterations x 100 repetitions]
+## Benchmarks (Node v10.16.0)
+
+### input as glob pattern [40 files x 1000 iterations x 100 repetitions]
+
 | Library (best&nbsp;bolded) | Execution time [s] | Difference percentage (comparing&nbsp;to&nbsp;best&nbsp;time) |
 | --- | --- | --- |
-| **FRS-replace async** | 0.07656150 | 0.0000% |
-| FRS-replace sync | 0.31196953 | 307.4757% |
-| replace-in-file | 0.76240075 | 895.8017% |
-| replace async | 0.11774627 | 53.7931% |
-| replace sync | 0.91518713 | 1095.3620% |
+| FRS-replace async | 0.01761663 | 103.7503% |
+| **FRS-replace sync** | 0.00864619 | 0.0000% |
+| replace-in-file | 0.02154322 | 149.1644% |
+| replace async | *N/A* | *N/A* |
+| replace sync | 0.05026399 | 481.3428% |
 | replace-string | *N/A* | *N/A* |
-#### input & replacement as strings [1000 iterations x 100 repetitions]
+
+### input & replacement as strings [1000 iterations x 100 repetitions]
+
 | Library (best&nbsp;bolded) | Execution time [s] | Difference percentage (comparing&nbsp;to&nbsp;best&nbsp;time) |
 | --- | --- | --- |
-| FRS-replace async | 0.00511845 | 77.4972% |
-| **FRS-replace sync** | 0.00288368 | 0.0000% |
+| FRS-replace async | 0.00011756 | 215.1822% |
+| **FRS-replace sync** | 0.00003730 | 0.0000% |
 | replace-in-file | *N/A* | *N/A* |
 | replace async | *N/A* | *N/A* |
 | replace sync | *N/A* | *N/A* |
-| replace-string | 0.00292622 | 1.4752% |
-
+| replace-string | 0.00004905 | 31.5049% |

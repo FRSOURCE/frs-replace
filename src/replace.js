@@ -14,14 +14,13 @@ function replaceSync ({
   regex,
   replacement
 }) {
-  let result
+  let result = ''
   const replaceFn = typeof regex === 'string' ? replaceString : replaceRegex
 
   if (content !== undefined) {
     result = replaceFn(content, regex, replacement)
   } else if (input !== undefined) {
-    const files = require('fast-glob')
-      .sync(input, inputGlobOptions)
+    const files = require('fast-glob').sync(input, inputGlobOptions)
 
     if (files.length !== 0) {
       const fs = require('fs')
@@ -30,8 +29,6 @@ function replaceSync ({
       for (let i = 1, len = files.length; i < len; ++i) {
         result += inputJoinString + replaceFn(fs.readFileSync(files[i], inputReadOptions), regex, replacement)
       }
-    } else {
-      result = ''
     }
   } else {
     writeError('at least one input source must be defined!')
@@ -62,33 +59,41 @@ async function replaceAsync ({
   let result
   const replaceFn = typeof regex === 'string' ? replaceString : replaceRegex
 
-  if (content !== void 0) {
+  if (content !== undefined) {
     result = replaceFn(content, regex, replacement)
-  } else if (input !== void 0) {
-    const fileStream = await require('fast-glob').stream(input, inputGlobOptions)
-    let filesFound = false
+  } else if (input !== undefined) {
+    const fileStream = require('fast-glob').stream(input, inputGlobOptions)
+    const fs = require('fs')
+    const replacePromises = []
+    const createReplacePromise = path => {
+      return new Promise((resolve, reject) =>
+        fs.readFile(path, inputReadOptions, (error, data) => {
+          /* istanbul ignore next */
+          error && reject(error)
 
-    result = ''
+          resolve(replaceFn(data, regex, replacement))
+        })
+      )
+    }
 
-    const fileReaderPromise = multiFileReaderBuilder(require('fs'), inputReadOptions, fileReader => {
-      fileStream.on('data', entry => {
-        filesFound = true
-        return fileReader(
-          entry,
-          content => (result += replaceFn(content, regex, replacement))
-        )
-      })
-      fileStream.once('error', writeError)
-    })
+    fileStream.on('error', writeError)
+    fileStream.on('data', path => replacePromises.push(
+      createReplacePromise(path)
+    ))
 
-    await new Promise((resolve) => fileStream.once('end', () => {
-      return resolve(filesFound ? fileReaderPromise : void 0)
-    }))
+    await new Promise(resolve =>
+      fileStream.once('end', () =>
+        resolve(Promise.all(replacePromises))
+      )
+    ).then(
+      (strings) => (result = strings.join(inputJoinString)),
+      writeError
+    )
   } else {
     writeError('at least one input source must be defined!')
   }
 
-  if (output !== void 0) {
+  if (output !== undefined) {
     if (typeof outputWriteOptions === 'string') {
       outputWriteOptions = { encoding: outputWriteOptions }
     }
@@ -101,28 +106,6 @@ async function replaceAsync ({
 
 function writeError (msg) {
   throw new Error(`FRS-replace :: ${msg}`)
-}
-
-function multiFileReaderBuilder (fs, inputReadOptions, setup) {
-  let i = 0
-  return new Promise((resolve, reject) => {
-    setup((path, callback) => {
-      if (++i < 1) return
-
-      fs.readFile(path, inputReadOptions, (error, data) => {
-        if (error) {
-          i = -1
-          return reject(error)
-        }
-
-        callback(data)
-
-        if (--i === 0) {
-          resolve()
-        }
-      })
-    })
-  })
 }
 
 function replaceRegex (content, needle, replacement) {

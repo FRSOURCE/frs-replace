@@ -35,15 +35,18 @@
     "javascript"
   ],
   "scripts": {
-    "prerelease": "standard --fix && yarn test",
+    "prerelease": "yarn standard:fix && yarn test && yarn test:benchmark",
     "release": "standard-version",
     "postrelease": "git push --follow-tags origin master && yarn publish",
     "pretest": "standard",
-    "test": "yarn test:unit --100 && yarn test:benchmark",
+    "test": "yarn test:unit --100",
     "posttest": "tap --coverage-report=html",
-    "pretest:unit": "standard --fix",
+    "pretest:unit": "yarn standard:fix",
     "test:unit": "tap ./src/*.test.js ./bin/*.test.js -J",
-    "test:benchmark": "tap ./benchmark/*.benchmark.test.js --no-timeout"
+    "test:benchmark": "tap ./benchmark/*.benchmark.test.js --no-timeout --no-coverage",
+    "test:benchmark:glob": "yarn test:benchmark --grep=\"/input as glob pattern/\"",
+    "test:benchmark:string": "yarn test:benchmark --grep=\"/input & replacement as strings/\"",
+    "standard:fix": "standard --fix"
   },
   "devDependencies": {
     "perfy": "^1.1.5",
@@ -58,7 +61,7 @@
   "dependencies": {
     "fast-glob": "^3.1.0",
     "get-stdin": "^7.0.0",
-    "yargs": "^14.2.0",
-    "write": "^2.0.0"
+    "write": "^2.0.0",
+    "yargs": "^14.2.0"
   }
 }
