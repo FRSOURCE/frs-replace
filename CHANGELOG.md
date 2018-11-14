@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.0.0"></a>
+# [1.0.0](https://github.com/FRSource/FRS-replace/compare/v0.1.2...v1.0.0) (2018-11-14)
+
+
+### Features
+
+* **input:** add support for globbing matching ([#14](https://github.com/FRSource/FRS-replace/issues/14)) ([b289ffe](https://github.com/FRSource/FRS-replace/commit/b289ffe)), closes [#3](https://github.com/FRSource/FRS-replace/issues/3)
+* **sync:** Sync speed improvements ([#18](https://github.com/FRSource/FRS-replace/issues/18)) ([4ff2a1e](https://github.com/FRSource/FRS-replace/commit/4ff2a1e)), closes [#17](https://github.com/FRSource/FRS-replace/issues/17)
+
+
+### BREAKING CHANGES
+
+* **input:** api options rename: 'inputOptions' to 'inputReadOptions', 'outputOptions' to 'outputWriteOptions'
+* **input:** cli options rename: 'in-opts' to 'i-read-opts', 'out-opts' to 'o-write-opts'
+Add possibility to set input or output options through cli
+Docs - fixes & new example
+Turn off camel-case-expansion to speed up yargs a bit
+
+
+
 <a name="0.1.2"></a>
 ## [0.1.2](https://github.com/FRSource/FRS-replace/compare/v0.1.1...v0.1.2) (2018-10-19)
 
