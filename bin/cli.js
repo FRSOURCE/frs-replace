@@ -12,6 +12,9 @@ require('get-stdin')().then((stdin) => {
   const isHelpPresent = ~process.argv.indexOf('--help') || ~process.argv.indexOf('-h')
 
   const argv = require('yargs')
+    .parserConfiguration({
+      'camel-case-expansion': false
+    })
     .scriptName('FRS-replace')
     .usage('$0 <regex> <replacement> [options]', 'Replace matching parts of string with replacement string/function', (yargs) => {
       yargs
