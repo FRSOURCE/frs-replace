@@ -63,7 +63,7 @@
     "tmp-promise": "^2.0.0"
   },
   "dependencies": {
-    "fast-glob": "^2.2.3",
+    "fast-glob": "^3.0.0",
     "get-stdin": "^7.0.0",
     "write": "^1.0.3",
     "yargs": "^13.2.2"
