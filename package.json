@@ -54,7 +54,7 @@
   },
   "devDependencies": {
     "perfy": "^1.1.5",
-    "replace": "^1.0.0",
+    "replace": "^1.1.1",
     "replace-in-file": "^4.0.0",
     "replace-string": "^3.0.0",
     "standard": "^12.0.1",
