@@ -65,7 +65,7 @@
   "dependencies": {
     "fast-glob": "^2.2.3",
     "get-stdin": "^7.0.0",
-    "write": "^1.0.3",
+    "write": "^2.0.0",
     "yargs": "^13.2.2"
   }
 }
