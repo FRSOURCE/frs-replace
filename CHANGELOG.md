@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.0.1](https://github.com/FRSource/FRS-replace/compare/v1.0.0...v1.0.1) (2019-10-18)
+
+
+### Bug Fixes
+
+* **package:** update yargs to version 13.2.2 ([749b721](https://github.com/FRSource/FRS-replace/commit/749b72144049d9c900b04dd2b14473938af963d7)), closes [#20](https://github.com/FRSource/FRS-replace/issues/20)
+
+
+
 <a name="1.0.0"></a>
 # [1.0.0](https://github.com/FRSource/FRS-replace/compare/v0.1.2...v1.0.0) (2018-11-14)
 
