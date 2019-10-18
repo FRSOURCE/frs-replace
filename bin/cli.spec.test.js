@@ -181,7 +181,7 @@ tap.test('input argument', async (t) => {
       ct,
       [regex, replacement, '--stdout'],
       ['-i', '--input'],
-      `${dir}\\${tmpPrefixes.input}*`,
+      `${dir}/${tmpPrefixes.input}*`,
       (cct, result) => {
         cct.is(result.status, 0, 'process should send success status (0)')
         cct.is(result.parsedOutput, expectedOutput + defaults.inputJoinString + expectedOutput, 'stdout should contain replaced string')

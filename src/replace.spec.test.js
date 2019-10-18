@@ -125,7 +125,7 @@ tap.test('check api', async t => {
       await checkSyncAsync(cct, 'is', [testInput, expectedOutput + defaults.inputJoinString + expectedOutput, 'replaced correctly'])
 
       await cct.test('with inputJoinString changed', async ccct => {
-        testInput.input = `${dir}\\${tmpPrefixes.input}*`
+        testInput.input = [input.path, input2.path]
         testInput.inputJoinString = 'someCustomString\n\t'
 
         await checkSyncAsync(ccct, 'is', [testInput, expectedOutput + testInput.inputJoinString + expectedOutput, 'replaced correctly'])
@@ -137,12 +137,12 @@ tap.test('check api', async t => {
     })
 
     await ct.test('as glob pattern', async cct => {
-      testInput.input = `${dir}\\${tmpPrefixes.input}*`
+      testInput.input = `${dir}/${tmpPrefixes.input}*`
 
       await checkSyncAsync(cct, 'is', [testInput, expectedOutput + defaults.inputJoinString + expectedOutput, 'replaced correctly'])
 
       await cct.test('with inputGlobOptions', async ccct => {
-        testInput.input = `${dir}\\${tmpPrefixes.input}*`
+        testInput.input = `${dir}/${tmpPrefixes.input}*`
         testInput.inputGlobOptions = { onlyDirectories: true }
 
         await checkSyncAsync(ccct, 'is', [testInput, '', 'replaced correctly'])
