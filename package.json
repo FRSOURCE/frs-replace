@@ -42,15 +42,8 @@
     "test": "yarn test:benchmark && yarn test:unit --100",
     "posttest": "tap --coverage-report=html",
     "pretest:unit": "standard --fix",
-    "test:unit": "tap ./src/*.spec.js ./bin/*.spec.js -J",
-    "test:benchmark": "tap ./benchmark/*.spec.js --no-timeout"
-  },
-  "nyc": {
-    "exclude": "**/*.spec.js",
-    "include": [
-      "src/**",
-      "bin/**"
-    ]
+    "test:unit": "tap ./src/*.test.js ./bin/*.test.js -J",
+    "test:benchmark": "tap ./benchmark/*.benchmark.test.js --no-timeout"
   },
   "devDependencies": {
     "perfy": "^1.1.5",
