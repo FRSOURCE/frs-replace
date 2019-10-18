@@ -91,7 +91,7 @@ tap.beforeEach(async () => {
 
 const cleanInputs = (done) => {
   input && input.cleanup()
-  input = void 0
+  input = undefined
   done && done() // to be runned either by node-tap or manually
 }
 
@@ -121,7 +121,7 @@ tap.test(`input as glob pattern [${iterationsNo} iterations x ${repetitionsNo / 
     //     testInput.replaceAsync.include = `${tmpPrefixes.input}*`
     //   }
     // }, // COMMENTED OUT - waits for better FRS-replace async methods
-    void 0,
+    undefined,
     {
       fn: () => replace(testInput.replace),
       before: () => {
@@ -129,7 +129,7 @@ tap.test(`input as glob pattern [${iterationsNo} iterations x ${repetitionsNo / 
         testInput.replace.include = `${tmpPrefixes.input}*`
       }
     },
-    void 0
+    undefined
   ])
   const sortedResults = results.slice().sort(sortByNanoseconds)
 
@@ -157,9 +157,9 @@ tap.test(`input & replacement as strings [${iterationsNo} iterations x ${repetit
         testInput.FRSReplace.content = content
       }
     },
-    void 0,
-    void 0,
-    void 0,
+    undefined,
+    undefined,
+    undefined,
     { fn: () => replaceString(content, regex.source, replacement) }
   ])
 
@@ -186,13 +186,13 @@ function outputPerfy (t, testResults, best) {
         name: v.name,
         avgTime:
           (
-            v.fullNanoseconds === void 0
+            v.fullNanoseconds === undefined
               ? null
               : (v.fullNanoseconds / 1000000000)
           ),
         avgPercentageDifference:
           (
-            v.fullNanoseconds === void 0
+            v.fullNanoseconds === undefined
               ? null
               : ((v.fullNanoseconds / best - 1) * 100)
           )
@@ -238,7 +238,7 @@ async function multipleTests (t, testCfgs, n, iterations) {
   iterations = iterations || iterationsNo
 
   testCfgs = testCfgs.reduce((p, v, i) => {
-    if (v === void 0) {
+    if (v === undefined) {
       results[i] = { name: testedLibraries[i] }
       return p
     }
@@ -262,8 +262,8 @@ async function multipleTests (t, testCfgs, n, iterations) {
           results[index] = result
           result.testCfg = testCfg
         } else {
-          for (let prop in result) {
-            if (result.hasOwnProperty(prop) && typeof result[prop] === 'number') {
+          for (const prop in result) {
+            if (Object.prototype.hasOwnProperty.call(result, prop) && typeof result[prop] === 'number') {
               prevResult[prop] += result[prop]
             }
           }
@@ -277,8 +277,8 @@ async function multipleTests (t, testCfgs, n, iterations) {
   testCfgs.forEach(({ i: index }) => {
     const result = results[index]
 
-    for (let prop in result) {
-      if (result.hasOwnProperty(prop) && typeof result[prop] === 'number') {
+    for (const prop in result) {
+      if (Object.prototype.hasOwnProperty.call(result, prop) && typeof result[prop] === 'number') {
         result[prop] /= n
       }
     }
@@ -304,11 +304,11 @@ async function singleTest (name, test, n) {
 }
 
 function sortByNanoseconds (a, b) {
-  if (a.fullNanoseconds === void 0) {
-    return b.fullNanoseconds === void 0 ? 0 : 1
+  if (a.fullNanoseconds === undefined) {
+    return b.fullNanoseconds === undefined ? 0 : 1
   }
 
-  if (b.fullNanoseconds === void 0) {
+  if (b.fullNanoseconds === undefined) {
     return -1
   }
 

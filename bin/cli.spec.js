@@ -112,9 +112,9 @@ tap.test('input argument', async (t) => {
   let input, input2
   const cleanInputs = done => {
     input && input.cleanup()
-    input = void 0
+    input = undefined
     input2 && input2.cleanup()
-    input2 = void 0
+    input2 = undefined
     done && done()
   }
 
@@ -212,7 +212,7 @@ tap.test('i-read-opts argument', async (t) => {
 
   t.afterEach(done => {
     input.cleanup()
-    input = void 0
+    input = undefined
     done()
   })
 
@@ -280,9 +280,9 @@ tap.test('i-glob-opts argument', async (t) => {
 
   t.afterEach(done => {
     input.cleanup()
-    input = void 0
+    input = undefined
     input2.cleanup()
-    input2 = void 0
+    input2 = undefined
     done()
   })
 
@@ -338,9 +338,9 @@ tap.test('i-join-str argument', async (t) => {
 
   t.afterEach(done => {
     input.cleanup()
-    input = void 0
+    input = undefined
     input2.cleanup()
-    input2 = void 0
+    input2 = undefined
     done()
   })
 
@@ -481,7 +481,7 @@ tap.test('flags argument', async (t) => {
 tap.test('replace-fn argument', async (t) => {
   const expectedOutput = content.replace(new RegExp(regex, defaultFlags), replaceFn)
   const outputPath = output = tmp.tmpNameSync({ prefix: tmpPrefixes.output })
-  let replaceFnTmp = void 0
+  let replaceFnTmp
 
   await tmp.file({ prefix: tmpPrefixes.input, keep: true, dir, postfix: '.js' })
     .then(
@@ -502,7 +502,7 @@ tap.test('replace-fn argument', async (t) => {
     t,
     [regex, replaceFnTmp.path, '--content', content, '-o', outputPath, '--stdout'],
     ['-r', '--replace-fn'],
-    void 0,
+    undefined,
     (ct, result) => {
       ct.is(result.status, 0, 'process should send success status (0)')
       ct.is(result.parsedOutput, expectedOutput, 'stdout should contain replaced string')
@@ -516,7 +516,7 @@ tap.test('replace-fn argument', async (t) => {
   )
 
   replaceFnTmp.cleanup()
-  replaceFnTmp = void 0
+  replaceFnTmp = undefined
 
   t.end()
 })

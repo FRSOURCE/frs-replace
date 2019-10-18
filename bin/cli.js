@@ -47,7 +47,7 @@ require('get-stdin')().then((stdin) => {
 
     .option('i-read-opts')
     .describe('i-read-opts', 'Passed to fs.readFileSync when reading input file')
-    .default('i-read-opts', void 0, 'utf8') // will use node's default value
+    .default('i-read-opts', undefined, 'utf8') // will use node's default value
     .implies('i-read-opts', 'i')
 
     .option('i-glob-opts')
@@ -56,7 +56,7 @@ require('get-stdin')().then((stdin) => {
 
     .option('i-join-str')
     .describe('i-join-str', 'Used when joining multiple files')
-    .default('i-join-str', void 0, 'newline (\\n)') // will use node's default value
+    .default('i-join-str', undefined, 'newline (\\n)') // will use node's default value
     .implies('i-join-str', 'i')
 
     .option('o')
@@ -67,7 +67,7 @@ require('get-stdin')().then((stdin) => {
 
     .option('o-write-opts')
     .describe('o-write-opts', 'Passed as options argument of write\'s .sync method')
-    .default('o-write-opts', void 0, 'utf8') // will use node's default value
+    .default('o-write-opts', undefined, 'utf8') // will use node's default value
     .implies('o-write-opts', 'o')
 
     .option('f')

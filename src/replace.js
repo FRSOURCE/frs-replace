@@ -27,9 +27,9 @@ function replace ({
   let result
   const replaceFn = typeof regex === 'string' ? replaceString : replaceRegex
 
-  if (content !== void 0) {
+  if (content !== undefined) {
     result = replaceFn(content, regex, replacement)
-  } else if (input !== void 0) {
+  } else if (input !== undefined) {
     const files = require('fast-glob')
       .sync(input, inputGlobOptions)
 
@@ -47,7 +47,7 @@ function replace ({
     writeError('at least one input source must be defined!')
   }
 
-  if (output !== void 0) {
+  if (output !== undefined) {
     if (typeof outputWriteOptions === 'string') {
       outputWriteOptions = { encoding: outputWriteOptions }
     }

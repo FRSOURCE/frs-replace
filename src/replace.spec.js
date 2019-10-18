@@ -75,9 +75,9 @@ tap.test('check api', async t => {
 
     const cleanInputs = (done) => {
       input2 && input2.cleanup()
-      input2 = void 0
+      input2 = undefined
       input && input.cleanup()
-      input = void 0
+      input = undefined
       done && done() // to be runned either by node-tap or manually
     }
 
