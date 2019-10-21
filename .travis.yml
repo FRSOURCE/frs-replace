@@ -1,4 +1,24 @@
+dist: trusty
+sudo: required
 language: node_js
-node_js:
-  - "node"
-  - "lts/*"
+cache: yarn
+matrix:
+  include:
+    - name: "Standard linting"
+      script: yarn standard
+      node_js: "lts/*"
+    - name: "Unit tests & coverage"
+      script: yarn test
+      node_js:
+        - "node"
+        - "lts/*"
+    - name: "Benchmark test - glob"
+      script: travis_wait yarn test:benchmark:glob
+      node_js:
+        - "node"
+        - "lts/*"
+    - name: "Benchmark test - string"
+      script: yarn test:benchmark:string
+      node_js:
+        - "node"
+        - "lts/*"

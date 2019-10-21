@@ -23,8 +23,8 @@ const defaults = {
 }
 let output, dir
 
-{
-  const dirObj = tmp.dirSync() // removing all files similar our tmp
+{ // removing all files similar our tmp
+  const dirObj = tmp.dirSync()
   dir = dirObj.name
 
   glob.sync(
@@ -170,10 +170,10 @@ tap.test('check api', async t => {
     ct.end()
   })
 
-  await t.test('outputOptions as object', async ct => {
+  await t.test('outputWriteOptions as object', async ct => {
     testInput.content = content
     output = testInput.output = tmp.tmpNameSync({ prefix: tmpPrefixes.output, dir })
-    testInput.outputOptions = { encoding: defaults.outputWriteOptions }
+    testInput.outputWriteOptions = { encoding: defaults.outputWriteOptions }
 
     await checkSyncAsync(ct, 'is', [testInput, expectedOutput, 'replaced correctly'])
 

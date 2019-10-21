@@ -1,19 +1,51 @@
 module.exports = {
-  sync: replace,
-  async: (...args) => new Promise((resolve, reject) => {
-    let result
-
-    try {
-      result = replace.apply(this, args)
-    } catch (e) {
-      return reject(e)
-    }
-
-    resolve(result)
-  })
+  sync: replaceSync,
+  async: replaceAsync
 }
 
-function replace ({
+function replaceSync ({
+  input,
+  inputReadOptions = 'utf8',
+  inputGlobOptions,
+  inputJoinString = '\n',
+  content,
+  output,
+  outputWriteOptions = 'utf8',
+  regex,
+  replacement
+}) {
+  let result = ''
+  const replaceFn = typeof regex === 'string' ? replaceString : replaceRegex
+
+  if (content !== undefined) {
+    result = replaceFn(content, regex, replacement)
+  } else if (input !== undefined) {
+    const files = require('fast-glob').sync(input, inputGlobOptions)
+
+    if (files.length !== 0) {
+      const fs = require('fs')
+      result = replaceFn(fs.readFileSync(files[0], inputReadOptions), regex, replacement)
+
+      for (let i = 1, len = files.length; i < len; ++i) {
+        result += inputJoinString + replaceFn(fs.readFileSync(files[i], inputReadOptions), regex, replacement)
+      }
+    }
+  } else {
+    writeError('at least one input source must be defined!')
+  }
+
+  if (output !== undefined) {
+    if (typeof outputWriteOptions === 'string') {
+      outputWriteOptions = { encoding: outputWriteOptions }
+    }
+
+    require('write').sync(require('path').normalize(output), result, outputWriteOptions)
+  }
+
+  return result
+}
+
+async function replaceAsync ({
   input,
   inputReadOptions = 'utf8',
   inputGlobOptions,
@@ -30,19 +62,33 @@ function replace ({
   if (content !== undefined) {
     result = replaceFn(content, regex, replacement)
   } else if (input !== undefined) {
-    const files = require('fast-glob')
-      .sync(input, inputGlobOptions)
+    const fileStream = require('fast-glob').stream(input, inputGlobOptions)
+    const fs = require('fs')
+    const replacePromises = []
+    const createReplacePromise = path => {
+      return new Promise((resolve, reject) =>
+        fs.readFile(path, inputReadOptions, (error, data) => {
+          /* istanbul ignore next */
+          error && reject(error)
 
-    if (files.length !== 0) {
-      const fs = require('fs')
-      result = replaceFn(fs.readFileSync(files[0], inputReadOptions), regex, replacement)
-
-      for (let i = 1, len = files.length; i < len; ++i) {
-        result += inputJoinString + replaceFn(fs.readFileSync(files[i], inputReadOptions), regex, replacement)
-      }
-    } else {
-      result = ''
+          resolve(replaceFn(data, regex, replacement))
+        })
+      )
     }
+
+    fileStream.on('error', writeError)
+    fileStream.on('data', path => replacePromises.push(
+      createReplacePromise(path)
+    ))
+
+    await new Promise(resolve =>
+      fileStream.once('end', () =>
+        resolve(Promise.all(replacePromises))
+      )
+    ).then(
+      (strings) => (result = strings.join(inputJoinString)),
+      writeError
+    )
   } else {
     writeError('at least one input source must be defined!')
   }
@@ -52,7 +98,7 @@ function replace ({
       outputWriteOptions = { encoding: outputWriteOptions }
     }
 
-    require('write').sync(require('path').normalize(output), result, outputWriteOptions)
+    await require('write')(require('path').normalize(output), result, outputWriteOptions)
   }
 
   return result
