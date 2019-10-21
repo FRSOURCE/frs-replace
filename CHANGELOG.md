@@ -1,6 +1,24 @@
-# Change Log
+# Changelog
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+## [2.0.0](https://github.com/FRSource/FRS-replace/compare/v1.0.1...v2.0.0) (2019-10-21)
+
+
+### ⚠ BREAKING CHANGES
+
+* **package:** fast-glob does not support backslashes in glob patterns anymore, always use forward-slashes
+
+### Features
+
+* better parallelization ([4d90537](https://github.com/FRSource/FRS-replace/commit/4d905375f0550a097d9464b742d13515e1314c94)), closes [#17](https://github.com/FRSource/FRS-replace/issues/17) [#10](https://github.com/FRSource/FRS-replace/issues/10) [#19](https://github.com/FRSource/FRS-replace/issues/19)
+
+
+### Bug Fixes
+
+* **package:** update fast-glob to version 3.1.0 ([#44](https://github.com/FRSource/FRS-replace/issues/44)) ([735785d](https://github.com/FRSource/FRS-replace/commit/735785dfdc99869096cd4c6a3be60fb8f796d54b))
+* **package:** update write to version 2.0.0 ([#36](https://github.com/FRSource/FRS-replace/issues/36)) ([d0b7ffd](https://github.com/FRSource/FRS-replace/commit/d0b7ffdbbd668262860e130551e64b54840ac782))
+* **package:** update yargs to version 14.2.0 ([#45](https://github.com/FRSource/FRS-replace/issues/45)) ([6df29e4](https://github.com/FRSource/FRS-replace/commit/6df29e4e9bda262f9467d85349cd1c61d260c328)), closes [#35](https://github.com/FRSource/FRS-replace/issues/35)
 
 ## [1.0.1](https://github.com/FRSource/FRS-replace/compare/v1.0.0...v1.0.1) (2019-10-18)
 
