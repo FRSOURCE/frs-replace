@@ -1,9 +1,12 @@
 # FRS-replace
 
 [![NPM version](https://img.shields.io/npm/v/frs-replace.svg?style=flat)](https://www.npmjs.com/package/frs-replace)
+[![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 [![Build Status](https://travis-ci.org/FRSource/FRS-replace.svg?branch=master)](https://travis-ci.org/FRSource/FRS-replace)
 [![Coverage Status](https://coveralls.io/repos/github/FRSource/FRS-replace/badge.svg?branch=master)](https://coveralls.io/github/FRSource/FRS-replace?branch=master)
-[![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release) [![Greenkeeper badge](https://badges.greenkeeper.io/FRSource/FRS-replace.svg)](https://greenkeeper.io/)
+[![Dependabot badge](https://api.dependabot.com/badges/status?host=github&repo=FRSource/FRS-replace)](https://dependabot.com/)
+[![Dependencies status](https://david-dm.org/frsource/frs-replace.svg)](https://david-dm.org/frsource/frs-replace)
+[![Dev dependencies status](https://david-dm.org/frsource/frs-replace/dev-status.svg)](https://david-dm.org/frsource/frs-replace?type=dev)
 [![codebeat badge](https://codebeat.co/badges/5496a006-a13d-48cc-baeb-37c79a1f6444)](https://codebeat.co/projects/github-com-frsource-frs-replace-master)
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
