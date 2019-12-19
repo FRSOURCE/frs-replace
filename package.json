@@ -6,7 +6,7 @@
   "main": "index.js",
   "repository": "https://github.com/FRSource/FRS-replace.git",
   "author": "Jakub Freisler <FRSgit@users.noreply.github.com>",
-  "license": "Apache",
+  "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/FRSource/FRS-replace/issues"
   },
