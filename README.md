@@ -40,7 +40,7 @@ download
 FRS-replace package provides 2 methods for synchronous / asynchronous (with promise and ES6 `async`/`await` syntax support) usage:
 
 ```javascript
-const FRSReplace = require('FRS-replace');
+const FRSReplace = require('frs-replace');
 
 FRSReplace.sync({/* options */})
 FRSReplace.async({/* options */})
@@ -64,7 +64,7 @@ Where `/* options */` is an object containing:
 ## CLI usage
 
 ```bash
-FRS-replace <regex> <replacement> [options]
+frs-replace <regex> <replacement> [options]
 ```
 
 ### Positionals
@@ -104,7 +104,7 @@ FRS-replace <regex> <replacement> [options]
 #### 1.1 API
 
 ```javascript
-const FRSReplace = require('FRS-replace')
+const FRSReplace = require('frs-replace')
 
 /* synchronously */
 const resultSync = FRSReplace.sync({
@@ -138,7 +138,7 @@ const resultAsync = await FRSReplace.async({
 #### 1.2 CLI
 
 ```bash
-FRS-replace a b -i foo.js --stdout
+frs-replace a b -i foo.js --stdout
 ```
 
 ### 2. Replace all `a` occurences with `b` from given `foo.js` and save result to `foo_replaced.js`
@@ -146,7 +146,7 @@ FRS-replace a b -i foo.js --stdout
 #### 2.1 API
 
 ```javascript
-const result = require('FRS-replace').sync({
+const result = require('frs-replace').sync({
   input       : 'foo.js',
   regex       : new RegExp('a', 'g'),
   replacement : 'b',
@@ -157,7 +157,7 @@ const result = require('FRS-replace').sync({
 #### 2.2 CLI
 
 ```bash
-FRS-replace a b -i foo.js -o foo_replaced.js
+frs-replace a b -i foo.js -o foo_replaced.js
 ```
 
 ### 3. Replace all `a` occurences with `b` from given array of files and save result to `foo_replaced.js` using default `\n` as result-joining string
@@ -165,7 +165,7 @@ FRS-replace a b -i foo.js -o foo_replaced.js
 #### 3.1 API
 
 ```javascript
-const result = require('FRS-replace').sync({
+const result = require('frs-replace').sync({
   input       : ['foo.js', 'foo2.js'],
   regex       : new RegExp('a', 'g'),
   replacement : 'b',
@@ -176,13 +176,13 @@ const result = require('FRS-replace').sync({
 #### 3.2 CLI
 
 ```bash
-FRS-replace a b -i foo.js foo2.js -o foo_replaced.js --i-join-str "\n/////\n"
+frs-replace a b -i foo.js foo2.js -o foo_replaced.js --i-join-str "\n/////\n"
 ```
 
 or
 
 ```bash
-FRS-replace a b -i foo.js -i foo2.js -o foo_replaced.js --i-join-str "\n/////\n"
+frs-replace a b -i foo.js -i foo2.js -o foo_replaced.js --i-join-str "\n/////\n"
 ```
 
 > Note: Arrays can be passed under single flag-entry as a space-separated list *or* under same flag repeated multiple times (all values will be concatenated into single array using, details - [yargs array notation](https://github.com/yargs/yargs-parser#dot-notation)).
@@ -192,7 +192,7 @@ FRS-replace a b -i foo.js -i foo2.js -o foo_replaced.js --i-join-str "\n/////\n"
 #### 4.1 API
 
 ```javascript
-const result = require('FRS-replace').sync({
+const result = require('frs-replace').sync({
   input           : 'foo/*.js',
   regex           : new RegExp('a', 'g'),
   replacement     : 'b',
@@ -204,7 +204,7 @@ const result = require('FRS-replace').sync({
 #### 4.2 CLI
 
 ```bash
-FRS-replace a b -i foo/*.js -o foo_replaced.js --i-join-str "\n/////\n"
+frs-replace a b -i foo/*.js -o foo_replaced.js --i-join-str "\n/////\n"
 ```
 
 ### 5. Replace all `a` occurences with `b` in given content string `abcd` and save result to `foo_replaced.js`
@@ -212,7 +212,7 @@ FRS-replace a b -i foo/*.js -o foo_replaced.js --i-join-str "\n/////\n"
 #### 5.1 API
 
 ```javascript
-const result = require('FRS-replace').sync({
+const result = require('frs-replace').sync({
   content     : 'abcd',
   regex       : new RegExp('a', 'g'),
   replacement : 'b',
@@ -223,7 +223,7 @@ const result = require('FRS-replace').sync({
 #### 5.2 CLI
 
 ```bash
-FRS-replace a b --content abcd -o foo_replaced.js
+frs-replace a b --content abcd -o foo_replaced.js
 ```
 
 ### 6. Replace all `a` occurences with `b` from piped stream and save it to output file
@@ -231,7 +231,7 @@ FRS-replace a b --content abcd -o foo_replaced.js
 #### 6.1 CLI
 
 ```bash
-<read-file> | FRS-replace a b > <output-file-path>
+<read-file> | frs-replace a b > <output-file-path>
 ```
 
 ### 7. Replaces all `a` occurences with `b` from piped stream and pass it through `stdout` stream to next command
@@ -239,7 +239,7 @@ FRS-replace a b --content abcd -o foo_replaced.js
 #### 7.1 CLI
 
 ```bash
-<read-file> | FRS-replace a b | <next-command>
+<read-file> | frs-replace a b | <next-command>
 ```
 
 ### 8. Both pipe & options styles can be mixed together, here - getting input from `i` argument and passing output down the stream to next command
@@ -247,7 +247,7 @@ FRS-replace a b --content abcd -o foo_replaced.js
 #### 8.1 CLI
 
 ```bash
-FRS-replace a b -i foo.js | <next-command>
+frs-replace a b -i foo.js | <next-command>
 ```
 
 ## Benchmarks (Node v10.16.0)
