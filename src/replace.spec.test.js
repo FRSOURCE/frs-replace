@@ -7,8 +7,8 @@ const glob = require('fast-glob')
 const replace = require('./replace')
 
 const tmpPrefixes = {
-  input: 'FRS-replace-replace-in',
-  output: 'FRS-replace-replace-out'
+  input: 'frs-replace-replace-in',
+  output: 'frs-replace-replace-out'
 }
 const content = `aąbcćdeęfg%hi
 jklmn
@@ -42,10 +42,10 @@ tap.afterEach((done) => {
 })
 
 tap.test('check required fields', async t => {
-  t.throws(() => replace.sync({}), { message: 'FRS-replace :: at least one input source must be defined!' }, 'sync :: should throw if both stdin & input arguments missing')
+  t.throws(() => replace.sync({}), { message: 'frs-replace :: at least one input source must be defined!' }, 'sync :: should throw if both stdin & input arguments missing')
   const asyncResult = replace.async({})
   asyncResult.catch(() => {}) // to silent Node "PromiseRejectionHandledWarning:" error
-  await t.rejects(asyncResult, { message: 'FRS-replace :: at least one input source must be defined!' }, 'async :: should reject promise if both stdin & input arguments missing')
+  await t.rejects(asyncResult, { message: 'frs-replace :: at least one input source must be defined!' }, 'async :: should reject promise if both stdin & input arguments missing')
 
   t.end()
 })

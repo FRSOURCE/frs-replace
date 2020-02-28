@@ -2,15 +2,17 @@
   "name": "frs-replace",
   "version": "2.0.1",
   "description": "Simple wrapper around javascript replace with CLI usage support!",
-  "bin": "./bin/cli.js",
+  "bin": {
+    "frs-replace": "./src/cli.js"
+  },
   "main": "index.js",
-  "repository": "https://github.com/FRSource/FRS-replace.git",
+  "repository": "https://github.com/FRSource/frs-replace.git",
   "author": "Jakub Freisler <FRSgit@users.noreply.github.com>",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/FRSource/FRS-replace/issues"
+    "url": "https://github.com/FRSource/frs-replace/issues"
   },
-  "homepage": "https://github.com/FRSource/FRS-replace#readme",
+  "homepage": "https://github.com/FRSource/frs-replace#readme",
   "files": [
     "bin/cli.js",
     "src/replace.js",
