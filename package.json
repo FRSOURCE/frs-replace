@@ -1,5 +1,5 @@
 {
-  "name": "frs-replace",
+  "name": "@frsource/frs-replace",
   "version": "2.0.1",
   "description": "Simple wrapper around javascript replace with CLI usage support!",
   "bin": {
