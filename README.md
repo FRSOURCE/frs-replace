@@ -1,10 +1,10 @@
-# FRS-replace
+# frs-replace
 
 [![NPM version](https://img.shields.io/npm/v/frs-replace.svg?style=flat)](https://www.npmjs.com/package/frs-replace)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
-[![Build Status](https://travis-ci.org/FRSource/FRS-replace.svg?branch=master)](https://travis-ci.org/FRSource/FRS-replace)
-[![Coverage Status](https://coveralls.io/repos/github/FRSource/FRS-replace/badge.svg?branch=master)](https://coveralls.io/github/FRSource/FRS-replace?branch=master)
-[![Dependabot badge](https://api.dependabot.com/badges/status?host=github&repo=FRSource/FRS-replace)](https://dependabot.com/)
+[![Build Status](https://travis-ci.org/FRSource/frs-replace.svg?branch=master)](https://travis-ci.org/FRSource/frs-replace)
+[![Coverage Status](https://coveralls.io/repos/github/FRSource/frs-replace/badge.svg?branch=master)](https://coveralls.io/github/FRSource/frs-replace?branch=master)
+[![Dependabot badge](https://api.dependabot.com/badges/status?host=github&repo=FRSource/frs-replace)](https://dependabot.com/)
 [![Dependencies status](https://david-dm.org/frsource/frs-replace.svg)](https://david-dm.org/frsource/frs-replace)
 [![Dev dependencies status](https://david-dm.org/frsource/frs-replace/dev-status.svg)](https://david-dm.org/frsource/frs-replace?type=dev)
 [![codebeat badge](https://codebeat.co/badges/5496a006-a13d-48cc-baeb-37c79a1f6444)](https://codebeat.co/projects/github-com-frsource-frs-replace-master)
@@ -33,21 +33,21 @@ npm install frs-replace
 ```
 
 download
-[zipped from FRS-replace Releases](https://github.com/FRSource/FRS-replace/releases)
+[zipped from frs-replace Releases](https://github.com/FRSource/frs-replace/releases)
 
 ## Node API usage
 
-FRS-replace package provides 2 methods for synchronous / asynchronous (with promise and ES6 `async`/`await` syntax support) usage:
+frs-replace package provides 2 methods for synchronous / asynchronous (with promise and ES6 `async`/`await` syntax support) usage:
 
 ```javascript
-const FRSReplace = require('FRS-replace');
+const FRSReplace = require('frs-replace');
 
 FRSReplace.sync({/* options */})
 FRSReplace.async({/* options */})
 ```
 
 Where `/* options */` is an object containing:
-> Note: remember that you need to provide some input for FRS-replace to work, so one of the parameters: input or content are **required**
+> Note: remember that you need to provide some input for frs-replace to work, so one of the parameters: input or content are **required**
 
 | Option | Type | Default | Description |
   | --- | --- | --- | --- |
@@ -64,7 +64,7 @@ Where `/* options */` is an object containing:
 ## CLI usage
 
 ```bash
-FRS-replace <regex> <replacement> [options]
+frs-replace <regex> <replacement> [options]
 ```
 
 ### Positionals
@@ -104,7 +104,7 @@ FRS-replace <regex> <replacement> [options]
 #### 1.1 API
 
 ```javascript
-const FRSReplace = require('FRS-replace')
+const FRSReplace = require('frs-replace')
 
 /* synchronously */
 const resultSync = FRSReplace.sync({
@@ -138,7 +138,7 @@ const resultAsync = await FRSReplace.async({
 #### 1.2 CLI
 
 ```bash
-FRS-replace a b -i foo.js --stdout
+frs-replace a b -i foo.js --stdout
 ```
 
 ### 2. Replace all `a` occurences with `b` from given `foo.js` and save result to `foo_replaced.js`
@@ -146,7 +146,7 @@ FRS-replace a b -i foo.js --stdout
 #### 2.1 API
 
 ```javascript
-const result = require('FRS-replace').sync({
+const result = require('frs-replace').sync({
   input       : 'foo.js',
   regex       : new RegExp('a', 'g'),
   replacement : 'b',
@@ -157,7 +157,7 @@ const result = require('FRS-replace').sync({
 #### 2.2 CLI
 
 ```bash
-FRS-replace a b -i foo.js -o foo_replaced.js
+frs-replace a b -i foo.js -o foo_replaced.js
 ```
 
 ### 3. Replace all `a` occurences with `b` from given array of files and save result to `foo_replaced.js` using default `\n` as result-joining string
@@ -165,7 +165,7 @@ FRS-replace a b -i foo.js -o foo_replaced.js
 #### 3.1 API
 
 ```javascript
-const result = require('FRS-replace').sync({
+const result = require('frs-replace').sync({
   input       : ['foo.js', 'foo2.js'],
   regex       : new RegExp('a', 'g'),
   replacement : 'b',
@@ -176,13 +176,13 @@ const result = require('FRS-replace').sync({
 #### 3.2 CLI
 
 ```bash
-FRS-replace a b -i foo.js foo2.js -o foo_replaced.js --i-join-str "\n/////\n"
+frs-replace a b -i foo.js foo2.js -o foo_replaced.js --i-join-str "\n/////\n"
 ```
 
 or
 
 ```bash
-FRS-replace a b -i foo.js -i foo2.js -o foo_replaced.js --i-join-str "\n/////\n"
+frs-replace a b -i foo.js -i foo2.js -o foo_replaced.js --i-join-str "\n/////\n"
 ```
 
 > Note: Arrays can be passed under single flag-entry as a space-separated list *or* under same flag repeated multiple times (all values will be concatenated into single array using, details - [yargs array notation](https://github.com/yargs/yargs-parser#dot-notation)).
@@ -192,7 +192,7 @@ FRS-replace a b -i foo.js -i foo2.js -o foo_replaced.js --i-join-str "\n/////\n"
 #### 4.1 API
 
 ```javascript
-const result = require('FRS-replace').sync({
+const result = require('frs-replace').sync({
   input           : 'foo/*.js',
   regex           : new RegExp('a', 'g'),
   replacement     : 'b',
@@ -204,7 +204,7 @@ const result = require('FRS-replace').sync({
 #### 4.2 CLI
 
 ```bash
-FRS-replace a b -i foo/*.js -o foo_replaced.js --i-join-str "\n/////\n"
+frs-replace a b -i foo/*.js -o foo_replaced.js --i-join-str "\n/////\n"
 ```
 
 ### 5. Replace all `a` occurences with `b` in given content string `abcd` and save result to `foo_replaced.js`
@@ -212,7 +212,7 @@ FRS-replace a b -i foo/*.js -o foo_replaced.js --i-join-str "\n/////\n"
 #### 5.1 API
 
 ```javascript
-const result = require('FRS-replace').sync({
+const result = require('frs-replace').sync({
   content     : 'abcd',
   regex       : new RegExp('a', 'g'),
   replacement : 'b',
@@ -223,7 +223,7 @@ const result = require('FRS-replace').sync({
 #### 5.2 CLI
 
 ```bash
-FRS-replace a b --content abcd -o foo_replaced.js
+frs-replace a b --content abcd -o foo_replaced.js
 ```
 
 ### 6. Replace all `a` occurences with `b` from piped stream and save it to output file
@@ -231,7 +231,7 @@ FRS-replace a b --content abcd -o foo_replaced.js
 #### 6.1 CLI
 
 ```bash
-<read-file> | FRS-replace a b > <output-file-path>
+<read-file> | frs-replace a b > <output-file-path>
 ```
 
 ### 7. Replaces all `a` occurences with `b` from piped stream and pass it through `stdout` stream to next command
@@ -239,7 +239,7 @@ FRS-replace a b --content abcd -o foo_replaced.js
 #### 7.1 CLI
 
 ```bash
-<read-file> | FRS-replace a b | <next-command>
+<read-file> | frs-replace a b | <next-command>
 ```
 
 ### 8. Both pipe & options styles can be mixed together, here - getting input from `i` argument and passing output down the stream to next command
@@ -247,7 +247,7 @@ FRS-replace a b --content abcd -o foo_replaced.js
 #### 8.1 CLI
 
 ```bash
-FRS-replace a b -i foo.js | <next-command>
+frs-replace a b -i foo.js | <next-command>
 ```
 
 ## Benchmarks (Node v10.16.0)
@@ -256,8 +256,8 @@ FRS-replace a b -i foo.js | <next-command>
 
 | Library (best&nbsp;bolded) | Execution time [s] | Difference percentage (comparing&nbsp;to&nbsp;best&nbsp;time) |
 | --- | --- | --- |
-| FRS-replace async | 0.01761663 | 103.7503% |
-| **FRS-replace sync** | 0.00864619 | 0.0000% |
+| frs-replace async | 0.01761663 | 103.7503% |
+| **frs-replace sync** | 0.00864619 | 0.0000% |
 | replace-in-file | 0.02154322 | 149.1644% |
 | replace async | *N/A* | *N/A* |
 | replace sync | 0.05026399 | 481.3428% |
@@ -267,8 +267,8 @@ FRS-replace a b -i foo.js | <next-command>
 
 | Library (best&nbsp;bolded) | Execution time [s] | Difference percentage (comparing&nbsp;to&nbsp;best&nbsp;time) |
 | --- | --- | --- |
-| FRS-replace async | 0.00011756 | 215.1822% |
-| **FRS-replace sync** | 0.00003730 | 0.0000% |
+| frs-replace async | 0.00011756 | 215.1822% |
+| **frs-replace sync** | 0.00003730 | 0.0000% |
 | replace-in-file | *N/A* | *N/A* |
 | replace async | *N/A* | *N/A* |
 | replace sync | *N/A* | *N/A* |

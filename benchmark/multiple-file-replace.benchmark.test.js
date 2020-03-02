@@ -16,8 +16,8 @@ const content = `aąbcćdeęfg%hi
 jklmn
 oópqr,stuvwxyZ`
 const tmpPrefixes = {
-  input: 'FRS-replace-replace-in-',
-  output: 'FRS-replace-replace-out-'
+  input: 'frs-replace-replace-in',
+  output: 'frs-replace-replace-out'
 }
 const defaults = {
   inputReadOptions: 'utf8',
@@ -54,8 +54,8 @@ const testInput = {
   }
 }
 const testedLibraries = [
-  'FRS-replace async',
-  'FRS-replace sync',
+  'frs-replace async',
+  'frs-replace sync',
   'replace-in-file',
   'replace async',
   'replace sync',
@@ -136,8 +136,8 @@ tap.test(`input as glob pattern [${inputFilesNo} files x ${iterationsNo} iterati
   const result = outputPerfy(ct, results, results.slice().sort(sortByNumberVariable('fullNanoseconds'))[0])
   const sortedResults = result.results.slice().sort(sortByNumberVariable('avgTime'))
 
-  ct.is((sortedResults[0].name.indexOf('FRS-replace sync') !== -1 || (sortedResults[1].name.indexOf('FRS-replace sync') !== -1 && sortedResults[1].avgPercentageDifference < 5)), true, 'FRS-replace sync should be the fastest or second, but at most with 5% difference to best')
-  ct.is(sortedResults[0].name.indexOf('FRS-replace async') !== -1 || sortedResults[1].name.indexOf('FRS-replace async') !== -1, true, 'FRS-replace async should be the fastest or second')
+  ct.is((sortedResults[0].name.indexOf('frs-replace sync') !== -1 || (sortedResults[1].name.indexOf('frs-replace sync') !== -1 && sortedResults[1].avgPercentageDifference < 5)), true, 'frs-replace sync should be the fastest or second, but at most with 5% difference to best')
+  ct.is(sortedResults[0].name.indexOf('frs-replace async') !== -1 || sortedResults[1].name.indexOf('frs-replace async') !== -1, true, 'frs-replace async should be the fastest or second')
 
   ct.end()
 })
@@ -167,7 +167,7 @@ tap.test(`input & replacement as strings [${iterationsNo} iterations x ${repetit
   const result = outputPerfy(ct, results, results.slice().sort(sortByNumberVariable('fullNanoseconds'))[0])
   const sortedResults = result.results.slice().sort(sortByNumberVariable('avgTime'))
 
-  ct.is((sortedResults[0].name.indexOf('FRS-replace') !== -1 || (sortedResults[1].name.indexOf('FRS-replace') !== -1 && sortedResults[1].avgPercentageDifference < 10)), true, 'FRS-replace should be the fastest or second, but at most with 10% difference to best')
+  ct.is((sortedResults[0].name.indexOf('frs-replace') !== -1 || (sortedResults[1].name.indexOf('frs-replace') !== -1 && sortedResults[1].avgPercentageDifference < 10)), true, 'frs-replace should be the fastest or second, but at most with 10% difference to best')
 
   ct.end()
 })

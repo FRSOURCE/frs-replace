@@ -105,7 +105,7 @@ async function replaceAsync ({
 }
 
 function writeError (msg) {
-  throw new Error(`FRS-replace :: ${msg}`)
+  throw new Error(`frs-replace :: ${msg}`)
 }
 
 function replaceRegex (content, needle, replacement) {

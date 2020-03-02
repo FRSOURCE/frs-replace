@@ -6,8 +6,8 @@ const glob = require('fast-glob')
 const path = require('path')
 
 const tmpPrefixes = {
-  input: 'FRS-replace-cli-in',
-  output: 'FRS-replace-cli-out'
+  input: 'frs-replace-cli-in',
+  output: 'frs-replace-cli-out'
 }
 const defaultOptions = {
   timeout: 2000

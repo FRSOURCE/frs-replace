@@ -15,7 +15,7 @@ require('get-stdin')().then((stdin) => {
     .parserConfiguration({
       'camel-case-expansion': false
     })
-    .scriptName('FRS-replace')
+    .scriptName('frs-replace')
     .usage('$0 <regex> <replacement> [options]', 'Replace matching parts of string with replacement string/function', (yargs) => {
       yargs
         .positional('regex', {
