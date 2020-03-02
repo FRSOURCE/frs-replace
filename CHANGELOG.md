@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.1.0](https://github.com/FRSource/frs-replace/compare/v2.0.1...v2.1.0) (2020-03-02)
+
+
+### Features
+
+* change npm package name - add it [@frsource](https://github.com/frsource) scope ([0208a90](https://github.com/FRSource/frs-replace/commit/0208a900c88f29ac167e06524ba583ea62eeb457))
+* rename FRS-replace to frs-replace ([#73](https://github.com/FRSource/frs-replace/issues/73)) ([8547685](https://github.com/FRSource/frs-replace/commit/8547685e09e133265ba493b8e5349adf8298b463))
+
 ### [2.0.1](https://github.com/FRSource/frs-replace/compare/v2.0.0...v2.0.1) (2019-11-01)
 
 ## [2.0.0](https://github.com/FRSource/frs-replace/compare/v1.0.1...v2.0.0) (2019-10-21)
