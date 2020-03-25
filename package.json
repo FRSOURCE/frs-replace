@@ -1,6 +1,6 @@
 {
   "name": "@frsource/frs-replace",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "description": "Simple wrapper around javascript replace with CLI usage support!",
   "bin": {
     "frs-replace": "./src/cli.js"
@@ -57,7 +57,7 @@
     "replace-string": "^3.0.0",
     "standard": "^14.3.1",
     "standard-version": "^7.0.0",
-    "tap": "^14.7.1",
+    "tap": "^14.10.7",
     "tmp-promise": "^2.0.2"
   },
   "dependencies": {
