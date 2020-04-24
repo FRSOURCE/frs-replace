@@ -52,7 +52,7 @@
   },
   "devDependencies": {
     "perfy": "^1.1.5",
-    "replace": "^1.1.1",
+    "replace": "^1.2.0",
     "replace-in-file": "^5.0.2",
     "replace-string": "^3.0.0",
     "standard": "^14.3.3",
