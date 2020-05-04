@@ -58,7 +58,7 @@
     "standard": "^14.3.3",
     "standard-version": "^7.0.0",
     "tap": "^14.10.7",
-    "tmp-promise": "^2.0.2"
+    "tmp-promise": "^2.1.0"
   },
   "dependencies": {
     "fast-glob": "^3.1.0",
