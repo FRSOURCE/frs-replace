@@ -1,6 +1,6 @@
-# frs-replace
+# @frsource/frs-replace
 
-[![NPM version](https://img.shields.io/npm/v/frs-replace.svg?style=flat)](https://www.npmjs.com/package/frs-replace)
+[![NPM version](https://img.shields.io/npm/v/@frsource/frs-replace.svg?style=flat)](https://www.npmjs.com/package/@frsource/frs-replace)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 [![Build Status](https://travis-ci.org/FRSource/frs-replace.svg?branch=master)](https://travis-ci.org/FRSource/frs-replace)
 [![Coverage Status](https://coveralls.io/repos/github/FRSource/frs-replace/badge.svg?branch=master)](https://coveralls.io/github/FRSource/frs-replace?branch=master)
@@ -250,26 +250,26 @@ frs-replace a b --content abcd -o foo_replaced.js
 frs-replace a b -i foo.js | <next-command>
 ```
 
-## Benchmarks (Node v10.16.0)
+## Benchmarks (Node v12.16.2)
 
 ### input as glob pattern [40 files x 1000 iterations x 100 repetitions]
 
 | Library (best&nbsp;bolded) | Execution time [s] | Difference percentage (comparing&nbsp;to&nbsp;best&nbsp;time) |
 | --- | --- | --- |
-| frs-replace async | 0.01761663 | 103.7503% |
-| **frs-replace sync** | 0.00864619 | 0.0000% |
-| replace-in-file | 0.02154322 | 149.1644% |
+| frs-replace async | 0.01546155 | 84.3014% |
+| **frs-replace sync** | 0.00838927 | 0.0000% |
+| replace-in-file | 0.02182254 | 160.1244% |
 | replace async | *N/A* | *N/A* |
-| replace sync | 0.05026399 | 481.3428% |
+| replace sync | 0.04994809 | 495.3804% |
 | replace-string | *N/A* | *N/A* |
 
 ### input & replacement as strings [1000 iterations x 100 repetitions]
 
 | Library (best&nbsp;bolded) | Execution time [s] | Difference percentage (comparing&nbsp;to&nbsp;best&nbsp;time) |
 | --- | --- | --- |
-| frs-replace async | 0.00011756 | 215.1822% |
-| **frs-replace sync** | 0.00003730 | 0.0000% |
+| frs-replace async | 0.00003655 | 17.4625% |
+| **frs-replace sync** | 0.00003112 | 0.0000% |
 | replace-in-file | *N/A* | *N/A* |
 | replace async | *N/A* | *N/A* |
 | replace sync | *N/A* | *N/A* |
-| replace-string | 0.00004905 | 31.5049% |
+| replace-string | 0.00003231 | 3.8462% |
