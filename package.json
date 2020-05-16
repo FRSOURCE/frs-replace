@@ -3,7 +3,7 @@
   "version": "2.1.0",
   "description": "Simple wrapper around javascript replace with CLI usage support!",
   "bin": {
-    "frs-replace": "./src/cli.js"
+    "frs-replace": "./bin/cli.js"
   },
   "main": "index.js",
   "repository": "https://github.com/FRSource/frs-replace.git",
