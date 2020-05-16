@@ -129,8 +129,3 @@ Turn off camel-case-expansion to speed up yargs a bit
 
 <a name="0.0.1"></a>
 ## 0.0.1 (2018-10-15)
-
-
-
-<a name="0.0.1"></a>
-## 0.0.1 (2018-10-15)

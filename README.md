@@ -12,11 +12,11 @@
 
 The fastest ([see benchmarks](#benchmarks)) CLI & Node wrapper around [javascript replace](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace) which allows on-the-fly replacing (with or without changing input files), [globbing](https://en.wikipedia.org/wiki/Glob_(programming)), [piping](https://en.wikipedia.org/wiki/Pipeline_(Unix)) and many more!
 
-* [:scroll: Installation](#installation)
-* [:books: Node API usage](#node-api-usage)
-* [:keyboard: CLI usage](#cli-usage)
-* [:mag_right: Examples](#examples)
-* [:chart_with_upwards_trend: Benchmarks](#benchmarks)
+* [:scroll: Installation](#scroll-installation)
+* [:books: Node API usage](#books-node-api-usage)
+* [:keyboard: CLI usage](#keyboard-cli-usage)
+* [:mag_right: Examples](#mag_right-examples)
+* [:chart_with_upwards_trend: Benchmarks](#chart_with_upwards_trend-benchmarks)
 
 ## :scroll: Installation
 
@@ -254,7 +254,7 @@ frs-replace a b -i foo.js | <next-command>
 
 > Tested on Node v12.16.2.
 
-### input as glob pattern [4 files x 1 iterations x 1 repetitions]
+### input as glob pattern [40 files x 1000 iterations x 100 repetitions]
 
 | Library (best&nbsp;bolded) | Execution time [s] | Difference percentage (comparing&nbsp;to&nbsp;best&nbsp;time) |
 | --- | --- | --- |
