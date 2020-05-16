@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.1.1](https://github.com/FRSource/frs-replace/compare/v2.1.0...v2.1.1) (2020-05-16)
+
+
+### Bug Fixes
+
+* cli path for binary command ([2546905](https://github.com/FRSource/frs-replace/commit/254690572e86d31c60aaac5b234fbb6b5d11eabf))
+
 ## [2.1.0](https://github.com/FRSource/frs-replace/compare/v2.0.1...v2.1.0) (2020-05-15)
 
 
