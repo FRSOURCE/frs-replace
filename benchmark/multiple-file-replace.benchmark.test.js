@@ -106,7 +106,7 @@ tap.teardown(() => {
   inputs = []
   const readmeContent = fs.readFileSync('./README.md').toString()
 
-  fs.writeFileSync('./README.md', readmeContent.replace(/(##\sBenchmarks \(Node )(?:.*?)(\)\s)[\s\S]*?(?:$|(?:\s##\s))/, `$1${process.version}$2${perfyResults}`))
+  fs.writeFileSync('./README.md', readmeContent.replace(/(##\s:chart_with_upwards_trend:\sBenchmarks)[\s\S]*?(?:$|(?:\s##\s))/, `$1\n\n> Tested on Node ${process.version}.\n${perfyResults}`))
 })
 
 tap.test(`input as glob pattern [${inputFilesNo} files x ${iterationsNo} iterations x ${repetitionsNo / iterationsNo} repetitions]`, async ct => {

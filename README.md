@@ -12,13 +12,13 @@
 
 The fastest ([see benchmarks](#benchmarks)) CLI & Node wrapper around [javascript replace](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace) which allows on-the-fly replacing (with or without changing input files), [globbing](https://en.wikipedia.org/wiki/Glob_(programming)), [piping](https://en.wikipedia.org/wiki/Pipeline_(Unix)) and many more!
 
-* [Installation](#installation)
-* [Node API usage](#node-api-usage)
-* [CLI usage](#cli-usage)
-* [Examples](#examples)
-* [Benchmarks](#benchmarks)
+* [:scroll: Installation](#installation)
+* [:books: Node API usage](#node-api-usage)
+* [:keyboard: CLI usage](#cli-usage)
+* [:mag_right: Examples](#examples)
+* [:chart_with_upwards_trend: Benchmarks](#benchmarks)
 
-## Installation
+## :scroll: Installation
 
 yarn
 
@@ -35,7 +35,7 @@ npm install frs-replace
 download
 [zipped from frs-replace Releases](https://github.com/FRSource/frs-replace/releases)
 
-## Node API usage
+## :books: Node API usage
 
 frs-replace package provides 2 methods for synchronous / asynchronous (with promise and ES6 `async`/`await` syntax support) usage:
 
@@ -61,7 +61,7 @@ Where `/* options */` is an object containing:
   | output | string | *undefined* | Path of an output file |
   | outputWriteOptions  | string or object | utf8 | Passed as options argument of [write's .sync](https://www.npmjs.com/package/write#sync) |
 
-## CLI usage
+## :keyboard: CLI usage
 
 ```bash
 frs-replace <regex> <replacement> [options]
@@ -95,7 +95,7 @@ frs-replace <regex> <replacement> [options]
   | &#8209;h, &#8209;&#8209;help  | boolean | *-* | Show help |
   | &#8209;v, &#8209;&#8209;version  | boolean | *-* | Show version number |
 
-## Examples
+## :mag_right: Examples
 
 > Note: while most of examples is using synchronous API method, in all cases `.async` is applicable as well.
 
@@ -250,9 +250,11 @@ frs-replace a b --content abcd -o foo_replaced.js
 frs-replace a b -i foo.js | <next-command>
 ```
 
-## Benchmarks (Node v12.16.2)
+## :chart_with_upwards_trend: Benchmarks
 
-### input as glob pattern [40 files x 1000 iterations x 100 repetitions]
+> Tested on Node v12.16.2.
+
+### input as glob pattern [4 files x 1 iterations x 1 repetitions]
 
 | Library (best&nbsp;bolded) | Execution time [s] | Difference percentage (comparing&nbsp;to&nbsp;best&nbsp;time) |
 | --- | --- | --- |
