@@ -23,31 +23,31 @@ The fastest ([see benchmarks](#benchmarks)) CLI & Node wrapper around [javascrip
 yarn
 
 ```bash
-yarn add frs-replace
+yarn add @frsource/frs-replace
 ```
 
 npm
 
 ```bash
-npm install frs-replace
+npm install @frsource/frs-replace
 ```
 
 download
-[zipped from frs-replace Releases](https://github.com/FRSource/frs-replace/releases)
+[zipped from @frsource/frs-replace Releases](https://github.com/FRSource/frs-replace/releases)
 
 ## :books: Node API usage
 
-frs-replace package provides 2 methods for synchronous / asynchronous (with promise and ES6 `async`/`await` syntax support) usage:
+@frsource/frs-replace package provides 2 methods for synchronous / asynchronous (with promise and ES6 `async`/`await` syntax support) usage:
 
 ```javascript
-const FRSReplace = require('frs-replace');
+const FRSReplace = require('@frsource/frs-replace');
 
 FRSReplace.sync({/* options */})
 FRSReplace.async({/* options */})
 ```
 
 Where `/* options */` is an object containing:
-> Note: remember that you need to provide some input for frs-replace to work, so one of the parameters: input or content are **required**
+> Note: remember that you need to provide some input for @frsource/frs-replace to work, so one of the parameters: input or content are **required**
 
 | Option | Type | Default | Description |
   | --- | --- | --- | --- |
@@ -78,7 +78,7 @@ frs-replace <regex> <replacement> [options]
 
 > Note: Every boolean option can be negated with use of `--no-` prefix, e.g. `--stdout` or `--no-stdout` turn stdout output on or off, respectively.
 
-> Note: Object types can be set using [dot notation](https://github.com/yargs/yargs-parser#dot-notation). So, e.g. if you want to pass `utf8` value under i-read-opts encoding field you should write `--i-read-opts.encoding utf8`.
+> Note: Object types can be set using [dot notation](https://github.com/yargs/yargs-parser#dot-notation). So, e.g. if you want to pass `utf8` value under `i-read-opts` `encoding` field you should write `--i-read-opts.encoding utf8`.
 
   | Option | Type | Default | Description |
   | --- | --- | --- | --- |
@@ -104,7 +104,7 @@ frs-replace <regex> <replacement> [options]
 #### 1.1 API
 
 ```javascript
-const FRSReplace = require('frs-replace')
+const FRSReplace = require('@frsource/frs-replace')
 
 /* synchronously */
 const resultSync = FRSReplace.sync({
@@ -146,7 +146,7 @@ frs-replace a b -i foo.js --stdout
 #### 2.1 API
 
 ```javascript
-const result = require('frs-replace').sync({
+const result = require('@frsource/frs-replace').sync({
   input       : 'foo.js',
   regex       : new RegExp('a', 'g'),
   replacement : 'b',
@@ -165,7 +165,7 @@ frs-replace a b -i foo.js -o foo_replaced.js
 #### 3.1 API
 
 ```javascript
-const result = require('frs-replace').sync({
+const result = require('@frsource/frs-replace').sync({
   input       : ['foo.js', 'foo2.js'],
   regex       : new RegExp('a', 'g'),
   replacement : 'b',
@@ -192,7 +192,7 @@ frs-replace a b -i foo.js -i foo2.js -o foo_replaced.js --i-join-str "\n/////\n"
 #### 4.1 API
 
 ```javascript
-const result = require('frs-replace').sync({
+const result = require('@frsource/frs-replace').sync({
   input           : 'foo/*.js',
   regex           : new RegExp('a', 'g'),
   replacement     : 'b',
@@ -212,7 +212,7 @@ frs-replace a b -i foo/*.js -o foo_replaced.js --i-join-str "\n/////\n"
 #### 5.1 API
 
 ```javascript
-const result = require('frs-replace').sync({
+const result = require('@frsource/frs-replace').sync({
   content     : 'abcd',
   regex       : new RegExp('a', 'g'),
   replacement : 'b',
