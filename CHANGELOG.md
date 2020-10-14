@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### [2.1.2](https://github.com/FRSource/frs-replace/compare/v2.1.1...v2.1.2) (2020-10-14)
 
+### Bug Fixes
+
+* migration to yargs v16 ([yargs changelog](https://github.com/yargs/yargs/blob/master/CHANGELOG.md#1600-2020-09-09))
+
 ### [2.1.1](https://github.com/FRSource/frs-replace/compare/v2.1.0...v2.1.1) (2020-05-16)
 
 
