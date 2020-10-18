@@ -97,7 +97,7 @@ frs-replace <regex> <replacement> [options]
 
 ## :mag_right: Examples
 
-> Note: while most of examples is using synchronous API method, in all cases `.async` is applicable as well.
+> Note: While most of examples are using synchronous API method in all cases `.async` is applicable as well.
 
 ### 1. Replace all `a` occurences with `b` from given `foo.js` and returns result / writes result to console
 
@@ -185,7 +185,7 @@ or
 frs-replace a b -i foo.js -i foo2.js -o foo_replaced.js --i-join-str "\n/////\n"
 ```
 
-> Note: Arrays can be passed under single flag-entry as a space-separated list *or* under same flag repeated multiple times (all values will be concatenated into single array using, details - [yargs array notation](https://github.com/yargs/yargs-parser#dot-notation)).
+> Note: Arrays can be passed under single flag-entry as a space-separated list *or* under same flag repeated multiple times (all values will be concatenated into single array using, details - [yargs array notation](https://github.com/yargs/yargs/blob/master/docs/tricks.md#arrays)).
 
 ### 4. Replace all `a` occurences with `b` from all `.js` files in `foo` directory and save result to `foo_replaced.js` using `\n/////\n` as result-joining string
 
