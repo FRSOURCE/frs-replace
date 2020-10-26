@@ -45,6 +45,7 @@
     "posttest": "tap --coverage-report=html",
     "pretest:unit": "yarn standard:fix",
     "test:unit": "tap ./src/*.test.js ./bin/*.test.js -J",
+    "test:unit:debug": "tap ./bin/cli.spec.test.js -J -R spec",
     "test:benchmark": "tap ./benchmark/*.benchmark.test.js --no-timeout --no-coverage",
     "test:benchmark:glob": "yarn test:benchmark --grep=\"/input as glob pattern/\"",
     "test:benchmark:string": "yarn test:benchmark --grep=\"/input & replacement as strings/\"",

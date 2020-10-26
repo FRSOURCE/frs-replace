@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+const replaceSync = require('../sync')
 
 require('get-stdin')().then((stdin) => {
   const isPiped = !!stdin
@@ -16,9 +17,9 @@ require('get-stdin')().then((stdin) => {
       'camel-case-expansion': false
     })
     .scriptName('frs-replace')
-    .usage('$0 <regex> <replacement> [options]', 'Replace matching parts of string with replacement string/function', (yargs) => {
+    .usage('$0 <needle> <replacement> [options]', 'Replace matching parts of string with replacement string/function', (yargs) => {
       yargs
-        .positional('regex', {
+        .positional('needle', {
           describe: 'String which is passed as a first parameter to RegExp constructor',
           type: 'string',
           demand: true
@@ -40,9 +41,17 @@ require('get-stdin')().then((stdin) => {
           'Replace all "a" occurences with "b" in given "abcd" and save result (which is "bbcd") to foo_replaced.js')
     })
 
+    .option('f')
+    .alias('f', 'flags')
+    .describe('f', 'RegExp flags used together with `needle` positional (supporting g, i & m)')
+    .nargs('f', 1)
+    .choices('f', ['', 'g', 'm', 'i', 'gm', 'gi', 'mi', 'mg', 'ig', 'im', 'gmi', 'gim', 'mig', 'mgi', 'igm', 'img'])
+    .default('f', 'g')
+    .coerce('f', arg => arg.trim())
+
     .option('i', { demandOption: !isContentPresent && !isHelpPresent })
     .alias('i', 'input')
-    .describe('i', 'File to read & replace from')
+    .describe('i', 'Path to files or fast-glob pattern pointing to files to read & replace from')
     .array('i')
 
     .option('i-read-opts')
@@ -54,14 +63,26 @@ require('get-stdin')().then((stdin) => {
     .describe('i-glob-opts', 'Passed to fast-glob.sync when resolving glob patterns')
     .implies('i-glob-opts', 'i')
 
-    .option('i-join-str')
-    .describe('i-join-str', 'Used when joining multiple files')
-    .default('i-join-str', undefined, 'newline (\\n)') // will use node's default value
-    .implies('i-join-str', 'i')
+    .option('c', { demandOption: isContentPresent })
+    .alias('c', 'content')
+    .describe('c', 'Content to be replaced (takes precedence over stream & file input)')
+    .string('c')
+    .nargs('c', 1)
+
+    .option('s')
+    .alias('s', 'strategy')
+    .describe('s', `output file generation strategy.
+\`join\` - join all input files and saves single file using "output" option as it's path,
+\`preserve-structure\` - when replacing files content copies them over to the directory specified by "output" option.
+\`flatten\` - same as \`preserve-structure\` but flattens the directory structure`)
+    .nargs('s', 1)
+    .choices('s', ['join', 'flatten', 'preserve-structure'])
+    .default('s', 'join')
+    .coerce('s', arg => arg.trim())
 
     .option('o')
     .alias('o', 'output')
-    .describe('o', 'Output file name/path (replaces the file if it already exists and creates any intermediate directories if they don\'t already exist)')
+    .describe('o', 'Output file name/path (replaces the file if it already exists and creates any intermediate directories if they don\'t already exist) or (when used together with `strategy` = `flatten` or `preserve-structure`) path to the output directory')
     .string('o')
     .nargs('o', 1)
 
@@ -70,19 +91,9 @@ require('get-stdin')().then((stdin) => {
     .default('o-write-opts', undefined, 'utf8') // will use node's default value
     .implies('o-write-opts', 'o')
 
-    .option('f')
-    .alias('f', 'flags')
-    .describe('f', 'RegExp flags (supporting gim)')
-    .nargs('f', 1)
-    .choices('f', ['', 'g', 'm', 'i', 'gm', 'gi', 'mi', 'mg', 'ig', 'im', 'gmi', 'gim', 'mig', 'mgi', 'igm', 'img'])
-    .default('f', 'g')
-    .coerce('f', arg => arg.trim())
-
-    .option('c', { demandOption: isContentPresent })
-    .alias('c', 'content')
-    .describe('c', 'Content to be replaced (takes precedence over stream & file input)')
-    .string('c')
-    .nargs('c', 1)
+    .option('o-join-str')
+    .describe('o-join-str', 'String used when joining multiple files (use it together with either `output` or `stdout` option)')
+    .default('o-join-str', undefined, 'newline (\\n)') // will use node's default value
 
     .option('stdout')
     .describe('stdout', 'Force sending output on stdout')
@@ -104,20 +115,21 @@ require('get-stdin')().then((stdin) => {
     .argv
 
   try {
-    const result = require('../src/replace').sync({
-      content: argv.c,
+    const result = replaceSync({
       input: argv.i,
       inputReadOptions: argv['i-read-opts'],
       inputGlobOptions: argv['i-glob-opts'],
-      inputJoinString: argv['i-join-str'],
-      regex: new RegExp(argv.regex, argv.f),
-      replacement: argv.r ? require(argv.replacement) : argv.replacement,
+      content: argv.c,
+      strategy: argv.strategy,
       output: argv.o,
-      outputWriteOptions: argv['o-write-opts']
+      outputWriteOptions: argv['o-write-opts'],
+      outputJoinString: argv['o-join-str'],
+      needle: new RegExp(argv.needle, argv.f),
+      replacement: argv.r ? require(argv.replacement) : argv.replacement
     })
 
     if (argv.stdout) {
-      process.stdout.write(result)
+      process.stdout.write(result[0][1])
     }
 
     return process.exit()
