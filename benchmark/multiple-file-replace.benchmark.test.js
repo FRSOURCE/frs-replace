@@ -5,7 +5,8 @@ const fs = require('fs')
 const perfy = require('perfy')
 const glob = require('fast-glob')
 
-const FRSreplace = require('../src/replace')
+const FRSreplaceSync = require('../src/sync')
+const FRSreplaceAsync = require('../src/async')
 const replace = require('replace')
 const replaceInFile = require('replace-in-file')
 const replaceString = require('replace-string')
@@ -22,7 +23,7 @@ const tmpPrefixes = {
 const defaults = {
   inputReadOptions: 'utf8',
   outputWriteOptions: 'utf8',
-  inputJoinString: '\n'
+  outputJoinString: '\n'
 }
 const repetitionsNo = 100000
 const iterationsNo = 1000
@@ -109,14 +110,14 @@ tap.teardown(() => {
   fs.writeFileSync('./README.md', readmeContent.replace(/(##\s:chart_with_upwards_trend:\sBenchmarks)[\s\S]*?(?:$|(?:\s##\s))/, `$1\n\n> Tested on Node ${process.version}.\n${perfyResults}`))
 })
 
-tap.test(`input as glob pattern [${inputFilesNo} files x ${iterationsNo} iterations x ${repetitionsNo / iterationsNo} repetitions]`, async ct => {
-  const results = await multipleTests(ct, [
+tap.test(`input as glob pattern [${inputFilesNo} files x ${iterationsNo} iterations x ${repetitionsNo / iterationsNo} repetitions]`, async t => {
+  const results = await multipleTests(t, [
     {
-      fn: () => FRSreplace.async(testInput.FRSReplace),
+      fn: () => FRSreplaceAsync(testInput.FRSReplace),
       before: () => (testInput.FRSReplace.input = `${dir}/${tmpPrefixes.input}*`)
     },
     {
-      fn: () => FRSreplace.sync(testInput.FRSReplace),
+      fn: () => FRSreplaceSync(testInput.FRSReplace),
       before: () => (testInput.FRSReplace.input = `${dir}/${tmpPrefixes.input}*`)
     },
     {
@@ -133,26 +134,26 @@ tap.test(`input as glob pattern [${inputFilesNo} files x ${iterationsNo} iterati
     undefined
   ])
 
-  const result = outputPerfy(ct, results, results.slice().sort(sortByNumberVariable('fullNanoseconds'))[0])
+  const result = outputPerfy(t, results, results.slice().sort(sortByNumberVariable('fullNanoseconds'))[0])
   const sortedResults = result.results.slice().sort(sortByNumberVariable('avgTime'))
 
-  ct.is((sortedResults[0].name.indexOf('frs-replace sync') !== -1 || (sortedResults[1].name.indexOf('frs-replace sync') !== -1 && sortedResults[1].avgPercentageDifference < 5)), true, 'frs-replace sync should be the fastest or second, but at most with 5% difference to best')
-  ct.is(sortedResults[0].name.indexOf('frs-replace async') !== -1 || sortedResults[1].name.indexOf('frs-replace async') !== -1, true, 'frs-replace async should be the fastest or second')
+  t.is((sortedResults[0].name.indexOf('frs-replace sync') !== -1 || (sortedResults[1].name.indexOf('frs-replace sync') !== -1 && sortedResults[1].avgPercentageDifference < 5)), true, 'frs-replace sync should be the fastest or second, but at most with 5% difference to best')
+  t.is(sortedResults[0].name.indexOf('frs-replace async') !== -1 || sortedResults[1].name.indexOf('frs-replace async') !== -1, true, 'frs-replace async should be the fastest or second')
 
-  ct.end()
+  t.end()
 })
 
-tap.test(`input & replacement as strings [${iterationsNo} iterations x ${repetitionsNo / iterationsNo} repetitions]`, async ct => {
-  const results = await multipleTests(ct, [
+tap.test(`input & replacement as strings [${iterationsNo} iterations x ${repetitionsNo / iterationsNo} repetitions]`, async t => {
+  const results = await multipleTests(t, [
     {
-      fn: () => FRSreplace.async(testInput.FRSReplace),
+      fn: () => FRSreplaceAsync(testInput.FRSReplace),
       before: () => {
         testInput.FRSReplace.regex = regex.source
         testInput.FRSReplace.content = content
       }
     },
     {
-      fn: () => FRSreplace.sync(testInput.FRSReplace),
+      fn: () => FRSreplaceSync(testInput.FRSReplace),
       before: () => {
         testInput.FRSReplace.regex = regex.source
         testInput.FRSReplace.content = content
@@ -164,12 +165,12 @@ tap.test(`input & replacement as strings [${iterationsNo} iterations x ${repetit
     { fn: () => replaceString(content, regex.source, replacement) }
   ])
 
-  const result = outputPerfy(ct, results, results.slice().sort(sortByNumberVariable('fullNanoseconds'))[0])
+  const result = outputPerfy(t, results, results.slice().sort(sortByNumberVariable('fullNanoseconds'))[0])
   const sortedResults = result.results.slice().sort(sortByNumberVariable('avgTime'))
 
-  ct.is((sortedResults[0].name.indexOf('frs-replace') !== -1 || (sortedResults[1].name.indexOf('frs-replace') !== -1 && sortedResults[1].avgPercentageDifference < 10)), true, 'frs-replace should be the fastest or second, but at most with 10% difference to best')
+  t.is((sortedResults[0].name.indexOf('frs-replace') !== -1 || (sortedResults[1].name.indexOf('frs-replace') !== -1 && sortedResults[1].avgPercentageDifference < 20)), true, 'frs-replace should be the fastest or second, but at most with 20% difference to the best')
 
-  ct.end()
+  t.end()
 })
 
 function outputPerfy (t, testResults, best) {
@@ -248,7 +249,7 @@ async function multipleTests (t, testCfgs, n, iterations) {
     const { v: testCfg, i: index } = testCfgs[k]
     const prevResult = results[index]
     const libName = testedLibraries[index]
-    await t.test(`${t.name} - ${libName}`, async ct => {
+    await t.test(`${t.name} - ${libName}`, async t => {
       for (let i = 0; i < n; ++i) {
         testCfg.before && testCfg.before()
         const result = await singleTest(libName, testCfg.fn, iterations)
@@ -264,7 +265,7 @@ async function multipleTests (t, testCfgs, n, iterations) {
           }
         }
       }
-      ct.end()
+      t.end()
     })
   }
 

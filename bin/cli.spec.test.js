@@ -15,15 +15,15 @@ const defaultOptions = {
 const content = `aąbcćdeęfg%hi
 jklmn
 oópqr,stuvwxyZ`
-const regex = '^[adjox]'
+const needle = '^[adjox]'
 const defaultFlags = 'g'
 const replacement = 'ą|'
 const replaceFn = () => replacement
-const expectedOutput = content.replace(new RegExp(regex, defaultFlags), replacement)
+const expectedOutput = content.replace(new RegExp(needle, defaultFlags), replacement)
 const defaults = {
   inputReadOptions: 'utf8',
   outputWriteOptions: 'utf8',
-  inputJoinString: '\n'
+  outputJoinString: '\n'
 }
 let output, dir
 
@@ -41,7 +41,9 @@ let output, dir
 }
 
 tap.afterEach((done) => {
-  fs.existsSync(output) && fs.unlinkSync(output)
+  fs.existsSync(output) && (fs.lstatSync(output).isDirectory()
+    ? fs.rmdirSync(output)
+    : fs.unlinkSync(output))
   done()
 })
 
@@ -73,9 +75,9 @@ tap.test('two arguments', (t) => {
 })
 
 tap.test('content argument', async (t) => {
-  await checkEachArgCombinations(
+  await checkEachArgCombination(
     t,
-    [regex, replacement, '--stdout'],
+    [needle, replacement, '--stdout'],
     ['-c', '--content'],
     content,
     (ct, result) => {
@@ -91,7 +93,7 @@ tap.test('content argument', async (t) => {
 })
 
 tap.test('no stdout argument', (t) => {
-  const result = runCli([regex, replacement, '--content', content])
+  const result = runCli([needle, replacement, '--content', content])
   t.is(result.status, 0, 'process should send success status (0)')
   t.is(result.parsedOutput, '', 'stdout should be empty')
   t.is(result.parsedError, '', 'stderr should be empty')
@@ -100,7 +102,7 @@ tap.test('no stdout argument', (t) => {
 })
 
 tap.test('stdout argument', (t) => {
-  const result = runCli([regex, replacement, '--content', content, '--stdout'])
+  const result = runCli([needle, replacement, '--content', content, '--stdout'])
   t.is(result.status, 0, 'process should send success status (0)')
   t.is(result.parsedOutput, expectedOutput, 'stdout should contain replaced string')
   t.is(result.parsedError, '', 'stderr should be empty')
@@ -141,9 +143,9 @@ tap.test('input argument', async (t) => {
   t.afterEach(cleanInputs)
 
   await t.test('as single file path', async ct => {
-    await checkEachArgCombinations(
+    await checkEachArgCombination(
       ct,
-      [regex, replacement, '--stdout'],
+      [needle, replacement, '--stdout'],
       ['-i', '--input'],
       () => input.path,
       (cct, result) => {
@@ -158,16 +160,66 @@ tap.test('input argument', async (t) => {
     ct.end()
   })
 
-  await t.test('as array of file paths', async ct => {
-    await checkEachArgCombinations(
+  await t.test('as array of file paths with strategy="flatten"', async ct => {
+    const outputPath = output = tmp.tmpNameSync({ prefix: tmpPrefixes.output })
+    await checkEachArgCombination(
       ct,
-      [regex, replacement, '--stdout'],
+      [needle, replacement, '--stdout', '--strategy', 'flatten', '--output', outputPath],
       ['-i', '--input'],
       () => [input.path, input2.path],
       (cct, result) => {
         cct.is(result.status, 0, 'process should send success status (0)')
-        cct.is(result.parsedOutput, expectedOutput + defaults.inputJoinString + expectedOutput, 'stdout should contain replaced string')
+        cct.is(result.parsedOutput, expectedOutput, 'stdout should contain replaced string')
         cct.is(result.parsedError, '', 'stderr should be empty')
+
+        const outputFilePath = path.join(outputPath, input.path.substring(input.path.lastIndexOf(path.sep)))
+        const outputFileContent = fs.readFileSync(outputFilePath).toString()
+        ct.is(outputFileContent, expectedOutput, 'expected output saved to file')
+
+        const outputFilePath2 = path.join(outputPath, input2.path.substring(input2.path.lastIndexOf(path.sep)))
+        const outputFileContent2 = fs.readFileSync(outputFilePath2).toString()
+        ct.is(outputFileContent2, expectedOutput, 'expected output saved to file')
+
+        fs.unlinkSync(outputFilePath)
+        fs.unlinkSync(outputFilePath2)
+
+        cct.end()
+      }
+    )
+
+    ct.end()
+  })
+
+  await t.test('as array of file paths with strategy="preserve-structure"', async ct => {
+    const outputPath = output = tmp.tmpNameSync({ prefix: tmpPrefixes.output })
+    await checkEachArgCombination(
+      ct,
+      [needle, replacement, '--stdout', '--strategy', 'preserve-structure', '--output', outputPath],
+      ['-i', '--input'],
+      () => [input.path, input2.path],
+      (cct, result) => {
+        cct.is(result.status, 0, 'process should send success status (0)')
+        cct.is(result.parsedOutput, expectedOutput, 'stdout should contain replaced string')
+        cct.is(result.parsedError, '', 'stderr should be empty')
+
+        const outputFilePath = path.join(outputPath, input.path)
+        const outputFileContent = fs.readFileSync(outputFilePath).toString()
+        ct.is(outputFileContent, expectedOutput, 'expected output saved to file')
+
+        const outputFilePath2 = path.join(outputPath, input2.path)
+        const outputFileContent2 = fs.readFileSync(outputFilePath2).toString()
+        ct.is(outputFileContent2, expectedOutput, 'expected output saved to file')
+
+        fs.unlinkSync(outputFilePath)
+        fs.unlinkSync(outputFilePath2)
+
+        const splittedPath = input.path.split(path.sep)
+        splittedPath.pop()
+        while (splittedPath.length) {
+          const outputDir = splittedPath.join(path.sep)
+          fs.rmdirSync(path.join(outputPath, outputDir))
+          splittedPath.pop()
+        }
 
         cct.end()
       }
@@ -177,14 +229,14 @@ tap.test('input argument', async (t) => {
   })
 
   await t.test('as glob pattern', async ct => {
-    await checkEachArgCombinations(
+    await checkEachArgCombination(
       ct,
-      [regex, replacement, '--stdout'],
+      [needle, replacement, '--stdout'],
       ['-i', '--input'],
       `${dir}/${tmpPrefixes.input}*`,
       (cct, result) => {
         cct.is(result.status, 0, 'process should send success status (0)')
-        cct.is(result.parsedOutput, expectedOutput + defaults.inputJoinString + expectedOutput, 'stdout should contain replaced string')
+        cct.is(result.parsedOutput, expectedOutput + defaults.outputJoinString + expectedOutput, 'stdout should contain replaced string')
         cct.is(result.parsedError, '', 'stderr should be empty')
 
         cct.end()
@@ -218,7 +270,7 @@ tap.test('i-read-opts argument', async (t) => {
 
   await t.test('without input argument', async (ct) => {
     const result = runCli(
-      [regex, replacement, '--i-read-opts.encoding', defaults.inputReadOptions, '--stdout'],
+      [needle, replacement, '--i-read-opts.encoding', defaults.inputReadOptions, '--stdout'],
       { input: content }
     )
 
@@ -231,7 +283,7 @@ tap.test('i-read-opts argument', async (t) => {
 
   await t.test('wrong with input argument', async (ct) => {
     const result = runCli(
-      [regex, replacement, '-i', input.path, '--i-read-opts.encoding', 'incorrect-encoding', '--stdout']
+      [needle, replacement, '-i', input.path, '--i-read-opts.encoding', 'incorrect-encoding', '--stdout']
     )
 
     ct.is(result.status, 1, 'process should send error status (1)')
@@ -243,7 +295,7 @@ tap.test('i-read-opts argument', async (t) => {
 
   await t.test('correct with input argument', async (ct) => {
     const result = runCli(
-      [regex, replacement, '-i', input.path, '--i-read-opts.encoding', defaults.inputReadOptions, '--stdout']
+      [needle, replacement, '-i', input.path, '--i-read-opts.encoding', defaults.inputReadOptions, '--stdout']
     )
 
     ct.is(result.status, 0, 'process should send success status (0)')
@@ -288,7 +340,7 @@ tap.test('i-glob-opts argument', async (t) => {
 
   await t.test('set without input argument', (ct) => {
     const result = runCli(
-      [regex, replacement, '--i-glob-opts.onlyDirectories', true, '--stdout'],
+      [needle, replacement, '--i-glob-opts.onlyDirectories', true, '--stdout'],
       { input: content }
     )
 
@@ -301,7 +353,7 @@ tap.test('i-glob-opts argument', async (t) => {
 
   await t.test('set with input argument', (ct) => {
     const result = runCli(
-      [regex, replacement, '-i', input.path, '--i-glob-opts.onlyDirectories', true, '--stdout']
+      [needle, replacement, '-i', input.path, '--i-glob-opts.onlyDirectories', true, '--stdout']
     )
 
     ct.is(result.status, 0, 'process should send success status (0)')
@@ -314,7 +366,7 @@ tap.test('i-glob-opts argument', async (t) => {
   t.end()
 })
 
-tap.test('i-join-str argument', async (t) => {
+tap.test('o-join-str argument', async (t) => {
   let input, input2
 
   t.beforeEach(
@@ -344,27 +396,14 @@ tap.test('i-join-str argument', async (t) => {
     done()
   })
 
-  await t.test('set without input argument', (ct) => {
-    const result = runCli(
-      [regex, replacement, '--i-join-str', 'sth', '--stdout'],
-      { input: content }
-    )
-
-    ct.is(result.status, 1, 'process should send error status (1)')
-    ct.is(result.parsedOutput, '', 'stdout should be empty')
-    ct.is(result.parsedError, 'i-join-str -> i', 'stderr contain error about missing i-join-str dependency: i argument')
-
-    ct.end()
-  })
-
   await t.test('set with input argument', (ct) => {
-    const inputJoinString = 'someCustomString\n\t'
+    const outputJoinString = 'someCustomString\n\t'
     const result = runCli(
-      [regex, replacement, '-i', input.path, input2.path, '--i-join-str', inputJoinString, '--stdout']
+      [needle, replacement, '-i', input.path, input2.path, '--o-join-str', outputJoinString, '--stdout']
     )
 
     ct.is(result.status, 0, 'process should send success status (0)')
-    ct.is(result.parsedOutput, expectedOutput + inputJoinString + expectedOutput, 'stdout should contain replaced string')
+    ct.is(result.parsedOutput, expectedOutput + outputJoinString + expectedOutput, 'stdout should contain replaced string')
     ct.is(result.parsedError, '', 'stderr should be empty')
 
     ct.end()
@@ -375,9 +414,9 @@ tap.test('i-join-str argument', async (t) => {
 
 tap.test('output argument', async (t) => {
   const outputPath = output = tmp.tmpNameSync({ prefix: tmpPrefixes.output })
-  await checkEachArgCombinations(
+  await checkEachArgCombination(
     t,
-    [regex, replacement, '--content', content],
+    [needle, replacement, '--content', content],
     ['-o', '--output'],
     outputPath,
     (ct, result) => {
@@ -400,7 +439,7 @@ tap.test('input options argument', async (t) => {
 
   t.test('without output argument', async (ct) => {
     const result = runCli(
-      [regex, replacement, '--o-write-opts.encoding', defaults.outputWriteOptions, '--stdout'],
+      [needle, replacement, '--o-write-opts.encoding', defaults.outputWriteOptions, '--stdout'],
       { input: content }
     )
 
@@ -413,7 +452,7 @@ tap.test('input options argument', async (t) => {
 
   t.test('correct with input argument', async (ct) => {
     const result = runCli(
-      [regex, replacement, '-o', outputPath, '--o-write-opts.encoding', defaults.outputWriteOptions, '--no-stdout'],
+      [needle, replacement, '-o', outputPath, '--o-write-opts.encoding', defaults.outputWriteOptions, '--no-stdout'],
       { input: content }
     )
 
@@ -433,9 +472,9 @@ tap.test('input options argument', async (t) => {
 tap.test('stdin && output argument', async (t) => {
   const outputPath = output = tmp.tmpNameSync({ prefix: tmpPrefixes.output })
 
-  await checkEachArgCombinations(
+  await checkEachArgCombination(
     t,
-    [regex, replacement, '--content', content, '--stdout'],
+    [needle, replacement, '--content', content, '--stdout'],
     ['-o', '--output'],
     outputPath,
     (ct, result) => {
@@ -455,12 +494,12 @@ tap.test('stdin && output argument', async (t) => {
 
 tap.test('flags argument', async (t) => {
   const flags = 'gm'
-  const expectedOutput = content.replace(new RegExp(regex, flags), replacement)
+  const expectedOutput = content.replace(new RegExp(needle, flags), replacement)
   const outputPath = output = tmp.tmpNameSync({ prefix: tmpPrefixes.output })
 
-  await checkEachArgCombinations(
+  await checkEachArgCombination(
     t,
-    [regex, replacement, '--content', content, '-o', outputPath, '--stdout'],
+    [needle, replacement, '--content', content, '-o', outputPath, '--stdout'],
     ['-f', '--flags'],
     flags,
     (ct, result) => {
@@ -479,7 +518,7 @@ tap.test('flags argument', async (t) => {
 })
 
 tap.test('replace-fn argument', async (t) => {
-  const expectedOutput = content.replace(new RegExp(regex, defaultFlags), replaceFn)
+  const expectedOutput = content.replace(new RegExp(needle, defaultFlags), replaceFn)
   const outputPath = output = tmp.tmpNameSync({ prefix: tmpPrefixes.output })
   let replaceFnTmp
 
@@ -498,9 +537,9 @@ tap.test('replace-fn argument', async (t) => {
         )
       })
 
-  await checkEachArgCombinations(
+  await checkEachArgCombination(
     t,
-    [regex, replaceFnTmp.path, '--content', content, '-o', outputPath, '--stdout'],
+    [needle, replaceFnTmp.path, '--content', content, '-o', outputPath, '--stdout'],
     ['-r', '--replace-fn'],
     undefined,
     (ct, result) => {
@@ -523,7 +562,7 @@ tap.test('replace-fn argument', async (t) => {
 
 tap.test('stdin stream as input argument (like piped stream)', async (t) => {
   const result = runCli(
-    [regex, replacement, '--stdout'],
+    [needle, replacement, '--stdout'],
     { input: content }
   )
 
@@ -534,7 +573,7 @@ tap.test('stdin stream as input argument (like piped stream)', async (t) => {
   t.end()
 })
 
-async function checkEachArgCombinations (t, args, argCombinations, argValue, testFn) {
+async function checkEachArgCombination (t, args, argCombinations, argValue, testFn) {
   for (const combination of argCombinations) {
     await t.test(combination, ct =>
       testFn(

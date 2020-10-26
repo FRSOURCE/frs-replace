@@ -1,1 +1,4 @@
-module.exports = require('./src/replace')
+module.exports = {
+  async: require('./src/async'),
+  sync: require('./src/sync')
+}

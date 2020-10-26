@@ -4,7 +4,7 @@ const fs = require('fs')
 const path = require('path')
 const glob = require('fast-glob')
 
-const replace = require('./replace')
+const replace = require('../index.js')
 
 const tmpPrefixes = {
   input: 'frs-replace-replace-in',
@@ -13,15 +13,44 @@ const tmpPrefixes = {
 const content = `aąbcćdeęfg%hi
 jklmn
 oópqr,stuvwxyZ`
-const regex = new RegExp('^[adjox]', 'gm')
+const needle = new RegExp('^[adjox]', 'gm')
 const replacement = 'ą|'
 const replaceFn = () => replacement
 const defaults = {
   inputReadOptions: 'utf8',
   outputWriteOptions: 'utf8',
-  inputJoinString: '\n'
+  outputJoinString: '\n'
 }
 let output, dir
+
+let input, input2
+
+const cleanInputs = (done) => {
+  input2 && input2.cleanup()
+  input2 = undefined
+  input && input.cleanup()
+  input = undefined
+  done && done() // to be runned either by node-tap or manually
+}
+
+const createInputs = async () => {
+  await tmp.file({ prefix: tmpPrefixes.input, keep: true, dir })
+    .then(
+      async f => {
+        input = f
+        return new Promise(
+          (resolve) => fs.appendFile(f.path, content, { encoding: defaults.inputReadOptions }, resolve)
+        )
+      })
+  await tmp.file({ prefix: tmpPrefixes.input, keep: true, dir })
+    .then(
+      async f => {
+        input2 = f
+        return new Promise(
+          (resolve) => fs.appendFile(f.path, content, { encoding: defaults.inputReadOptions }, resolve)
+        )
+      })
+}
 
 { // removing all files similar our tmp
   const dirObj = tmp.dirSync()
@@ -36,16 +65,17 @@ let output, dir
     .forEach(fs.unlinkSync)
 }
 
+tap.Test.prototype.addAssert('arrayContaining', 2, arrayContainingAssert)
+tap.Test.prototype.addAssert('throwsMessageObj', 2, throwsMessageObjAssert)
 tap.afterEach((done) => {
-  fs.existsSync(output) && fs.unlinkSync(output)
+  fs.existsSync(output) && (fs.lstatSync(output).isDirectory()
+    ? fs.rmdirSync(output)
+    : fs.unlinkSync(output))
   done()
 })
 
 tap.test('check required fields', async t => {
-  t.throws(() => replace.sync({}), { message: 'frs-replace :: at least one input source must be defined!' }, 'sync :: should throw if both stdin & input arguments missing')
-  const asyncResult = replace.async({})
-  asyncResult.catch(() => {}) // to silent Node "PromiseRejectionHandledWarning:" error
-  await t.rejects(asyncResult, { message: 'frs-replace :: at least one input source must be defined!' }, 'async :: should reject promise if both stdin & input arguments missing')
+  await t.throwsMessageObj({}, 'frs-replace :: at least one input source must be defined!', 'if both stdin & input arguments missing')
 
   t.end()
 })
@@ -56,161 +86,286 @@ tap.test('check api', async t => {
 
   t.beforeEach(async () => {
     testInput = {
-      regex,
+      needle,
       replacement
     }
 
-    expectedOutput = content.replace(regex, replacement)
+    expectedOutput = [['', content.replace(needle, replacement)]]
   })
 
-  await t.test('content', async ct => {
+  await t.test('content', async t => {
     testInput.content = content
-    await checkSyncAsync(ct, 'is', [testInput, expectedOutput, 'replaced correctly'])
+    await checkSyncAsync(t, 'looseEqual', [testInput, expectedOutput, 'replaced correctly'])
 
-    ct.end()
-  })
+    await t.test('with strategy = "flatten"', async t => {
+      testInput.content = content
+      testInput.strategy = 'flatten'
+      await checkSyncAsync(t, 'looseEqual', [testInput, expectedOutput, 'replaced correctly'])
 
-  await t.test('input', async ct => {
-    let input, input2
-
-    const cleanInputs = (done) => {
-      input2 && input2.cleanup()
-      input2 = undefined
-      input && input.cleanup()
-      input = undefined
-      done && done() // to be runned either by node-tap or manually
-    }
-
-    ct.beforeEach(async () => {
-      cleanInputs()
-
-      await tmp.file({ prefix: tmpPrefixes.input, keep: true, dir })
-        .then(
-          async f => {
-            input = f
-            return new Promise(
-              (resolve) => fs.appendFile(f.path, content, { encoding: defaults.inputReadOptions }, resolve)
-            )
-          })
-      await tmp.file({ prefix: tmpPrefixes.input, keep: true, dir })
-        .then(
-          async f => {
-            input2 = f
-            return new Promise(
-              (resolve) => fs.appendFile(f.path, content, { encoding: defaults.inputReadOptions }, resolve)
-            )
-          })
+      t.end()
     })
 
-    ct.afterEach(cleanInputs)
+    await t.test('strategy = "preserve-structure"', async t => {
+      testInput.content = content
+      testInput.strategy = 'flatten'
+      await checkSyncAsync(t, 'looseEqual', [testInput, expectedOutput, 'replaced correctly'])
 
-    await ct.test('as single file path', async cct => {
+      t.end()
+    })
+
+    t.end()
+  })
+
+  await t.test('input', async t => {
+    t.beforeEach(async () => {
+      cleanInputs()
+
+      await createInputs()
+    })
+
+    t.afterEach(cleanInputs)
+
+    await t.test('as single file path', async t => {
       testInput.input = input.path
-      await checkSyncAsync(cct, 'is', [testInput, expectedOutput, 'replaced correctly'])
+      await checkSyncAsync(t, 'looseEqual', [testInput, expectedOutput, 'replaced correctly'])
 
-      await cct.test('with inputReadOptions as object', async ccct => {
+      await t.test('with inputReadOptions as object', async t => {
         testInput.input = input.path
         testInput.inputReadOptions = { encoding: defaults.inputReadOptions }
 
-        await checkSyncAsync(ccct, 'is', [testInput, expectedOutput, 'replaced correctly'])
+        await checkSyncAsync(t, 'looseEqual', [testInput, expectedOutput, 'replaced correctly'])
 
-        ccct.end()
+        t.end()
       })
 
-      cct.end()
+      t.end()
     })
 
-    await ct.test('as array of file paths', async cct => {
+    await t.test('as array of file paths', async t => {
       testInput.input = [input.path, input2.path]
-      await checkSyncAsync(cct, 'is', [testInput, expectedOutput + defaults.inputJoinString + expectedOutput, 'replaced correctly'])
+      await checkSyncAsync(t, 'looseEqual', [testInput, [[
+        '',
+        expectedOutput[0][1] + defaults.outputJoinString + expectedOutput[0][1]
+      ]], 'replaced correctly'])
 
-      await cct.test('with inputJoinString changed', async ccct => {
+      await t.test('with outputJoinString changed', async t => {
         testInput.input = [input.path, input2.path]
-        testInput.inputJoinString = 'someCustomString\n\t'
+        testInput.outputJoinString = 'someCustomString\n\t'
 
-        await checkSyncAsync(ccct, 'is', [testInput, expectedOutput + testInput.inputJoinString + expectedOutput, 'replaced correctly'])
+        await checkSyncAsync(t, 'looseEqual', [testInput, [[
+          '',
+          expectedOutput[0][1] + testInput.outputJoinString + expectedOutput[0][1]
+        ]], 'replaced correctly'])
 
-        ccct.end()
+        t.end()
       })
 
-      cct.end()
+      await t.test('with strategy = "flatten"', async t => {
+        testInput.input = [input.path, input2.path]
+        testInput.strategy = 'flatten'
+        await checkSyncAsync(t, 'looseEqual', [testInput, [
+          [input.path.substring(input.path.lastIndexOf('/')), expectedOutput[0][1]],
+          [input2.path.substring(input.path.lastIndexOf('/')), expectedOutput[0][1]]
+        ], 'replaced correctly with proper filepaths'])
+
+        t.end()
+      })
+
+      await t.test('with strategy = "preserve-structure"', async t => {
+        testInput.input = [input.path, input2.path]
+        testInput.strategy = 'preserve-structure'
+        await checkSyncAsync(t, 'looseEqual', [testInput, [
+          [input.path, expectedOutput[0][1]],
+          [input2.path, expectedOutput[0][1]]
+        ], 'replaced correctly with proper filepaths'])
+
+        t.end()
+      })
+
+      t.end()
     })
 
-    await ct.test('as glob pattern', async cct => {
+    await t.test('as glob pattern', async t => {
       testInput.input = `${dir}/${tmpPrefixes.input}*`
 
-      await checkSyncAsync(cct, 'is', [testInput, expectedOutput + defaults.inputJoinString + expectedOutput, 'replaced correctly'])
+      await checkSyncAsync(t, 'looseEqual', [testInput, [[
+        '',
+        expectedOutput[0][1] + defaults.outputJoinString + expectedOutput[0][1]
+      ]], 'replaced correctly'])
 
-      await cct.test('with inputGlobOptions', async ccct => {
+      await t.test('with inputGlobOptions', async t => {
         testInput.input = `${dir}/${tmpPrefixes.input}*`
         testInput.inputGlobOptions = { onlyDirectories: true }
 
-        await checkSyncAsync(ccct, 'is', [testInput, '', 'replaced correctly'])
+        await checkSyncAsync(t, 'looseEqual', [testInput, [['', '']], 'replaced correctly'])
 
-        ccct.end()
+        t.end()
       })
 
-      cct.end()
+      await t.test('with strategy = "flatten"', async t => {
+        const message = 'replaced correctly with proper filepaths'
+        testInput.input = `${dir}/${tmpPrefixes.input}*`
+        testInput.strategy = 'flatten'
+        expectedOutput = [
+          [input.path.substring(input.path.lastIndexOf(path.sep)), expectedOutput[0][1]],
+          [input2.path.substring(input.path.lastIndexOf(path.sep)), expectedOutput[0][1]]
+        ]
+        t.arrayContaining(await Promise.all(await replace.async(testInput)), expectedOutput, `async :: ${message}`)
+        t.arrayContaining(replace.sync(testInput), expectedOutput, `sync :: ${message}`)
+
+        t.end()
+      })
+
+      await t.test('with strategy = "preserve-structure"', async t => {
+        const message = 'replaced correctly with proper filepaths'
+        testInput.input = `${dir}/${tmpPrefixes.input}*`
+        testInput.strategy = 'preserve-structure'
+        expectedOutput = [
+          [input.path, expectedOutput[0][1]],
+          [input2.path, expectedOutput[0][1]]
+        ]
+        t.arrayContaining(await Promise.all(await replace.async(testInput)), expectedOutput, `async :: ${message}`)
+        t.arrayContaining(replace.sync(testInput), expectedOutput, `sync :: ${message}`)
+
+        t.end()
+      })
+
+      t.end()
     })
 
-    ct.end()
+    t.end()
   })
 
-  await t.test('output', async ct => {
+  await t.test('strategy', async t => {
+    await t.test('if unsupported strategy used', async t => {
+      await t.throwsMessageObj({ content: 'qwe', strategy: 'whatever' }, 'frs-replace :: unsupported strategy used! Possible values are: "join", "preserve-structure" or "flatten"')
+
+      t.end()
+    })
+
+    t.end()
+  })
+
+  await t.test('output', async t => {
     testInput.content = content
     output = testInput.output = tmp.tmpNameSync({ prefix: tmpPrefixes.output, dir })
+    expectedOutput = [[
+      output,
+      expectedOutput[0][1]
+    ]]
 
-    await checkSyncAsync(ct, 'is', [testInput, expectedOutput, 'replaced correctly'])
+    await checkSyncAsync(t, 'looseEqual', [testInput, expectedOutput, 'replaced correctly'])
 
-    ct.ok(fs.existsSync(testInput.output), 'output file exists')
+    t.ok(fs.existsSync(testInput.output), 'output file exists')
 
     const outputFileContent = fs.readFileSync(testInput.output).toString()
-    ct.is(outputFileContent, expectedOutput, 'expected output saved to file')
+    t.is(outputFileContent, expectedOutput[0][1], 'expected output saved to file')
 
-    ct.end()
+    t.beforeEach(async () => {
+      cleanInputs()
+
+      await createInputs()
+    })
+
+    t.afterEach(cleanInputs)
+
+    await t.test('with strategy = "flatten"', async t => {
+      testInput.input = [input.path, input2.path]
+      output = testInput.output = path.join(dir, tmpPrefixes.output, 'flatten')
+      testInput.strategy = 'flatten'
+      expectedOutput = [
+        [
+          path.join(dir, tmpPrefixes.output, 'flatten') + input.path.substring(input.path.lastIndexOf('/')),
+          expectedOutput[0][1]
+        ],
+        [
+          path.join(dir, tmpPrefixes.output, 'flatten') + input2.path.substring(input.path.lastIndexOf('/')),
+          expectedOutput[0][1]
+        ]
+      ]
+      await checkSyncAsync(t, 'looseEqual', [testInput, expectedOutput, 'replaced correctly with proper filepaths'])
+
+      t.ok(fs.existsSync(expectedOutput[0][0]), 'output file exists')
+      t.ok(fs.existsSync(expectedOutput[1][0]), 'output file 2 exists')
+
+      fs.unlinkSync(expectedOutput[0][0])
+      fs.unlinkSync(expectedOutput[1][0])
+
+      t.end()
+    })
+
+    await t.test('with strategy = "preserve-structure"', async t => {
+      testInput.input = [input.path, input2.path]
+      output = testInput.output = path.join(dir, tmpPrefixes.output, 'preserve-structure')
+      testInput.strategy = 'preserve-structure'
+      expectedOutput = [
+        [
+          path.join(dir, tmpPrefixes.output, 'preserve-structure', input.path),
+          expectedOutput[0][1]
+        ],
+        [
+          path.join(dir, tmpPrefixes.output, 'preserve-structure', input2.path),
+          expectedOutput[0][1]
+        ]
+      ]
+      await checkSyncAsync(t, 'looseEqual', [testInput, expectedOutput, 'replaced correctly with proper filepaths'])
+
+      t.ok(fs.existsSync(expectedOutput[0][0]), 'output file exists')
+      t.ok(fs.existsSync(expectedOutput[1][0]), 'output file 2 exists')
+
+      fs.unlinkSync(expectedOutput[0][0])
+      fs.unlinkSync(expectedOutput[1][0])
+
+      deleteFolderRecursive(output)
+
+      t.end()
+    })
+
+    t.end()
   })
 
-  await t.test('outputWriteOptions as object', async ct => {
+  await t.test('outputWriteOptions as object', async t => {
     testInput.content = content
     output = testInput.output = tmp.tmpNameSync({ prefix: tmpPrefixes.output, dir })
     testInput.outputWriteOptions = { encoding: defaults.outputWriteOptions }
+    expectedOutput[0][0] = output
 
-    await checkSyncAsync(ct, 'is', [testInput, expectedOutput, 'replaced correctly'])
+    await checkSyncAsync(t, 'looseEqual', [testInput, expectedOutput, 'replaced correctly'])
 
-    ct.ok(fs.existsSync(testInput.output), 'output file exists')
+    t.ok(fs.existsSync(testInput.output), 'output file exists')
 
     const outputFileContent = fs.readFileSync(testInput.output).toString()
-    ct.is(outputFileContent, expectedOutput, 'expected output saved to file')
+    t.is(outputFileContent, expectedOutput[0][1], 'expected output saved to file')
 
-    ct.end()
+    t.end()
   })
 
-  await t.test('replacement as function', async ct => {
-    expectedOutput = content.replace(regex, replaceFn)
-
+  await t.test('replacement as function', async t => {
     testInput.content = content
     output = testInput.output = tmp.tmpNameSync({ prefix: tmpPrefixes.output, dir })
     testInput.replacement = replaceFn
 
-    await checkSyncAsync(ct, 'is', [testInput, expectedOutput, 'replaced correctly'])
+    expectedOutput[0] = [output, content.replace(needle, replaceFn)]
 
-    ct.ok(fs.existsSync(testInput.output), 'output file exists')
+    await checkSyncAsync(t, 'looseEqual', [testInput, expectedOutput, 'replaced correctly'])
+
+    t.ok(fs.existsSync(testInput.output), 'output file exists')
 
     const outputFileContent = fs.readFileSync(testInput.output).toString()
-    ct.is(outputFileContent, expectedOutput, 'expected output saved to file')
+    t.is(outputFileContent, expectedOutput[0][1], 'expected output saved to file')
 
-    ct.end()
+    t.end()
   })
 
-  await t.test('regex as string', async ct => {
-    testInput.regex = 'a'
+  await t.test('needle as string', async t => {
+    testInput.needle = 'a'
     testInput.content = content
 
-    expectedOutput = content.replace(testInput.regex, replacement)
+    expectedOutput[0][1] = content.replace(testInput.needle, replacement)
 
-    await checkSyncAsync(ct, 'is', [testInput, expectedOutput, 'replaced correctly'])
+    await checkSyncAsync(t, 'looseEqual', [testInput, expectedOutput, 'replaced correctly'])
 
-    ct.end()
+    t.end()
   })
 
   t.end()
@@ -222,12 +377,12 @@ async function checkSyncAsync (t, method, argsSync, isFirstArgFn = false) {
   let messageIndex = argsSync.length - 1
   while (typeof argsSync[messageIndex] !== 'string') { --messageIndex }
 
-  const argsAsync = Object.assign({}, argsSync)
+  const argsAsync = [...argsSync]
   argsAsync[0] = bindArray(replace.async, argsAsync[0])
   argsSync[0] = bindArray(replace.sync, argsSync[0])
 
   if (!isFirstArgFn) {
-    argsAsync[0] = await argsAsync[0]()
+    argsAsync[0] = await Promise.all(await argsAsync[0]())
     argsSync[0] = argsSync[0]()
   }
   argsAsync[messageIndex] = `async :: ${argsAsync[messageIndex]}`
@@ -240,3 +395,80 @@ async function checkSyncAsync (t, method, argsSync, isFirstArgFn = false) {
 function bindArray (fn, args) {
   return () => fn.apply(fn, args)
 }
+
+function handleRejection (promise) {
+  promise.catch(() => {}) // to silent Node "PromiseRejectionHandledWarning:" error
+  return promise
+}
+
+function throwsMessageObjAssert (args, errorMessage, message) {
+  const error = { message: errorMessage }
+  this.throws(() => replace.sync(args), error, 'sync :: should throw ' + message)
+  return this.rejects(handleRejection(replace.async(args)), error, 'async :: should reject promise ' + message)
+}
+
+function arrayContainingAssert (array, equalArray, message, extra) {
+  message = message || 'should contain items'
+
+  let type;
+  [type, message] = arrayContaining(array, equalArray, message)
+  return this[type ? 'pass' : 'fail'](message, extra)
+}
+
+function arrayContaining (array, equalArray, message) {
+  if (!Array.isArray(array) || !Array.isArray(equalArray) || array.length < equalArray.length) {
+    return [false, message]
+  }
+
+  for (let i = 0; i < equalArray.length; ++i) {
+    const item = equalArray[i]
+    if (typeof item === 'string') {
+      if (!array.includes(item)) {
+        return [false,
+          `${message}
+  Expected:
+  ${JSON.stringify(item)}
+  
+  To be contained within:
+  ${JSON.stringify(array)}
+          `
+        ]
+      }
+    } else if (Array.isArray(item)) {
+      for (let j = 0; j < array.length; ++j) {
+        const arrayItem = array[j]
+        const [checkResult] = arrayContaining(arrayItem, item)
+        if (checkResult !== false) break
+        else if (j === array.length - 1) {
+          return [false,
+            `${message} 
+Expected:
+${JSON.stringify(item)}
+
+To be contained within:
+${JSON.stringify(array)}
+            `
+          ]
+        }
+      }
+    } else {
+      return [false, `${message} "arrayContainingAssert" unsupported type`]
+    }
+  }
+
+  return [true, message]
+}
+
+function deleteFolderRecursive (path) {
+  if (fs.existsSync(path)) {
+    fs.readdirSync(path).forEach(function (file) {
+      var curPath = path + '/' + file
+      if (fs.lstatSync(curPath).isDirectory()) { // recurse
+        deleteFolderRecursive(curPath)
+      } else { // delete file
+        fs.unlinkSync(curPath)
+      }
+    })
+    fs.rmdirSync(path)
+  }
+};
