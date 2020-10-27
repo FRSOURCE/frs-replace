@@ -7,7 +7,7 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### ⚠ BREAKING CHANGES
 
-* from this version on Node.js api ALWAYS returns an array of replace result array, where replace result array follows the pattern: [<replaced/new file path>, <replaced content>]
+* from this version on Node.js api ALWAYS returns an array of replace result array, where replace result array follows the pattern: `[<replaced/new file path>, <replaced content>]`
 * renamed `regex` option to `needle`
 * renamed `inputJoinString` option to `outputJoinString`
 
