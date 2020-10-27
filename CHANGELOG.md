@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.0.0](https://github.com/FRSource/frs-replace/compare/v2.1.2...v3.0.0) (2020-10-27)
+
+
+### ⚠ BREAKING CHANGES
+
+* from this version on Node.js api ALWAYS returns an array of replace result array, where replace result array follows the pattern: [<replaced/new file path>, <replaced content>]
+* renamed `regex` option to `needle`
+* renamed `inputJoinString` option to `outputJoinString`
+
+### Features
+
+* different output strategies support ([#100](https://github.com/FRSource/frs-replace/issues/100)) ([d9cabac](https://github.com/FRSource/frs-replace/commit/d9cabac7d220a770637f5ef455e2770b1e28cdd4))
+
 ### [2.1.2](https://github.com/FRSource/frs-replace/compare/v2.1.1...v2.1.2) (2020-10-14)
 
 ### Bug Fixes
