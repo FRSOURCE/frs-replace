@@ -11,7 +11,7 @@ const replace = require('replace')
 const replaceInFile = require('replace-in-file')
 const replaceString = require('replace-string')
 
-const regex = new RegExp('^[adjox]', 'gm')
+const regex = /'^[adjox]/gm
 const replacement = 'ą|'
 const content = `aąbcćdeęfg%hi
 jklmn

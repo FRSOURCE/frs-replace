@@ -13,7 +13,7 @@ const tmpPrefixes = {
 const content = `aąbcćdeęfg%hi
 jklmn
 oópqr,stuvwxyZ`
-const needle = new RegExp('^[adjox]', 'gm')
+const needle = /^[adjox]/gm
 const replacement = 'ą|'
 const replaceFn = () => replacement
 const defaults = {
@@ -462,7 +462,7 @@ ${JSON.stringify(array)}
 function deleteFolderRecursive (path) {
   if (fs.existsSync(path)) {
     fs.readdirSync(path).forEach(function (file) {
-      var curPath = path + '/' + file
+      const curPath = path + '/' + file
       if (fs.lstatSync(curPath).isDirectory()) { // recurse
         deleteFolderRecursive(curPath)
       } else { // delete file
