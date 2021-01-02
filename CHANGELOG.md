@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.0.1](https://github.com/FRSource/frs-replace/compare/v3.0.0...v3.0.1) (2021-01-02)
+
+### Bug Fixes
+
+* security update: ini ([#110](https://github.com/FRSource/frs-replace/pull/110))
+* updates: standard ([#107](https://github.com/FRSource/frs-replace/pull/107)), tap ([#106](https://github.com/FRSource/frs-replace/pull/106)), yargs ([#108](https://github.com/FRSource/frs-replace/pull/108)), standard-version ([#111](https://github.com/FRSource/frs-replace/pull/111))
+
 ## [3.0.0](https://github.com/FRSource/frs-replace/compare/v2.1.2...v3.0.0) (2020-10-27)
 
 

@@ -288,26 +288,26 @@ frs-replace a b -i foo.js | <next-command>
 
 ## :chart_with_upwards_trend: Benchmarks
 
-> Tested on Node v12.16.2.
+> Tested on Node v15.0.1.
 
 ### input as glob pattern [40 files x 1000 iterations x 100 repetitions]
 
 | Library (best&nbsp;bolded) | Execution time [s] | Difference percentage (comparing&nbsp;to&nbsp;best&nbsp;time) |
 | --- | --- | --- |
-| frs-replace async | 0.01362554 | 34.9580% |
-| **frs-replace sync** | 0.01009613 | 0.0000% |
-| replace-in-file | 0.02028758 | 100.9440% |
+| frs-replace async | 0.01959564 | 57.5020% |
+| **frs-replace sync** | 0.01244152 | 0.0000% |
+| replace-in-file | 0.02223758 | 78.7368% |
 | replace async | *N/A* | *N/A* |
-| replace sync | 0.05186623 | 413.7238% |
+| replace sync | 0.06111267 | 391.1992% |
 | replace-string | *N/A* | *N/A* |
 
 ### input & replacement as strings [1000 iterations x 100 repetitions]
 
 | Library (best&nbsp;bolded) | Execution time [s] | Difference percentage (comparing&nbsp;to&nbsp;best&nbsp;time) |
 | --- | --- | --- |
-| frs-replace async | 0.00023470 | 472.5367% |
-| frs-replace sync | 0.00004455 | 8.6850% |
+| frs-replace async | 0.00020093 | 516.9883% |
+| **frs-replace sync** | 0.00003257 | 0.0000% |
 | replace-in-file | *N/A* | *N/A* |
 | replace async | *N/A* | *N/A* |
 | replace sync | *N/A* | *N/A* |
-| **replace-string** | 0.00004099 | 0.0000% |
+| replace-string | 0.00003438 | 5.5692% |
