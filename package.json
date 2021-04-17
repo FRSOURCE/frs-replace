@@ -15,7 +15,9 @@
   "homepage": "https://github.com/FRSource/frs-replace#readme",
   "files": [
     "bin/cli.js",
-    "src/replace.js",
+    "src/sync.js",
+    "src/async.js",
+    "src/utils.js",
     "index.js",
     "LICENSE",
     "package.json",
