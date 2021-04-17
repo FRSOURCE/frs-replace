@@ -97,9 +97,8 @@ let tmpFilesPromise
 }
 tap.autoend(false)
 tap.beforeEach(() => tmpFilesPromise)
-tap.afterEach(done => {
+tap.afterEach(() => {
   fs.existsSync(output) && fs.unlinkSync(output)
-  done()
 })
 
 tap.teardown(() => {
@@ -137,8 +136,8 @@ tap.test(`input as glob pattern [${inputFilesNo} files x ${iterationsNo} iterati
   const result = outputPerfy(t, results, results.slice().sort(sortByNumberVariable('fullNanoseconds'))[0])
   const sortedResults = result.results.slice().sort(sortByNumberVariable('avgTime'))
 
-  t.is((sortedResults[0].name.indexOf('frs-replace sync') !== -1 || (sortedResults[1].name.indexOf('frs-replace sync') !== -1 && sortedResults[1].avgPercentageDifference < 5)), true, 'frs-replace sync should be the fastest or second, but at most with 5% difference to best')
-  t.is(sortedResults[0].name.indexOf('frs-replace async') !== -1 || sortedResults[1].name.indexOf('frs-replace async') !== -1, true, 'frs-replace async should be the fastest or second')
+  t.equal((sortedResults[0].name.indexOf('frs-replace sync') !== -1 || (sortedResults[1].name.indexOf('frs-replace sync') !== -1 && sortedResults[1].avgPercentageDifference < 5)), true, 'frs-replace sync should be the fastest or second, but at most with 5% difference to best')
+  t.equal(sortedResults[0].name.indexOf('frs-replace async') !== -1 || sortedResults[1].name.indexOf('frs-replace async') !== -1, true, 'frs-replace async should be the fastest or second')
 
   t.end()
 })
@@ -168,7 +167,7 @@ tap.test(`input & replacement as strings [${iterationsNo} iterations x ${repetit
   const result = outputPerfy(t, results, results.slice().sort(sortByNumberVariable('fullNanoseconds'))[0])
   const sortedResults = result.results.slice().sort(sortByNumberVariable('avgTime'))
 
-  t.is((sortedResults[0].name.indexOf('frs-replace') !== -1 || (sortedResults[1].name.indexOf('frs-replace') !== -1 && sortedResults[1].avgPercentageDifference < 20)), true, 'frs-replace should be the fastest or second, but at most with 20% difference to the best')
+  t.equal((sortedResults[0].name.indexOf('frs-replace') !== -1 || (sortedResults[1].name.indexOf('frs-replace') !== -1 && sortedResults[1].avgPercentageDifference < 20)), true, 'frs-replace should be the fastest or second, but at most with 20% difference to the best')
 
   t.end()
 })

@@ -25,12 +25,11 @@ let output, dir
 
 let input, input2
 
-const cleanInputs = (done) => {
+const cleanInputs = () => {
   input2 && input2.cleanup()
   input2 = undefined
   input && input.cleanup()
   input = undefined
-  done && done() // to be runned either by node-tap or manually
 }
 
 const createInputs = async () => {
@@ -67,11 +66,10 @@ const createInputs = async () => {
 
 tap.Test.prototype.addAssert('arrayContaining', 2, arrayContainingAssert)
 tap.Test.prototype.addAssert('throwsMessageObj', 2, throwsMessageObjAssert)
-tap.afterEach((done) => {
+tap.afterEach(() => {
   fs.existsSync(output) && (fs.lstatSync(output).isDirectory()
     ? fs.rmdirSync(output)
     : fs.unlinkSync(output))
-  done()
 })
 
 tap.test('check required fields', async t => {
@@ -95,12 +93,12 @@ tap.test('check api', async t => {
 
   await t.test('content', async t => {
     testInput.content = content
-    await checkSyncAsync(t, 'looseEqual', [testInput, expectedOutput, 'replaced correctly'])
+    await checkSyncAsync(t, 'same', [testInput, expectedOutput, 'replaced correctly'])
 
     await t.test('with strategy = "flatten"', async t => {
       testInput.content = content
       testInput.strategy = 'flatten'
-      await checkSyncAsync(t, 'looseEqual', [testInput, expectedOutput, 'replaced correctly'])
+      await checkSyncAsync(t, 'same', [testInput, expectedOutput, 'replaced correctly'])
 
       t.end()
     })
@@ -108,7 +106,7 @@ tap.test('check api', async t => {
     await t.test('strategy = "preserve-structure"', async t => {
       testInput.content = content
       testInput.strategy = 'flatten'
-      await checkSyncAsync(t, 'looseEqual', [testInput, expectedOutput, 'replaced correctly'])
+      await checkSyncAsync(t, 'same', [testInput, expectedOutput, 'replaced correctly'])
 
       t.end()
     })
@@ -127,13 +125,13 @@ tap.test('check api', async t => {
 
     await t.test('as single file path', async t => {
       testInput.input = input.path
-      await checkSyncAsync(t, 'looseEqual', [testInput, expectedOutput, 'replaced correctly'])
+      await checkSyncAsync(t, 'same', [testInput, expectedOutput, 'replaced correctly'])
 
       await t.test('with inputReadOptions as object', async t => {
         testInput.input = input.path
         testInput.inputReadOptions = { encoding: defaults.inputReadOptions }
 
-        await checkSyncAsync(t, 'looseEqual', [testInput, expectedOutput, 'replaced correctly'])
+        await checkSyncAsync(t, 'same', [testInput, expectedOutput, 'replaced correctly'])
 
         t.end()
       })
@@ -143,7 +141,7 @@ tap.test('check api', async t => {
 
     await t.test('as array of file paths', async t => {
       testInput.input = [input.path, input2.path]
-      await checkSyncAsync(t, 'looseEqual', [testInput, [[
+      await checkSyncAsync(t, 'same', [testInput, [[
         '',
         expectedOutput[0][1] + defaults.outputJoinString + expectedOutput[0][1]
       ]], 'replaced correctly'])
@@ -152,7 +150,7 @@ tap.test('check api', async t => {
         testInput.input = [input.path, input2.path]
         testInput.outputJoinString = 'someCustomString\n\t'
 
-        await checkSyncAsync(t, 'looseEqual', [testInput, [[
+        await checkSyncAsync(t, 'same', [testInput, [[
           '',
           expectedOutput[0][1] + testInput.outputJoinString + expectedOutput[0][1]
         ]], 'replaced correctly'])
@@ -163,7 +161,7 @@ tap.test('check api', async t => {
       await t.test('with strategy = "flatten"', async t => {
         testInput.input = [input.path, input2.path]
         testInput.strategy = 'flatten'
-        await checkSyncAsync(t, 'looseEqual', [testInput, [
+        await checkSyncAsync(t, 'same', [testInput, [
           [input.path.substring(input.path.lastIndexOf('/')), expectedOutput[0][1]],
           [input2.path.substring(input.path.lastIndexOf('/')), expectedOutput[0][1]]
         ], 'replaced correctly with proper filepaths'])
@@ -174,7 +172,7 @@ tap.test('check api', async t => {
       await t.test('with strategy = "preserve-structure"', async t => {
         testInput.input = [input.path, input2.path]
         testInput.strategy = 'preserve-structure'
-        await checkSyncAsync(t, 'looseEqual', [testInput, [
+        await checkSyncAsync(t, 'same', [testInput, [
           [input.path, expectedOutput[0][1]],
           [input2.path, expectedOutput[0][1]]
         ], 'replaced correctly with proper filepaths'])
@@ -188,7 +186,7 @@ tap.test('check api', async t => {
     await t.test('as glob pattern', async t => {
       testInput.input = `${dir}/${tmpPrefixes.input}*`
 
-      await checkSyncAsync(t, 'looseEqual', [testInput, [[
+      await checkSyncAsync(t, 'same', [testInput, [[
         '',
         expectedOutput[0][1] + defaults.outputJoinString + expectedOutput[0][1]
       ]], 'replaced correctly'])
@@ -197,7 +195,7 @@ tap.test('check api', async t => {
         testInput.input = `${dir}/${tmpPrefixes.input}*`
         testInput.inputGlobOptions = { onlyDirectories: true }
 
-        await checkSyncAsync(t, 'looseEqual', [testInput, [['', '']], 'replaced correctly'])
+        await checkSyncAsync(t, 'same', [testInput, [['', '']], 'replaced correctly'])
 
         t.end()
       })
@@ -254,12 +252,12 @@ tap.test('check api', async t => {
       expectedOutput[0][1]
     ]]
 
-    await checkSyncAsync(t, 'looseEqual', [testInput, expectedOutput, 'replaced correctly'])
+    await checkSyncAsync(t, 'same', [testInput, expectedOutput, 'replaced correctly'])
 
     t.ok(fs.existsSync(testInput.output), 'output file exists')
 
     const outputFileContent = fs.readFileSync(testInput.output).toString()
-    t.is(outputFileContent, expectedOutput[0][1], 'expected output saved to file')
+    t.equal(outputFileContent, expectedOutput[0][1], 'expected output saved to file')
 
     t.beforeEach(async () => {
       cleanInputs()
@@ -283,7 +281,7 @@ tap.test('check api', async t => {
           expectedOutput[0][1]
         ]
       ]
-      await checkSyncAsync(t, 'looseEqual', [testInput, expectedOutput, 'replaced correctly with proper filepaths'])
+      await checkSyncAsync(t, 'same', [testInput, expectedOutput, 'replaced correctly with proper filepaths'])
 
       t.ok(fs.existsSync(expectedOutput[0][0]), 'output file exists')
       t.ok(fs.existsSync(expectedOutput[1][0]), 'output file 2 exists')
@@ -308,7 +306,7 @@ tap.test('check api', async t => {
           expectedOutput[0][1]
         ]
       ]
-      await checkSyncAsync(t, 'looseEqual', [testInput, expectedOutput, 'replaced correctly with proper filepaths'])
+      await checkSyncAsync(t, 'same', [testInput, expectedOutput, 'replaced correctly with proper filepaths'])
 
       t.ok(fs.existsSync(expectedOutput[0][0]), 'output file exists')
       t.ok(fs.existsSync(expectedOutput[1][0]), 'output file 2 exists')
@@ -330,12 +328,12 @@ tap.test('check api', async t => {
     testInput.outputWriteOptions = { encoding: defaults.outputWriteOptions }
     expectedOutput[0][0] = output
 
-    await checkSyncAsync(t, 'looseEqual', [testInput, expectedOutput, 'replaced correctly'])
+    await checkSyncAsync(t, 'same', [testInput, expectedOutput, 'replaced correctly'])
 
     t.ok(fs.existsSync(testInput.output), 'output file exists')
 
     const outputFileContent = fs.readFileSync(testInput.output).toString()
-    t.is(outputFileContent, expectedOutput[0][1], 'expected output saved to file')
+    t.equal(outputFileContent, expectedOutput[0][1], 'expected output saved to file')
 
     t.end()
   })
@@ -347,12 +345,12 @@ tap.test('check api', async t => {
 
     expectedOutput[0] = [output, content.replace(needle, replaceFn)]
 
-    await checkSyncAsync(t, 'looseEqual', [testInput, expectedOutput, 'replaced correctly'])
+    await checkSyncAsync(t, 'same', [testInput, expectedOutput, 'replaced correctly'])
 
     t.ok(fs.existsSync(testInput.output), 'output file exists')
 
     const outputFileContent = fs.readFileSync(testInput.output).toString()
-    t.is(outputFileContent, expectedOutput[0][1], 'expected output saved to file')
+    t.equal(outputFileContent, expectedOutput[0][1], 'expected output saved to file')
 
     t.end()
   })
@@ -363,7 +361,7 @@ tap.test('check api', async t => {
 
     expectedOutput[0][1] = content.replace(testInput.needle, replacement)
 
-    await checkSyncAsync(t, 'looseEqual', [testInput, expectedOutput, 'replaced correctly'])
+    await checkSyncAsync(t, 'same', [testInput, expectedOutput, 'replaced correctly'])
 
     t.end()
   })
