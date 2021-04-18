@@ -40,36 +40,35 @@ let output, dir
     .forEach(fs.unlinkSync)
 }
 
-tap.afterEach((done) => {
+tap.afterEach(() => {
   fs.existsSync(output) && (fs.lstatSync(output).isDirectory()
     ? fs.rmdirSync(output)
     : fs.unlinkSync(output))
-  done()
 })
 
 tap.test('no arguments', (t) => {
   const result = runCli()
-  t.is(result.status, 1, 'process should send error status (1)')
-  t.is(result.parsedOutput, '', 'stdout should be empty')
-  t.is(result.parsedError, 'Not enough non-option arguments: got 0, need at least 2', 'stderr should complain about missing arguments')
+  t.equal(result.status, 1, 'process should send error status (1)')
+  t.equal(result.parsedOutput, '', 'stdout should be empty')
+  t.equal(result.parsedError, 'Not enough non-option arguments: got 0, need at least 2', 'stderr should complain about missing arguments')
 
   t.end()
 })
 
 tap.test('one argument', (t) => {
   const result = runCli('sth')
-  t.is(result.status, 1, 'process should send error status (1)')
-  t.is(result.parsedOutput, '', 'stdout should be empty')
-  t.is(result.parsedError, 'Not enough non-option arguments: got 1, need at least 2', 'stderr should complain about missing arguments')
+  t.equal(result.status, 1, 'process should send error status (1)')
+  t.equal(result.parsedOutput, '', 'stdout should be empty')
+  t.equal(result.parsedError, 'Not enough non-option arguments: got 1, need at least 2', 'stderr should complain about missing arguments')
 
   t.end()
 })
 
 tap.test('two arguments', (t) => {
   const result = runCli(['sth', 'sth'])
-  t.is(result.status, 1, 'process should send error status (1)')
-  t.is(result.parsedOutput, '', 'stdout should be empty')
-  t.is(result.parsedError, 'Missing required argument: i')
+  t.equal(result.status, 1, 'process should send error status (1)')
+  t.equal(result.parsedOutput, '', 'stdout should be empty')
+  t.equal(result.parsedError, 'Missing required argument: i')
 
   t.end()
 })
@@ -81,9 +80,9 @@ tap.test('content argument', async (t) => {
     ['-c', '--content'],
     content,
     (ct, result) => {
-      ct.is(result.status, 0, 'process should send success status (0)')
-      ct.is(result.parsedOutput, expectedOutput, 'stdout should contain replaced string')
-      ct.is(result.parsedError, '', 'stderr should be empty')
+      ct.equal(result.status, 0, 'process should send success status (0)')
+      ct.equal(result.parsedOutput, expectedOutput, 'stdout should contain replaced string')
+      ct.equal(result.parsedError, '', 'stderr should be empty')
 
       ct.end()
     }
@@ -94,30 +93,29 @@ tap.test('content argument', async (t) => {
 
 tap.test('no stdout argument', (t) => {
   const result = runCli([needle, replacement, '--content', content])
-  t.is(result.status, 0, 'process should send success status (0)')
-  t.is(result.parsedOutput, '', 'stdout should be empty')
-  t.is(result.parsedError, '', 'stderr should be empty')
+  t.equal(result.status, 0, 'process should send success status (0)')
+  t.equal(result.parsedOutput, '', 'stdout should be empty')
+  t.equal(result.parsedError, '', 'stderr should be empty')
 
   t.end()
 })
 
 tap.test('stdout argument', (t) => {
   const result = runCli([needle, replacement, '--content', content, '--stdout'])
-  t.is(result.status, 0, 'process should send success status (0)')
-  t.is(result.parsedOutput, expectedOutput, 'stdout should contain replaced string')
-  t.is(result.parsedError, '', 'stderr should be empty')
+  t.equal(result.status, 0, 'process should send success status (0)')
+  t.equal(result.parsedOutput, expectedOutput, 'stdout should contain replaced string')
+  t.equal(result.parsedError, '', 'stderr should be empty')
 
   t.end()
 })
 
 tap.test('input argument', async (t) => {
   let input, input2
-  const cleanInputs = done => {
+  const cleanInputs = () => {
     input && input.cleanup()
     input = undefined
     input2 && input2.cleanup()
     input2 = undefined
-    done && done()
   }
 
   t.beforeEach(
@@ -149,9 +147,9 @@ tap.test('input argument', async (t) => {
       ['-i', '--input'],
       () => input.path,
       (cct, result) => {
-        cct.is(result.status, 0, 'process should send success status (0)')
-        cct.is(result.parsedOutput, expectedOutput, 'stdout should contain replaced string')
-        cct.is(result.parsedError, '', 'stderr should be empty')
+        cct.equal(result.status, 0, 'process should send success status (0)')
+        cct.equal(result.parsedOutput, expectedOutput, 'stdout should contain replaced string')
+        cct.equal(result.parsedError, '', 'stderr should be empty')
 
         cct.end()
       }
@@ -168,17 +166,17 @@ tap.test('input argument', async (t) => {
       ['-i', '--input'],
       () => [input.path, input2.path],
       (cct, result) => {
-        cct.is(result.status, 0, 'process should send success status (0)')
-        cct.is(result.parsedOutput, expectedOutput, 'stdout should contain replaced string')
-        cct.is(result.parsedError, '', 'stderr should be empty')
+        cct.equal(result.status, 0, 'process should send success status (0)')
+        cct.equal(result.parsedOutput, expectedOutput, 'stdout should contain replaced string')
+        cct.equal(result.parsedError, '', 'stderr should be empty')
 
         const outputFilePath = path.join(outputPath, input.path.substring(input.path.lastIndexOf(path.sep)))
         const outputFileContent = fs.readFileSync(outputFilePath).toString()
-        ct.is(outputFileContent, expectedOutput, 'expected output saved to file')
+        ct.equal(outputFileContent, expectedOutput, 'expected output saved to file')
 
         const outputFilePath2 = path.join(outputPath, input2.path.substring(input2.path.lastIndexOf(path.sep)))
         const outputFileContent2 = fs.readFileSync(outputFilePath2).toString()
-        ct.is(outputFileContent2, expectedOutput, 'expected output saved to file')
+        ct.equal(outputFileContent2, expectedOutput, 'expected output saved to file')
 
         fs.unlinkSync(outputFilePath)
         fs.unlinkSync(outputFilePath2)
@@ -198,17 +196,17 @@ tap.test('input argument', async (t) => {
       ['-i', '--input'],
       () => [input.path, input2.path],
       (cct, result) => {
-        cct.is(result.status, 0, 'process should send success status (0)')
-        cct.is(result.parsedOutput, expectedOutput, 'stdout should contain replaced string')
-        cct.is(result.parsedError, '', 'stderr should be empty')
+        cct.equal(result.status, 0, 'process should send success status (0)')
+        cct.equal(result.parsedOutput, expectedOutput, 'stdout should contain replaced string')
+        cct.equal(result.parsedError, '', 'stderr should be empty')
 
         const outputFilePath = path.join(outputPath, input.path)
         const outputFileContent = fs.readFileSync(outputFilePath).toString()
-        ct.is(outputFileContent, expectedOutput, 'expected output saved to file')
+        ct.equal(outputFileContent, expectedOutput, 'expected output saved to file')
 
         const outputFilePath2 = path.join(outputPath, input2.path)
         const outputFileContent2 = fs.readFileSync(outputFilePath2).toString()
-        ct.is(outputFileContent2, expectedOutput, 'expected output saved to file')
+        ct.equal(outputFileContent2, expectedOutput, 'expected output saved to file')
 
         fs.unlinkSync(outputFilePath)
         fs.unlinkSync(outputFilePath2)
@@ -235,9 +233,9 @@ tap.test('input argument', async (t) => {
       ['-i', '--input'],
       `${dir}/${tmpPrefixes.input}*`,
       (cct, result) => {
-        cct.is(result.status, 0, 'process should send success status (0)')
-        cct.is(result.parsedOutput, expectedOutput + defaults.outputJoinString + expectedOutput, 'stdout should contain replaced string')
-        cct.is(result.parsedError, '', 'stderr should be empty')
+        cct.equal(result.status, 0, 'process should send success status (0)')
+        cct.equal(result.parsedOutput, expectedOutput + defaults.outputJoinString + expectedOutput, 'stdout should contain replaced string')
+        cct.equal(result.parsedError, '', 'stderr should be empty')
 
         cct.end()
       }
@@ -262,10 +260,9 @@ tap.test('i-read-opts argument', async (t) => {
       })
   )
 
-  t.afterEach(done => {
+  t.afterEach(() => {
     input.cleanup()
     input = undefined
-    done()
   })
 
   await t.test('without input argument', async (ct) => {
@@ -274,9 +271,9 @@ tap.test('i-read-opts argument', async (t) => {
       { input: content }
     )
 
-    ct.is(result.status, 1, 'process should send error status (1)')
-    ct.is(result.parsedOutput, '', 'stdout should be empty')
-    ct.is(result.parsedError, 'i-read-opts -> i', 'stderr contain error about missing i-read-opts dependency: i argument')
+    ct.equal(result.status, 1, 'process should send error status (1)')
+    ct.equal(result.parsedOutput, '', 'stdout should be empty')
+    ct.equal(result.parsedError, 'i-read-opts -> i', 'stderr contain error about missing i-read-opts dependency: i argument')
 
     ct.end()
   })
@@ -286,9 +283,9 @@ tap.test('i-read-opts argument', async (t) => {
       [needle, replacement, '-i', input.path, '--i-read-opts.encoding', 'incorrect-encoding', '--stdout']
     )
 
-    ct.is(result.status, 1, 'process should send error status (1)')
-    ct.is(result.parsedOutput, '', 'stdout should be empty')
-    ct.contains(result.parsedError, 'incorrect-encoding', 'stderr should complain wrong encoding argument')
+    ct.equal(result.status, 1, 'process should send error status (1)')
+    ct.equal(result.parsedOutput, '', 'stdout should be empty')
+    ct.has(result.parsedError, 'TypeError [ERR_INVALID_OPT_VALUE_ENCODING]: The value "incorrect-encoding" is invalid for option "encoding"', 'stderr should complain wrong encoding argument')
 
     ct.end()
   })
@@ -298,9 +295,9 @@ tap.test('i-read-opts argument', async (t) => {
       [needle, replacement, '-i', input.path, '--i-read-opts.encoding', defaults.inputReadOptions, '--stdout']
     )
 
-    ct.is(result.status, 0, 'process should send success status (0)')
-    ct.is(result.parsedOutput, expectedOutput, 'stdout should contain replaced string')
-    ct.is(result.parsedError, '', 'stderr should be empty')
+    ct.equal(result.status, 0, 'process should send success status (0)')
+    ct.equal(result.parsedOutput, expectedOutput, 'stdout should contain replaced string')
+    ct.equal(result.parsedError, '', 'stderr should be empty')
 
     ct.end()
   })
@@ -330,12 +327,11 @@ tap.test('i-glob-opts argument', async (t) => {
     }
   )
 
-  t.afterEach(done => {
+  t.afterEach(() => {
     input.cleanup()
     input = undefined
     input2.cleanup()
     input2 = undefined
-    done()
   })
 
   await t.test('set without input argument', (ct) => {
@@ -344,9 +340,9 @@ tap.test('i-glob-opts argument', async (t) => {
       { input: content }
     )
 
-    ct.is(result.status, 1, 'process should send error status (1)')
-    ct.is(result.parsedOutput, '', 'stdout should be empty')
-    ct.is(result.parsedError, 'i-glob-opts -> i', 'stderr contain error about missing i-glob-opts dependency: i argument')
+    ct.equal(result.status, 1, 'process should send error status (1)')
+    ct.equal(result.parsedOutput, '', 'stdout should be empty')
+    ct.equal(result.parsedError, 'i-glob-opts -> i', 'stderr contain error about missing i-glob-opts dependency: i argument')
 
     ct.end()
   })
@@ -356,9 +352,9 @@ tap.test('i-glob-opts argument', async (t) => {
       [needle, replacement, '-i', input.path, '--i-glob-opts.onlyDirectories', true, '--stdout']
     )
 
-    ct.is(result.status, 0, 'process should send success status (0)')
-    ct.is(result.parsedOutput, '', 'stdout should be empty')
-    ct.is(result.parsedError, '', 'stderr should be empty')
+    ct.equal(result.status, 0, 'process should send success status (0)')
+    ct.equal(result.parsedOutput, '', 'stdout should be empty')
+    ct.equal(result.parsedError, '', 'stderr should be empty')
 
     ct.end()
   })
@@ -388,12 +384,11 @@ tap.test('o-join-str argument', async (t) => {
     }
   )
 
-  t.afterEach(done => {
+  t.afterEach(() => {
     input.cleanup()
     input = undefined
     input2.cleanup()
     input2 = undefined
-    done()
   })
 
   await t.test('set with input argument', (ct) => {
@@ -402,9 +397,9 @@ tap.test('o-join-str argument', async (t) => {
       [needle, replacement, '-i', input.path, input2.path, '--o-join-str', outputJoinString, '--stdout']
     )
 
-    ct.is(result.status, 0, 'process should send success status (0)')
-    ct.is(result.parsedOutput, expectedOutput + outputJoinString + expectedOutput, 'stdout should contain replaced string')
-    ct.is(result.parsedError, '', 'stderr should be empty')
+    ct.equal(result.status, 0, 'process should send success status (0)')
+    ct.equal(result.parsedOutput, expectedOutput + outputJoinString + expectedOutput, 'stdout should contain replaced string')
+    ct.equal(result.parsedError, '', 'stderr should be empty')
 
     ct.end()
   })
@@ -420,12 +415,12 @@ tap.test('output argument', async (t) => {
     ['-o', '--output'],
     outputPath,
     (ct, result) => {
-      ct.is(result.status, 0, 'process should send success status (0)')
-      ct.is(result.parsedOutput, '', 'stdout should be empty')
-      ct.is(result.parsedError, '', 'stderr should be empty')
+      ct.equal(result.status, 0, 'process should send success status (0)')
+      ct.equal(result.parsedOutput, '', 'stdout should be empty')
+      ct.equal(result.parsedError, '', 'stderr should be empty')
 
       const outputFileContent = fs.readFileSync(outputPath).toString()
-      ct.is(outputFileContent, expectedOutput, 'expected output saved to file')
+      ct.equal(outputFileContent, expectedOutput, 'expected output saved to file')
 
       ct.end()
     }
@@ -443,9 +438,9 @@ tap.test('input options argument', async (t) => {
       { input: content }
     )
 
-    ct.is(result.status, 1, 'process should send error status (1)')
-    ct.is(result.parsedOutput, '', 'stdout should be empty')
-    ct.is(result.parsedError, 'o-write-opts -> o', 'stderr contain error about missing i-read-opts dependency: i argument')
+    ct.equal(result.status, 1, 'process should send error status (1)')
+    ct.equal(result.parsedOutput, '', 'stdout should be empty')
+    ct.equal(result.parsedError, 'o-write-opts -> o', 'stderr contain error about missing i-read-opts dependency: i argument')
 
     ct.end()
   })
@@ -456,12 +451,12 @@ tap.test('input options argument', async (t) => {
       { input: content }
     )
 
-    ct.is(result.status, 0, 'process should send success status (0)')
-    ct.is(result.parsedOutput, '', 'stdout should be empty')
-    ct.is(result.parsedError, '', 'stderr should be empty')
+    ct.equal(result.status, 0, 'process should send success status (0)')
+    ct.equal(result.parsedOutput, '', 'stdout should be empty')
+    ct.equal(result.parsedError, '', 'stderr should be empty')
 
     const outputFileContent = fs.readFileSync(outputPath).toString()
-    ct.is(outputFileContent, expectedOutput, 'expected output saved to file')
+    ct.equal(outputFileContent, expectedOutput, 'expected output saved to file')
 
     ct.end()
   })
@@ -478,12 +473,12 @@ tap.test('stdin && output argument', async (t) => {
     ['-o', '--output'],
     outputPath,
     (ct, result) => {
-      ct.is(result.status, 0, 'process should send success status (0)')
-      ct.is(result.parsedOutput, expectedOutput, 'stdout should contain replaced string')
-      ct.is(result.parsedError, '', 'stderr should be empty')
+      ct.equal(result.status, 0, 'process should send success status (0)')
+      ct.equal(result.parsedOutput, expectedOutput, 'stdout should contain replaced string')
+      ct.equal(result.parsedError, '', 'stderr should be empty')
 
       const outputFileContent = fs.readFileSync(outputPath).toString()
-      ct.is(outputFileContent, expectedOutput, 'expected output saved to file')
+      ct.equal(outputFileContent, expectedOutput, 'expected output saved to file')
 
       ct.end()
     }
@@ -503,12 +498,12 @@ tap.test('flags argument', async (t) => {
     ['-f', '--flags'],
     flags,
     (ct, result) => {
-      ct.is(result.status, 0, 'process should send success status (0)')
-      ct.is(result.parsedOutput, expectedOutput, 'stdout should contain replaced string')
-      ct.is(result.parsedError, '', 'stderr should be empty')
+      ct.equal(result.status, 0, 'process should send success status (0)')
+      ct.equal(result.parsedOutput, expectedOutput, 'stdout should contain replaced string')
+      ct.equal(result.parsedError, '', 'stderr should be empty')
 
       const outputFileContent = fs.readFileSync(outputPath).toString()
-      ct.is(outputFileContent, expectedOutput, 'expected output saved to file')
+      ct.equal(outputFileContent, expectedOutput, 'expected output saved to file')
 
       ct.end()
     }
@@ -543,12 +538,12 @@ tap.test('replace-fn argument', async (t) => {
     ['-r', '--replace-fn'],
     undefined,
     (ct, result) => {
-      ct.is(result.status, 0, 'process should send success status (0)')
-      ct.is(result.parsedOutput, expectedOutput, 'stdout should contain replaced string')
-      ct.is(result.parsedError, '', 'stderr should be empty')
+      ct.equal(result.status, 0, 'process should send success status (0)')
+      ct.equal(result.parsedOutput, expectedOutput, 'stdout should contain replaced string')
+      ct.equal(result.parsedError, '', 'stderr should be empty')
 
       const outputFileContent = fs.readFileSync(outputPath).toString()
-      ct.is(outputFileContent, expectedOutput, 'expected output saved to file')
+      ct.equal(outputFileContent, expectedOutput, 'expected output saved to file')
 
       ct.end()
     }
@@ -566,9 +561,9 @@ tap.test('stdin stream as input argument (like piped stream)', async (t) => {
     { input: content }
   )
 
-  t.is(result.status, 0, 'process should send success status (0)')
-  t.is(result.parsedOutput, expectedOutput, 'stdout should contain replaced string')
-  t.is(result.parsedError, '', 'stderr should be empty')
+  t.equal(result.status, 0, 'process should send success status (0)')
+  t.equal(result.parsedOutput, expectedOutput, 'stdout should contain replaced string')
+  t.equal(result.parsedError, '', 'stderr should be empty')
 
   t.end()
 })
