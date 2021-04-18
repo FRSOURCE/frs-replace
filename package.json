@@ -18,6 +18,8 @@
     "src/sync.js",
     "src/async.js",
     "src/utils.js",
+    "sync.js",
+    "async.js",
     "index.js",
     "LICENSE",
     "package.json",
