@@ -285,7 +285,12 @@ tap.test('i-read-opts argument', async (t) => {
 
     ct.equal(result.status, 1, 'process should send error status (1)')
     ct.equal(result.parsedOutput, '', 'stdout should be empty')
-    ct.has(result.parsedError, 'TypeError [ERR_INVALID_OPT_VALUE_ENCODING]: The value "incorrect-encoding" is invalid for option "encoding"', 'stderr should complain wrong encoding argument')
+
+    if (process.version.includes('v16')) {
+      ct.has(result.parsedError, 'TypeError [ERR_INVALID_ARG_VALUE]: The argument \'incorrect-encoding\' is invalid encoding. Received \'encoding\'', 'stderr should complain wrong encoding argument')
+    } else {
+      ct.has(result.parsedError, 'TypeError [ERR_INVALID_OPT_VALUE_ENCODING]: The value "incorrect-encoding" is invalid for option "encoding"', 'stderr should complain wrong encoding argument')
+    }
 
     ct.end()
   })
