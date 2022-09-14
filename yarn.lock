@@ -3429,7 +3429,7 @@ performance-now@^2.1.0:
   resolved "https://registry.yarnpkg.com/performance-now/-/performance-now-2.1.0.tgz#6309f4e0e5fa913ec1c69307ae364b4b377c9e7b"
   integrity sha1-Ywn04OX6kT7BxpMHrjZLSzd8nns=
 
-perfy@^1.1.5:
+perfy@1.1.5:
   version "1.1.5"
   resolved "https://registry.yarnpkg.com/perfy/-/perfy-1.1.5.tgz#0d629f870a34a3eb1866d3db485d2b3faef29e4b"
   integrity sha512-/ieVBpMaPTJf83YTUl2TImsSwMEJ23qGP2w27pE6aX+NrB/ZRGqOnQZpl7J719yFwd+ebDiHguPNFeMSamyK7w==
@@ -3719,7 +3719,7 @@ repeating@^2.0.0:
   dependencies:
     is-finite "^1.0.0"
 
-replace-in-file@^6.0.0:
+replace-in-file@6.2.0:
   version "6.2.0"
   resolved "https://registry.yarnpkg.com/replace-in-file/-/replace-in-file-6.2.0.tgz#9c0e381b0e02f27f83d5ba500bb4046f63d18566"
   integrity sha512-Im2AF9G/qgkYneOc9QwWwUS/efyyonTUBvzXS2VXuxPawE5yQIjT/e6x4CTijO0Quq48lfAujuo+S89RR2TP2Q==
@@ -3728,12 +3728,12 @@ replace-in-file@^6.0.0:
     glob "^7.1.6"
     yargs "^16.2.0"
 
-replace-string@^3.1.0:
+replace-string@3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/replace-string/-/replace-string-3.1.0.tgz#77a087d88580fbac59851237891aa4b0e283db72"
   integrity sha512-yPpxc4ZR2makceA9hy/jHNqc7QVkd4Je/N0WRHm6bs3PtivPuPynxE5ejU/mp5EhnCv8+uZL7vhz8rkluSlx+Q==
 
-replace@^1.2.0:
+replace@1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/replace/-/replace-1.2.1.tgz#e6e28db8dc7dcfa2a6c0b99c8922360570f1aead"
   integrity sha512-KZCBe/tPanwBlbjSMQby4l+zjSiFi3CLEP/6VLClnRYgJ46DZ5u9tmA6ceWeFS8coaUnU4ZdGNb/puUGMHNSRg==
@@ -4074,7 +4074,7 @@ standard-engine@^14.0.1:
     pkg-conf "^3.1.0"
     xdg-basedir "^4.0.0"
 
-standard-version@^9.0.0:
+standard-version@9.3.1:
   version "9.3.1"
   resolved "https://registry.yarnpkg.com/standard-version/-/standard-version-9.3.1.tgz#786c16c318847f58a31a2434f97e8db33a635853"
   integrity sha512-5qMxXw/FxLouC5nANyx/5RY1kiorJx9BppUso8gN07MG64q2uLRmrPb4KfXp3Ql4s/gxjZwZ89e0FwxeLubGww==
@@ -4095,7 +4095,7 @@ standard-version@^9.0.0:
     stringify-package "^1.0.1"
     yargs "^16.0.0"
 
-standard@^16.0.0:
+standard@16.0.4:
   version "16.0.4"
   resolved "https://registry.yarnpkg.com/standard/-/standard-16.0.4.tgz#779113ba41dd218ab545e7b4eb2405561f6eb370"
   integrity sha512-2AGI874RNClW4xUdM+bg1LRXVlYLzTNEkHmTG5mhyn45OhbgwA+6znowkOGYy+WMb5HRyELvtNy39kcdMQMcYQ==
@@ -4358,7 +4358,7 @@ tap-yaml@^1.0.0:
   dependencies:
     yaml "^1.5.0"
 
-tap@^15.0.2:
+tap@15.0.6:
   version "15.0.6"
   resolved "https://registry.yarnpkg.com/tap/-/tap-15.0.6.tgz#d8d5bf1af5485c9d4bb5b4ed3b84dfdca7743006"
   integrity sha512-f3LaBSGgXkwTh17Lj4H4DxKIl4BrDZlmxWHtLVGwl8vx+XxNKvf0qMbeFLVhsVTRVz9E5yTaSUweB00YcO+TMw==
@@ -4437,7 +4437,7 @@ through@2, "through@>=2.2.7 <3":
   resolved "https://registry.yarnpkg.com/through/-/through-2.3.8.tgz#0dd4c9ffaabc357960b1b724115d7e0e86a2e1f5"
   integrity sha1-DdTJ/6q8NXlgsbckEV1+Doai4fU=
 
-tmp-promise@^3.0.2:
+tmp-promise@3.0.2:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/tmp-promise/-/tmp-promise-3.0.2.tgz#6e933782abff8b00c3119d63589ca1fb9caaa62a"
   integrity sha512-OyCLAKU1HzBjL6Ev3gxUeraJNlbNingmi8IrHHEsYH8LTmEuhvYfqvhn2F/je+mjf4N58UmZ96OMEy1JanSCpA==
