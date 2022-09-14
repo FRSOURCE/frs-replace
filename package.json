@@ -60,7 +60,7 @@
     "replace": "1.2.1",
     "replace-in-file": "6.3.5",
     "replace-string": "3.1.0",
-    "standard": "16.0.4",
+    "standard": "17.0.0",
     "standard-version": "9.5.0",
     "tap": "16.3.0",
     "tmp-promise": "3.0.3"
