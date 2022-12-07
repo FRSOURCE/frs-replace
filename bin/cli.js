@@ -125,7 +125,7 @@ require('get-stdin')().then((stdin) => {
       outputWriteOptions: argv['o-write-opts'],
       outputJoinString: argv['o-join-str'],
       needle: new RegExp(argv.needle, argv.f),
-      replacement: argv.r ? require(argv.replacement) : argv.replacement
+      replacement: argv.r ? require(require('path').resolve(argv.replacement)) : argv.replacement
     })
 
     if (argv.stdout) {
