@@ -41,7 +41,7 @@
     "javascript"
   ],
   "scripts": {
-    "prerelease": "yarn standard:fix && yarn test && yarn test:benchmark",
+    "prerelease": "yarn standard:fix && yarn test",
     "release": "standard-version",
     "postrelease": "git push --follow-tags origin master && yarn publish",
     "pretest": "standard",
