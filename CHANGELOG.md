@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.0.0](https://github.com/FRSource/frs-replace/compare/v3.0.3...v4.0.0) (2022-12-07)
+
+
+### ⚠ BREAKING CHANGES
+
+* from now on replatement file path should be relative to projects' root
+
+Signed-off-by: Jakub Freisler <jakub@frsource.org>
+
+### Features
+
+* require replacement method in scope of projects' root ([69fc050](https://github.com/FRSource/frs-replace/commit/69fc05009bf11230fbab73d649b4ce636ebbc8e2))
+
 ### [3.0.3](https://github.com/FRSource/frs-replace/compare/v3.0.2...v3.0.3) (2021-04-18)
 
 ### [3.0.2](https://github.com/FRSource/frs-replace/compare/v3.0.1...v3.0.2) (2021-04-18)
