@@ -62,7 +62,7 @@
     "replace-string": "3.1.0",
     "standard": "17.0.0",
     "standard-version": "9.5.0",
-    "tap": "16.3.2",
+    "tap": "16.3.4",
     "tmp-promise": "3.0.3"
   },
   "dependencies": {
