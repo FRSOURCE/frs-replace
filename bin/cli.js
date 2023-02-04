@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 const replaceSync = require('../sync')
 
-require('get-stdin')().then((stdin) => {
+(~process.argv.indexOf('--no-stdin') ? Promise.resolve() : require('get-stdin')()).then((stdin) => {
   const isPiped = !!stdin
 
   if (isPiped) {
@@ -48,7 +48,6 @@ require('get-stdin')().then((stdin) => {
     .choices('f', ['', 'g', 'm', 'i', 'gm', 'gi', 'mi', 'mg', 'ig', 'im', 'gmi', 'gim', 'mig', 'mgi', 'igm', 'img'])
     .default('f', 'g')
     .coerce('f', arg => arg.trim())
-
     .option('i', { demandOption: !isContentPresent && !isHelpPresent })
     .alias('i', 'input')
     .describe('i', 'Path to files or fast-glob pattern pointing to files to read & replace from')
@@ -62,6 +61,11 @@ require('get-stdin')().then((stdin) => {
     .option('i-glob-opts')
     .describe('i-glob-opts', 'Passed to fast-glob.sync when resolving glob patterns')
     .implies('i-glob-opts', 'i')
+
+    .option('stdin')
+    .describe('stdin', 'Wait for stdin input (should be set to false when used in non-interactive terminals)')
+    .boolean('stdin')
+    .default('stdin', true)
 
     .option('c', { demandOption: isContentPresent })
     .alias('c', 'content')

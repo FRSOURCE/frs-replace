@@ -100,6 +100,7 @@ frs-replace <regex> <replacement> [options]
   |&#8209;i, &#8209;&#8209;input       | string or string[] | *-* | Path to files or [fast-glob](https://github.com/mrmlnc/fast-glob) pattern pointing to files to be read & replaced from. If multiple files specified results will be joined using `outputJoinString` option's value) |
   | &#8209;&#8209;i-read-opts | string or object | utf8 | Options which are passed directly to the [readFileSync method](https://nodejs.org/api/fs.html#fs_fs_readfilesync_path_options) when reading input file |
   | &#8209;&#8209;i-glob-opts | object | *undefined* | Options which are passed directly to the [fast-glob package](https://github.com/mrmlnc/fast-glob#options-1) when resolving glob patterns |
+  | &#8209;&#8209;stdin | boolean | *true* | Wait for stdin input (should be set to *false* when used in non-interactive terminals) |
   | &#8209;o, &#8209;&#8209;output     | string | *-* | Output file name/path (replaces the file if it already exists and creates any intermediate directories if they don't already exist) |
   | &#8209;&#8209;o-write-opts | string or object | utf8 | Passed as options argument of [write's .sync](https://www.npmjs.com/package/write#sync) |
   | &#8209;&#8209;o-join-str | string | \n | Used when joining multiple files, passed directly to [javascript join](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/join#Syntax) |
