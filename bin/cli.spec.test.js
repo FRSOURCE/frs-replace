@@ -76,7 +76,7 @@ tap.test('two arguments', (t) => {
 tap.test('content argument', async (t) => {
   await checkEachArgCombination(
     t,
-    [needle, replacement, '--stdout'],
+    [needle, replacement, '--stdout', '--no-stdin'],
     ['-c', '--content'],
     content,
     (ct, result) => {

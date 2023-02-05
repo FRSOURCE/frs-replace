@@ -1,7 +1,11 @@
 #!/usr/bin/env node
-const replaceSync = require('../sync')
+const replaceSync = require('../sync');
 
-(~process.argv.indexOf('--no-stdin') ? Promise.resolve() : require('get-stdin')()).then((stdin) => {
+(
+  ~process.argv.indexOf('--no-stdin')
+    ? Promise.resolve()
+    : require('get-stdin')()
+).then((stdin) => {
   const isPiped = !!stdin
 
   if (isPiped) {
