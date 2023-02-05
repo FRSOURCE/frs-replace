@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.1.0](https://github.com/FRSource/frs-replace/compare/v4.0.0...v4.1.0) (2023-02-05)
+
+
+### Features
+
+* add stdin flag ([7574b49](https://github.com/FRSource/frs-replace/commit/7574b49274a525432f0353b0ce24c54e1514e580))
+
 ## [4.0.0](https://github.com/FRSource/frs-replace/compare/v3.0.3...v4.0.0) (2022-12-07)
 
 
