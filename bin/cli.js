@@ -128,7 +128,7 @@ const replaceSync = require('../sync');
       inputReadOptions: argv['i-read-opts'],
       inputGlobOptions: argv['i-glob-opts'],
       content: argv.c,
-      strategy: argv.strategy,
+      strategy: argv.s,
       output: argv.o,
       outputWriteOptions: argv['o-write-opts'],
       outputJoinString: argv['o-join-str'],
@@ -141,7 +141,7 @@ const replaceSync = require('../sync');
     }
 
     return process.exit()
-  } catch (e) /* istanbul ignore next */ {
+  } catch (e) /* c8 ignore next */ {
     process.stderr.write(e.toString())
     return process.exit(1)
   }

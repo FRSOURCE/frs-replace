@@ -6,13 +6,14 @@
     "frs-replace": "./bin/cli.js"
   },
   "main": "index.js",
-  "repository": "https://github.com/FRSource/frs-replace.git",
+  "repository": "https://github.com/FRSOURCE/frs-replace.git",
   "author": "Jakub Freisler <FRSgit@users.noreply.github.com>",
   "license": "Apache-2.0",
+  "packageManager": "pnpm@8.5.1",
   "bugs": {
-    "url": "https://github.com/FRSource/frs-replace/issues"
+    "url": "https://github.com/FRSOURCE/frs-replace/issues"
   },
-  "homepage": "https://github.com/FRSource/frs-replace#readme",
+  "homepage": "https://github.com/FRSOURCE/frs-replace#readme",
   "files": [
     "bin/cli.js",
     "src/sync.js",
@@ -22,8 +23,7 @@
     "async.js",
     "index.js",
     "LICENSE",
-    "package.json",
-    "yarn.lock"
+    "package.json"
   ],
   "keywords": [
     "replace",
@@ -41,29 +41,25 @@
     "javascript"
   ],
   "scripts": {
-    "prerelease": "yarn standard:fix && yarn test",
-    "release": "standard-version",
-    "postrelease": "git push --follow-tags origin master && yarn publish",
-    "pretest": "standard",
-    "test": "yarn test:unit --100",
-    "posttest": "tap --coverage-report=html",
-    "pretest:unit": "yarn standard:fix",
-    "test:unit": "tap ./src/*.test.js ./bin/*.test.js -J",
-    "test:unit:debug": "tap ./bin/cli.spec.test.js -J -R spec",
-    "test:benchmark": "tap ./benchmark/*.benchmark.test.js --no-timeout --no-coverage",
-    "test:benchmark:glob": "yarn test:benchmark --grep=\"/input as glob pattern/\"",
-    "test:benchmark:string": "yarn test:benchmark --grep=\"/input & replacement as strings/\"",
-    "standard:fix": "standard --fix"
+    "release": "pnpm lint:fix && pnpm coverage:ci && standard-version && git push --follow-tags origin main && pnpm publish",
+    "test:ci": "vitest run",
+    "coverage:ci": "vitest run --coverage",
+    "test": "vitest",
+    "coverage": "vitest --coverage",
+    "lint:fix": "pnpm standard --fix",
+    "lint:ci": "pnpm standard",
+    "test:benchmark": "vitest bench"
   },
   "devDependencies": {
-    "perfy": "1.1.5",
+    "@vitest/coverage-c8": "^0.31.1",
+    "@vitest/ui": "^0.31.1",
     "replace": "1.2.2",
     "replace-in-file": "6.3.5",
     "replace-string": "3.1.0",
     "standard": "17.0.0",
     "standard-version": "9.5.0",
-    "tap": "16.3.4",
-    "tmp-promise": "3.0.3"
+    "tmp-promise": "3.0.3",
+    "vitest": "^0.31.1"
   },
   "dependencies": {
     "fast-glob": "^3.1.0",

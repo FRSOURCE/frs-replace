@@ -1,47 +1,34 @@
 name: CI
-on: [push]
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
 jobs:
   test:
     name: Unit tests & coverage
     runs-on: ubuntu-latest
     steps:
-      - name: checkout
-        uses: actions/checkout@v3
-      - name: remove git auth
-        run: git config --unset http.https://github.com/.extraheader
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-      - name: Configure Yarn cache
-        uses: actions/cache@v3
+      - uses: actions/checkout@v3
+      - uses: pnpm/action-setup@v2
+      - uses: actions/setup-node@v3
         with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('./yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn
-      - name: Install dependencies
-        run: yarn --prefer-offline --pure-lockfile
+          node-version: '16.x'
+          cache: 'pnpm'
+      - run: pnpm install
       - name: Unit tests & coverage
-        run: yarn test
+        run: pnpm coverage:ci
   lint:
     name: lint
     runs-on: ubuntu-latest
     steps:
-      - name: checkout
-        uses: actions/checkout@v3
-      - name: remove git auth
-        run: git config --unset http.https://github.com/.extraheader
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-      - name: Configure Yarn cache
-        uses: actions/cache@v3
+      - uses: actions/checkout@v3
+      - uses: pnpm/action-setup@v2
+      - uses: actions/setup-node@v3
         with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('./yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn
-      - name: Install dependencies
-        run: yarn --prefer-offline --pure-lockfile
-      - name: Standard linting
-        run: yarn standard
+          node-version: '16.x'
+          cache: 'pnpm'
+      - run: pnpm install
+      - run: pnpm lint:ci

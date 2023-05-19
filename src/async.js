@@ -73,7 +73,7 @@ module.exports = async ({
     fileStream.on('error', writeError)
     fileStream.on('data', path => replacePromises.push(new Promise((resolve, reject) =>
       fs.readFile(path, inputReadOptions, (error, data) => {
-        /* istanbul ignore next */
+        /* c8 ignore next */
         if (error) return reject(error)
 
         resolve([path, replaceFn(data)])
