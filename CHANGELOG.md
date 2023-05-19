@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.1.1](https://github.com/FRSOURCE/frs-replace/compare/v4.1.0...v4.1.1) (2023-05-19)
+
 ## [4.1.0](https://github.com/FRSource/frs-replace/compare/v4.0.0...v4.1.0) (2023-02-05)
 
 
