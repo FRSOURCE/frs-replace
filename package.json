@@ -55,7 +55,7 @@
     "@vitest/ui": "^0.31.1",
     "replace": "1.2.2",
     "replace-in-file": "6.3.5",
-    "replace-string": "3.1.0",
+    "replace-string": "4.0.0",
     "standard": "17.0.0",
     "standard-version": "9.5.0",
     "tmp-promise": "3.0.3",
@@ -63,7 +63,7 @@
   },
   "dependencies": {
     "fast-glob": "^3.1.0",
-    "get-stdin": "^8.0.0",
+    "get-stdin": "^9.0.0",
     "write": "^2.0.0",
     "yargs": "^17.0.0"
   }
