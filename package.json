@@ -56,7 +56,7 @@
     "replace": "1.2.2",
     "replace-in-file": "6.3.5",
     "replace-string": "4.0.0",
-    "standard": "17.0.0",
+    "standard": "17.1.0",
     "standard-version": "9.5.0",
     "tmp-promise": "3.0.3",
     "vitest": "^0.31.1"
