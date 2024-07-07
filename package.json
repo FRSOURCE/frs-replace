@@ -54,7 +54,7 @@
     "@vitest/coverage-c8": "^0.33.0",
     "@vitest/ui": "^0.33.0",
     "replace": "1.2.2",
-    "replace-in-file": "8.0.1",
+    "replace-in-file": "8.1.0",
     "replace-string": "4.0.0",
     "standard": "17.1.0",
     "standard-version": "9.5.0",
