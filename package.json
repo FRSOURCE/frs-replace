@@ -9,7 +9,7 @@
   "repository": "https://github.com/FRSOURCE/frs-replace.git",
   "author": "Jakub Freisler <FRSgit@users.noreply.github.com>",
   "license": "Apache-2.0",
-  "packageManager": "pnpm@8.15.8",
+  "packageManager": "pnpm@8.15.9",
   "bugs": {
     "url": "https://github.com/FRSOURCE/frs-replace/issues"
   },
