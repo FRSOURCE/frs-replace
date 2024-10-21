@@ -29,8 +29,8 @@ devDependencies:
     specifier: 1.2.2
     version: 1.2.2
   replace-in-file:
-    specifier: 8.1.0
-    version: 8.1.0
+    specifier: 8.2.0
+    version: 8.2.0
   replace-string:
     specifier: 4.0.0
     version: 4.0.0
@@ -3498,8 +3498,8 @@ packages:
       is-finite: 1.1.0
     dev: true
 
-  /replace-in-file@8.1.0:
-    resolution: {integrity: sha512-ySYfKDH6uFVC4Wt6DcZ2UX0UMCqE7xhWGVqje/15WFVwHxnel1gdZjV8nOW9Nms6h/yQE2MWyeIToeqFLZkp4w==}
+  /replace-in-file@8.2.0:
+    resolution: {integrity: sha512-hMsQtdYHwWviQT5ZbNsgfu0WuCiNlcUSnnD+aHAL081kbU9dPkPocDaHlDvAHKydTWWpx1apfcEcmvIyQk3CpQ==}
     engines: {node: '>=18'}
     hasBin: true
     dependencies:
