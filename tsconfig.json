@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "strict": true,
+    "module": "NodeNext",
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true
+  }
+}
