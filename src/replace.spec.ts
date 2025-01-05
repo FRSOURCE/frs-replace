@@ -31,9 +31,9 @@ let output: string, dir: string;
 let input: tmp.FileResult | undefined, input2: tmp.FileResult | undefined;
 
 const cleanInputs = () => {
-  input2 && input2.cleanup();
+  input2?.cleanup();
   input2 = undefined;
-  input && input.cleanup();
+  input?.cleanup();
   input = undefined;
 };
 
@@ -82,10 +82,10 @@ const createDemoInputs = async () => {
 }
 
 afterEach(() => {
-  fs.existsSync(output) &&
-    (fs.lstatSync(output).isDirectory()
-      ? fs.rmdirSync(output)
-      : fs.unlinkSync(output));
+  if (fs.existsSync(output)) {
+    if (fs.lstatSync(output).isDirectory()) fs.rmdirSync(output);
+    else fs.unlinkSync(output);
+  }
 });
 
 describe('argument validation', () => {

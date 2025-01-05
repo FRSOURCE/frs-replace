@@ -54,10 +54,10 @@ let output: string, dir: string;
 }
 
 afterEach(() => {
-  fs.existsSync(output) &&
-    (fs.lstatSync(output).isDirectory()
-      ? fs.rmdirSync(output)
-      : fs.unlinkSync(output));
+  if (fs.existsSync(output)) {
+    if (fs.lstatSync(output).isDirectory()) fs.rmdirSync(output);
+    else fs.unlinkSync(output);
+  }
 });
 
 test('no arguments', () => {
@@ -130,9 +130,9 @@ test('stdout argument', () => {
 describe('input argument', async () => {
   let input: tmp.FileResult | undefined, input2: tmp.FileResult | undefined;
   const cleanInputs = () => {
-    input && input.cleanup();
+    input?.cleanup();
     input = undefined;
-    input2 && input2.cleanup();
+    input2?.cleanup();
     input2 = undefined;
   };
 
