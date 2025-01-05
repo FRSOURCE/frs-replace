@@ -92,5 +92,8 @@
     "fast-glob": "3.3.2",
     "get-stdin": "9.0.0",
     "yargs": "17.7.2"
+  },
+  "engines": {
+    "node": ">=20.0.0"
   }
 }
