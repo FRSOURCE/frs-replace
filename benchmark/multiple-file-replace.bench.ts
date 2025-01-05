@@ -81,7 +81,7 @@ describe(`input as glob pattern [${inputFilesNo} files]`, () => {
   );
 
   bench(
-    'replace-in-file (async)',
+    'replace-in-file (sync)',
     async () => {
       const { replaceInFile } = await import('replace-in-file');
       await replaceInFile({
