@@ -227,17 +227,17 @@ const result = sync({
 
 ### input as glob pattern [40 files]
 
-| Rank | Library                       | Average latency [ms] | Difference percentage (comparing&nbsp;to&nbsp;best&nbsp;average&nbsp;latency) |
-| ---- | ----------------------------- | -------------------- | ----------------------------------------------------------------------------- |
-| 1    | @frsource/frs-replace (async) | 0.63 ± 1.11%         | +0.00%                                                                        |
-| 2    | @frsource/frs-replace (sync)  | 0.72 ± 0.76%         | +14.38%                                                                       |
-| 3    | replace-in-file (async)       | 0.85 ± 0.74%         | +33.88%                                                                       |
-| 4    | replace-in-file (async)       | 0.92 ± 1.36%         | +44.73%                                                                       |
+| Rank | Library | Average latency [ms] | Difference percentage (comparing&nbsp;to&nbsp;best&nbsp;average&nbsp;latency) |
+| --- | --- | --- | --- |
+| 1 | @frsource/frs-replace (sync) | 0.45 ± 1.11% | +0.00% |
+| 2 | replace-in-file (async) | 0.71 ± 1.30% | +57.48% |
+| 3 | @frsource/frs-replace (async) | 1.83 ± 1.19% | +302.13% |
+| 4 | replace-in-file (async) | 2.87 ± 1.09% | +532.37% |
 
 ### input & replacement as strings
 
-| Rank | Library                       | Average latency [ms] | Difference percentage (comparing&nbsp;to&nbsp;best&nbsp;average&nbsp;latency) |
-| ---- | ----------------------------- | -------------------- | ----------------------------------------------------------------------------- |
-| 1    | @frsource/frs-replace (sync)  | 0.01 ± 0.33%         | +0.00%                                                                        |
-| 2    | @frsource/frs-replace (async) | 0.01 ± 0.32%         | +12.15%                                                                       |
-| 3    | replaceString                 | 0.03 ± 0.72%         | +517.31%                                                                      |
+| Rank | Library | Average latency [ms] | Difference percentage (comparing&nbsp;to&nbsp;best&nbsp;average&nbsp;latency) |
+| --- | --- | --- | --- |
+| 1 | @frsource/frs-replace (sync) | 0.01 ± 0.32% | +0.00% |
+| 2 | @frsource/frs-replace (async) | 0.01 ± 0.32% | +12.84% |
+| 3 | replaceString | 0.09 ± 0.68% | +942.55% |
