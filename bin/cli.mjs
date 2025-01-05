@@ -4,7 +4,7 @@ import yargs from 'yargs/yargs';
 import { hideBin } from 'yargs/helpers';
 import { sync } from '../dist/index.mjs';
 
-(process.env.CI || ~process.argv.indexOf('--no-stdin')
+(~process.argv.indexOf('--no-stdin')
   ? Promise.resolve()
   : (await import('get-stdin')).default()
 ).then(async (stdin) => {

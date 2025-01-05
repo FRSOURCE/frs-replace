@@ -1,8 +1,8 @@
-import childProcess from 'child_process';
 import fs from 'fs';
 import tmp from 'tmp-promise';
 import glob from 'fast-glob';
 import path from 'path';
+import { SyncOptions, execaSync } from 'execa';
 import {
   afterAll,
   afterEach,
@@ -19,7 +19,7 @@ const tmpPrefixes = {
 };
 const defaultOptions = {
   timeout: 2000,
-  encoding: 'utf-8',
+  reject: false,
 } as const;
 const content = `aąbcćdeęfg%hi
 jklmn
@@ -62,7 +62,7 @@ afterEach(() => {
 
 test('no arguments', () => {
   const result = runCli();
-  expect(result.status, 'process should send error status (1)').toEqual(1);
+  expect(result.exitCode, 'process should send error status (1)').toEqual(1);
   expect(result.parsedOutput, 'stdout should be empty').toEqual('');
   expect(
     result.parsedError,
@@ -71,8 +71,8 @@ test('no arguments', () => {
 });
 
 test('one argument', () => {
-  const result = runCli('sth');
-  expect(result.status, 'process should send error status (1)').toEqual(1);
+  const result = runCli(['sth']);
+  expect(result.exitCode, 'process should send error status (1)').toEqual(1);
   expect(result.parsedOutput, 'stdout should be empty').toEqual('');
   expect(
     result.parsedError,
@@ -82,7 +82,7 @@ test('one argument', () => {
 
 test('two arguments', () => {
   const result = runCli(['sth', 'sth']);
-  expect(result.status, 'process should send error status (1)').toEqual(1);
+  expect(result.exitCode, 'process should send error status (1)').toEqual(1);
   expect(result.parsedOutput, 'stdout should be empty').toEqual('');
   expect(result.parsedError).toEqual('Missing required argument: i');
 });
@@ -93,7 +93,7 @@ describe('content argument', () => {
     ['-c', '--content'],
     content,
     (result) => {
-      expect(result.status, 'process should send success status (0)').toEqual(
+      expect(result.exitCode, 'process should send success status (0)').toEqual(
         0,
       );
       expect(
@@ -107,7 +107,7 @@ describe('content argument', () => {
 
 test('no stdout argument', () => {
   const result = runCli([needle, replacement, '--content', content]);
-  expect(result.status, 'process should send success status (0)').toEqual(0);
+  expect(result.exitCode, 'process should send success status (0)').toEqual(0);
   expect(result.parsedOutput, 'stdout should be empty').toEqual('');
   expect(result.parsedError, 'stderr should be empty').toEqual('');
 });
@@ -120,7 +120,7 @@ test('stdout argument', () => {
     content,
     '--stdout',
   ]);
-  expect(result.status, 'process should send success status (0)').toEqual(0);
+  expect(result.exitCode, 'process should send success status (0)').toEqual(0);
   expect(result.parsedOutput, 'stdout should contain replaced string').toEqual(
     expectedOutput,
   );
@@ -174,9 +174,10 @@ describe('input argument', async () => {
       ['-i', '--input'],
       () => input!.path,
       (result) => {
-        expect(result.status, 'process should send success status (0)').toEqual(
-          0,
-        );
+        expect(
+          result.exitCode,
+          'process should send success status (0)',
+        ).toEqual(0);
         expect(
           result.parsedOutput,
           'stdout should contain replaced string',
@@ -203,9 +204,10 @@ describe('input argument', async () => {
       ['-i', '--input'],
       () => [input!.path, input2!.path],
       (result) => {
-        expect(result.status, 'process should send success status (0)').toEqual(
-          0,
-        );
+        expect(
+          result.exitCode,
+          'process should send success status (0)',
+        ).toEqual(0);
         expect(
           result.parsedOutput,
           'stdout should contain replaced string',
@@ -253,9 +255,10 @@ describe('input argument', async () => {
       ['-i', '--input'],
       () => [input!.path, input2!.path],
       (result) => {
-        expect(result.status, 'process should send success status (0)').toEqual(
-          0,
-        );
+        expect(
+          result.exitCode,
+          'process should send success status (0)',
+        ).toEqual(0);
         expect(
           result.parsedOutput,
           'stdout should contain replaced string',
@@ -294,9 +297,10 @@ describe('input argument', async () => {
       ['-i', '--input'],
       `${dir}/${tmpPrefixes.input}*`,
       (result) => {
-        expect(result.status, 'process should send success status (0)').toEqual(
-          0,
-        );
+        expect(
+          result.exitCode,
+          'process should send success status (0)',
+        ).toEqual(0);
         expect(
           result.parsedOutput,
           'stdout should contain replaced string',
@@ -341,12 +345,12 @@ describe('i-read-opts argument', async () => {
       { input: content },
     );
 
-    expect(result.status, 'process should send error status (1)').toEqual(1);
+    expect(result.exitCode, 'process should send error status (1)').toEqual(1);
     expect(result.parsedOutput, 'stdout should be empty').toEqual('');
     expect(
       result.parsedError,
       'stderr contain error about missing i-read-opts dependency: i argument',
-    ).toEqual('Missing required argument: i');
+    ).toEqual('i-read-opts -> i');
   });
 
   test('wrong with input argument', () => {
@@ -360,7 +364,7 @@ describe('i-read-opts argument', async () => {
       '--stdout',
     ]);
 
-    expect(result.status, 'process should send error status (1)').toEqual(1);
+    expect(result.exitCode, 'process should send error status (1)').toEqual(1);
     expect(result.parsedOutput, 'stdout should be empty').toEqual('');
 
     if (process.version.includes('v16')) {
@@ -398,7 +402,9 @@ describe('i-read-opts argument', async () => {
       '--stdout',
     ]);
 
-    expect(result.status, 'process should send success status (0)').toEqual(0);
+    expect(result.exitCode, 'process should send success status (0)').toEqual(
+      0,
+    );
     expect(
       result.parsedOutput,
       'stdout should contain replaced string',
@@ -458,12 +464,12 @@ describe('i-glob-opts argument', async () => {
       { input: content },
     );
 
-    expect(result.status, 'process should send error status (1)').toEqual(1);
+    expect(result.exitCode, 'process should send error status (1)').toEqual(1);
     expect(result.parsedOutput, 'stdout should be empty').toEqual('');
     expect(
       result.parsedError,
       'stderr contain error about missing i-glob-opts dependency: i argument',
-    ).toEqual('Missing required argument: i');
+    ).toEqual('i-glob-opts -> i');
   });
 
   test('set with input argument', () => {
@@ -477,7 +483,9 @@ describe('i-glob-opts argument', async () => {
       '--stdout',
     ]);
 
-    expect(result.status, 'process should send success status (0)').toEqual(0);
+    expect(result.exitCode, 'process should send success status (0)').toEqual(
+      0,
+    );
     expect(result.parsedOutput, 'stdout should be empty').toEqual('');
     expect(result.parsedError, 'stderr should be empty').toEqual('');
   });
@@ -535,7 +543,9 @@ describe('o-join-str argument', () => {
       '--stdout',
     ]);
 
-    expect(result.status, 'process should send success status (0)').toEqual(0);
+    expect(result.exitCode, 'process should send success status (0)').toEqual(
+      0,
+    );
     expect(
       result.parsedOutput,
       'stdout should contain replaced string',
@@ -551,7 +561,7 @@ describe('output argument', async () => {
     ['-o', '--output'],
     outputPath,
     (result) => {
-      expect(result.status, 'process should send success status (0)').toEqual(
+      expect(result.exitCode, 'process should send success status (0)').toEqual(
         0,
       );
       expect(result.parsedOutput, 'stdout should be empty').toEqual('');
@@ -580,15 +590,15 @@ describe('input options argument', async () => {
       { input: content },
     );
 
-    expect(result.status, 'process should send error status (1)').toEqual(1);
+    expect(result.exitCode, 'process should send error status (1)').toEqual(1);
     expect(result.parsedOutput, 'stdout should be empty').toEqual('');
     expect(
       result.parsedError,
       'stderr contain error about missing i-read-opts dependency: i argument',
-    ).toEqual('Missing required argument: i');
+    ).toEqual('o-write-opts -> o');
   });
 
-  test('correct with input argument', () => {
+  test('correct with output argument', () => {
     const result = runCli(
       [
         needle,
@@ -602,9 +612,9 @@ describe('input options argument', async () => {
       { input: content },
     );
 
-    console.log('zxczxc', result);
-
-    expect(result.status, 'process should send success status (0)').toEqual(0);
+    expect(result.exitCode, 'process should send success status (0)').toEqual(
+      0,
+    );
     expect(result.parsedOutput, 'stdout should be empty').toEqual('');
     expect(result.parsedError, 'stderr should be empty').toEqual('');
 
@@ -623,7 +633,7 @@ describe('stdin && output argument', () => {
     ['-o', '--output'],
     outputPath,
     (result) => {
-      expect(result.status, 'process should send success status (0)').toEqual(
+      expect(result.exitCode, 'process should send success status (0)').toEqual(
         0,
       );
       expect(
@@ -653,7 +663,7 @@ describe('flags argument', async () => {
     ['-f', '--flags'],
     flags,
     (result) => {
-      expect(result.status, 'process should send success status (0)').toEqual(
+      expect(result.exitCode, 'process should send success status (0)').toEqual(
         0,
       );
       expect(
@@ -702,7 +712,9 @@ describe('replace-fn argument', async () => {
   });
 
   checkEachArgCombination(args, ['-r', '--replace-fn'], undefined, (result) => {
-    expect(result.status, 'process should send success status (0)').toEqual(0);
+    expect(result.exitCode, 'process should send success status (0)').toEqual(
+      0,
+    );
     expect(
       result.parsedOutput,
       'stdout should contain replaced string',
@@ -719,7 +731,7 @@ describe('replace-fn argument', async () => {
 test('stdin stream as input argument (like piped stream)', async () => {
   const result = runCli([needle, replacement, '--stdout'], { input: content });
 
-  expect(result.status, 'process should send success status (0)').toEqual(0);
+  expect(result.exitCode, 'process should send success status (0)').toEqual(0);
   expect(result.parsedOutput, 'stdout should contain replaced string').toEqual(
     expectedOutput,
   );
@@ -745,21 +757,14 @@ function checkEachArgCombination(
   }
 }
 
-function runCli(
-  _args?: string | string[],
-  _options?: Omit<childProcess.SpawnSyncOptionsWithStringEncoding, 'encoding'>,
-) {
-  _options = Object.assign({}, defaultOptions, _options);
-  const result = childProcess.spawnSync(
-    'node',
-    ['./bin/cli.mjs'].concat(_args || []),
-    _options,
-  );
+function runCli(args: string[] = [], options?: SyncOptions) {
+  const _options = Object.assign({}, defaultOptions, options);
+  const result = execaSync(_options)`node ${['./bin/cli.mjs', ...args]}`;
 
   return {
     ...result,
-    parsedOutput: result.stdout.toString().trim(),
+    parsedOutput: result.stdout?.toString().trim() || '',
     parsedError:
-      result.stderr.toString().trim().split('\n').pop()?.trim() ?? '',
+      result.stderr?.toString().trim().split('\n').pop()?.trim() ?? '',
   };
 }

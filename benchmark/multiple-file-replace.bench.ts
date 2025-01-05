@@ -2,7 +2,7 @@ import { join } from 'path';
 import { FileResult, dirSync, file } from 'tmp-promise';
 import { afterAll, beforeAll, bench, describe } from 'vitest';
 import { sync } from 'fast-glob';
-import { readFileSync, unlinkSync, writeFileSync } from 'fs';
+import { unlinkSync } from 'fs';
 import { appendFile } from 'fs/promises';
 
 const regex = /'^[adjox]/gm;
@@ -51,44 +51,6 @@ beforeAll(async () => {
 afterAll(async () => {
   inputs.forEach((input) => input.cleanup);
   inputs = [];
-
-  const { default: benchResults } = await import('./results.json');
-
-  let benchResultsContent = '';
-  for (const testGroup of benchResults.files[0].groups) {
-    const groupName = testGroup.fullName.split(' > ').slice(1).join(' > ');
-    benchResultsContent +=
-      '\n### ' +
-      groupName +
-      '\n\n' +
-      '| Rank | Library | Average latency [ms] | Difference percentage (comparing&nbsp;to&nbsp;best&nbsp;average&nbsp;latency) |\n' +
-      '| --- | --- | --- | --- |\n' +
-      testGroup.benchmarks
-        .sort((a, b) => a.rank - b.rank)
-        .reduce(
-          (p, v) =>
-            p +
-            '| ' +
-            v.rank +
-            ' | ' +
-            v.name +
-            ' | ' +
-            `${v.mean.toFixed(2)} \xb1 ${v.rme.toFixed(2)}%` +
-            ' | ' +
-            `+${((v.mean / testGroup.benchmarks[0].mean - 1) * 100).toFixed(2)}%` +
-            ' |\n',
-          '',
-        );
-  }
-
-  const readmeContent = readFileSync('./README.md')
-    .toString()
-    .replace(
-      /(##\s:chart_with_upwards_trend:\sBenchmarks)[\s\S]*?(?:$|(?:\s##\s))/,
-      `$1\n\n> Tested on Node ${process.version}.\n${benchResultsContent}`,
-    );
-
-  writeFileSync('./README.md', readmeContent);
 });
 
 describe(`input as glob pattern [${inputFilesNo} files]`, () => {
