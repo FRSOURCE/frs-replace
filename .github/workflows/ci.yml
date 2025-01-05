@@ -13,7 +13,7 @@ concurrency:
 
 jobs:
   test:
-    name: Lint, Unit tests & coverage and release 
+    name: Lint, Unit tests & coverage and release
     runs-on: ubuntu-latest
     permissions:
       contents: write
