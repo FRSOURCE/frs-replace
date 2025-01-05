@@ -1,5 +1,4 @@
-# @frsource/frs-replace
-
+<p align="center">
   <a href="https://www.npmjs.com/package/@frsource/frs-replace">
     <img src="https://img.shields.io/npm/v/@frsource/frs-replace" alt="NPM version badge">
   </a>
@@ -12,51 +11,68 @@
   <a href="https://github.com/FRSOURCE/frs-replace/blob/master/LICENSE">
     <img src="https://img.shields.io/github/license/FRSOURCE/frs-replace" alt="license MIT badge">
   </a>
+</p>
 
-[![NPM version badge](https://img.shields.io/npm/v/@frsource/frs-replace.svg?style=flat)](https://www.npmjs.com/package/@frsource/frs-replace)
-[![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
-[![Coverage Status](https://coveralls.io/repos/github/FRSource/frs-replace/badge.svg?branch=master)](https://coveralls.io/github/FRSource/frs-replace?branch=master)
-[![codebeat badge](https://codebeat.co/badges/5496a006-a13d-48cc-baeb-37c79a1f6444)](https://codebeat.co/projects/github-com-frsource-frs-replace-master)
+<h1 align="center">@frsource/frs-replace - replace content directly in your files/streams with ease (CLI included)! 📝</h1>
 
-The fastest ([see benchmarks](#chart_with_upwards_trend-benchmarks)) CLI & Node wrapper around [javascript replace](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace) which allows in-file replacing (with possibility to save changed file as a copy), [globbing](<https://en.wikipedia.org/wiki/Glob_(programming)>), [piping](<https://en.wikipedia.org/wiki/Pipeline_(Unix)>) and many more!
+<p align="center">
+  <a href="https://github.com/FRSOURCE/autoresize-textarea/issues">File an Issue</a>
+  ·
+  <a href="#questions">Question or an idea?</a>
+  ·
+  <a href="#chart_with_upwards_trend-benchmarks">Benchmarks</a>
+  <br>
+</p>
 
-- [:scroll: Installation](#scroll-installation)
-- [:keyboard: CLI](#keyboard-cli)
-- [:mag_right: Examples and recipes - CLI](#mag_right-examples-and-recipes---cli)
-- [:books: Node API](#books-node-api)
-- [:mag_right: Examples and recipes - Node](#mag_right-examples-and-recipes---node)
-- [:chart_with_upwards_trend: Benchmarks](#chart_with_upwards_trend-benchmarks)
+<p align="center"><strong>The fastest</strong> (<a href="#chart_with_upwards_trend-benchmarks">see benchmarks</a>) CLI & Node wrapper around <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace">javascript replace</a> which allows in-file replacing (with possibility to save changed file as a copy), <a href="https://en.wikipedia.org/wiki/Glob_(programming)">globbing</a>, <a href="https://en.wikipedia.org/wiki/Pipeline_(Unix)">piping</a> and many more!</p>
+
+<p align="center">
+  <a href="#keyboard-cli">Getting Started (CLI)</a>
+  ·
+  <a href="#mag_right-examples-and-recipes---cli">Examples and recipes (CLI)</a>
+  <br>
+  <a href="#books-node-api">Getting Started (Node)</a>
+  ·
+  <a href="#mag_right-examples-and-recipes---node">Examples and recipes (Node)</a>
+  <br>
+</p>
 
 ## :scroll: Installation
 
 ```bash
 npm install @frsource/frs-replace
-yarn add @frsource/frs-replace
-pnpm install @frsource/frs-replace
 ```
 
 or execute it right away:
 
 ```bash
 npx @frsource/frs-replace
-yarn dlx @frsource/frs-replace
-pnpx @frsource/frs-replace
 ```
 
 ## :keyboard: CLI
 
 ```bash
-frs-replace <regex> <replacement> [options]
+frs-replace <regex> <replacement> [flags]
 ```
 
-### Positionals
+Basic usage:
 
-| Option          | Type   | Description                                                                                                                             |
+```bash
+frs-replace something anything -i foo.js -o foo_replaced.js
+
+# all of the occurences of "something" in `foo.js` will be replaced with "anything" and saved to `foo_replaced.js`
+```
+
+More examples [below](#mag_right-examples-and-recipes---cli).
+
+### Arguments
+
+| Argument        | Type   | Description                                                                                                                             |
 | --------------- | ------ | --------------------------------------------------------------------------------------------------------------------------------------- |
 | \<regex\>       | string | First parameter to [RegExp constructor](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp#Syntax) |
 | \<replacement\> | string | String or path to replacement function file (see &#8209;&#8209;replace&#8209;fn switch for details)                                     |
 
-### Options
+### Flags
 
 > Note: Every boolean option can be negated with use of `--no-` prefix, e.g. `--stdout` or `--no-stdout` turn stdout output on or off, respectively.
 
@@ -73,7 +89,7 @@ frs-replace <regex> <replacement> [options]
 | &#8209;&#8209;o-join-str                 | string                                      | \n                                               | Used when joining multiple files, passed directly to [javascript join](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/join#Syntax)                                                                                                                                                        |
 | &#8209;c, &#8209;&#8209;content          | string                                      | _-_                                              | Content to be replaced (takes precedence over stream & file input)                                                                                                                                                                                                                                                                |
 | &#8209;s, &#8209;&#8209;strategy         | "join" or "flatten" or "preserve-structure" | "join"                                           | Output file generation strategy. _"join"_ - joins all input files and outputs them as a single file using path passed as: _"output"_. _"preserve-structure"_ - saves all files to the _"output"_ directory keeping relative directory structure._"flatten"_ - same as _"preserve-structure"_ but flattens the directory structure |
-| &#8209;f, &#8209;&#8209;flags            | combination of _gim_ flags                  | g                                                | [RegExp](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp#Syntax) flags                                                                                                                                                                                                                    |
+| &#8209;f, &#8209;&#8209;flags            | string, combination of _gim_ flags          | g                                                | [RegExp](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp#Syntax) flags                                                                                                                                                                                                                    |
 | &#8209;&#8209;stdout                     | boolean                                     | _true_ if piped input present, _false_ otherwise | Force sending output on stdout                                                                                                                                                                                                                                                                                                    |
 | &#8209;r, &#8209;&#8209;replace&#8209;fn | boolean                                     | false                                            | Treat replacement argument as path to file containing replacement function                                                                                                                                                                                                                                                        |
 | &#8209;h, &#8209;&#8209;help             | boolean                                     | _-_                                              | Show help                                                                                                                                                                                                                                                                                                                         |
@@ -81,43 +97,43 @@ frs-replace <regex> <replacement> [options]
 
 ## :mag_right: Examples and recipes - CLI
 
-### 1. Replace all `a` occurrences with `b` from the `foo.js` file and return the result (using CLI)
+##### 1. Replace all `a` occurrences with `b` from the `foo.js` file and return the result (using CLI)
 
 ```bash
 frs-replace a b -i foo.js --stdout
 ```
 
-### 2. Replace all `a` occurrences with `b` from `foo.js` and save the result to the `foo_replaced.js` (using CLI)
+##### 2. Replace all `a` occurrences with `b` from `foo.js` and save the result to the `foo_replaced.js` (using CLI)
 
 ```bash
 frs-replace a b -i foo.js -o foo_replaced.js
 ```
 
-### 3. Replace all `a` occurrences with `b` from an array of files and save the result to the `foo_replaced.js` using default `\n` as a result-joining string (using CLI)
+##### 3. Replace all `a` occurrences with `b` from an array of files and save the result to the `foo_replaced.js` using default `\n` as a result-joining string (using CLI)
 
 ```bash
 frs-replace a b -i foo.js -i foo2.js -o foo_replaced.js
 ```
 
-### 4. Replace all `a` occurrences with `b` from all `.js` files in the `foo` directory and save the result to the `foo_replaced.js` using `\n/////\n` as a result-joining string (using CLI)
+##### 4. Replace all `a` occurrences with `b` from all `.js` files in the `foo` directory and save the result to the `foo_replaced.js` using `\n/////\n` as a result-joining string (using CLI)
 
 ```bash
 frs-replace a b -i foo/*.js -o foo_replaced.js --o-join-str "\n/////\n"
 ```
 
-### 5. Replace all `a` occurrences with `b` in a content string `abcd` and save the result to the `foo_replaced.js` (using CLI)
+##### 5. Replace all `a` occurrences with `b` in a content string `abcd` and save the result to the `foo_replaced.js` (using CLI)
 
 ```bash
 frs-replace a b --content abcd -o foo_replaced.js
 ```
 
-### 6. Replace all `a` occurrences with `b` from a piped stream and save it to the output file (using CLI)
+##### 6. Replace all `a` occurrences with `b` from a piped stream and save it to the output file (using CLI)
 
 ```bash
 <read-file> | frs-replace a b > <output-file-path>
 ```
 
-### 7. Replace all `a` occurrences with `b` from a piped stream and pass it through the `stdout` stream to the `<next-command>` (using CLI)
+##### 7. Replace all `a` occurrences with `b` from a piped stream and pass it through the `stdout` stream to the `<next-command>` (using CLI)
 
 ```bash
 <read-file> | frs-replace a b | <next-command>
@@ -133,7 +149,7 @@ import { sync, async } from '@frsource/frs-replace';
 sync({
   /* options */
 });
-async({
+await async({
   /* options */
 });
 ```
@@ -159,7 +175,7 @@ Where `/* options */` is an object containing:
 
 > Note: While all of examples are using synchronous API method in all cases your can use `async` as well.
 
-### 1. Replace all `a` occurrences with `b` from the `foo.js` file and return the result
+##### 1. Replace all `a` occurrences with `b` from the `foo.js` file and return the result
 
 ```javascript
 import { sync } from '@frsource/frs-replace';
@@ -172,7 +188,7 @@ const result = sync({
 });
 ```
 
-### 2. Replace all `a` occurrences with `b` from `foo.js` and save the result to the `foo_replaced.js`
+##### 2. Replace all `a` occurrences with `b` from `foo.js` and save the result to the `foo_replaced.js`
 
 ```javascript
 import { sync } from '@frsource/frs-replace';
@@ -184,7 +200,7 @@ const result = sync({
 });
 ```
 
-### 3. Replace all `a` occurrences with `b` from an array of files and save the result to the `foo_replaced.js` using default `\n` as a result-joining string
+##### 3. Replace all `a` occurrences with `b` from an array of files and save the result to the `foo_replaced.js` using default `\n` as a result-joining string
 
 ```javascript
 import { sync } from '@frsource/frs-replace';
@@ -196,7 +212,7 @@ const result = sync({
 });
 ```
 
-### 4. Replace all `a` occurrences with `b` from all `.js` files in the `foo` directory and save the result to the `foo_replaced.js` using `\n/////\n` as a result-joining string
+##### 4. Replace all `a` occurrences with `b` from all `.js` files in the `foo` directory and save the result to the `foo_replaced.js` using `\n/////\n` as a result-joining string
 
 ```javascript
 import { sync } from '@frsource/frs-replace';
@@ -209,7 +225,7 @@ const result = sync({
 });
 ```
 
-### 5. Replace all `a` occurrences with `b` in a content string `abcd` and save the result to the `foo_replaced.js`
+##### 5. Replace all `a` occurrences with `b` in a content string `abcd` and save the result to the `foo_replaced.js`
 
 ```javascript
 import { sync } from '@frsource/frs-replace';
@@ -227,17 +243,17 @@ const result = sync({
 
 ### input as glob pattern [40 files]
 
-| Rank | Library | Average latency [ms] | Difference percentage (comparing&nbsp;to&nbsp;best&nbsp;average&nbsp;latency) |
-| --- | --- | --- | --- |
-| 1 | @frsource/frs-replace (sync) | 0.45 ± 1.13% | +0.00% |
-| 2 | replace-in-file (async) | 0.70 ± 1.24% | +55.55% |
-| 3 | @frsource/frs-replace (async) | 1.85 ± 1.33% | +310.81% |
-| 4 | replace-in-file (async) | 2.97 ± 1.28% | +559.52% |
+| Rank | Library                       | Average latency [ms] | Difference percentage (comparing&nbsp;to&nbsp;best&nbsp;average&nbsp;latency) |
+| ---- | ----------------------------- | -------------------- | ----------------------------------------------------------------------------- |
+| 1    | @frsource/frs-replace (sync)  | 0.45 ± 1.13%         | +0.00%                                                                        |
+| 2    | replace-in-file (async)       | 0.70 ± 1.24%         | +55.55%                                                                       |
+| 3    | @frsource/frs-replace (async) | 1.85 ± 1.33%         | +310.81%                                                                      |
+| 4    | replace-in-file (async)       | 2.97 ± 1.28%         | +559.52%                                                                      |
 
 ### input & replacement as strings
 
-| Rank | Library | Average latency [ms] | Difference percentage (comparing&nbsp;to&nbsp;best&nbsp;average&nbsp;latency) |
-| --- | --- | --- | --- |
-| 1 | @frsource/frs-replace (sync) | 0.01 ± 0.28% | +0.00% |
-| 2 | @frsource/frs-replace (async) | 0.01 ± 0.43% | +13.55% |
-| 3 | replaceString | 0.09 ± 0.29% | +980.58% |
+| Rank | Library                       | Average latency [ms] | Difference percentage (comparing&nbsp;to&nbsp;best&nbsp;average&nbsp;latency) |
+| ---- | ----------------------------- | -------------------- | ----------------------------------------------------------------------------- |
+| 1    | @frsource/frs-replace (sync)  | 0.01 ± 0.28%         | +0.00%                                                                        |
+| 2    | @frsource/frs-replace (async) | 0.01 ± 0.43%         | +13.55%                                                                       |
+| 3    | replaceString                 | 0.09 ± 0.29%         | +980.58%                                                                      |
