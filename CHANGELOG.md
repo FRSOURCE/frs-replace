@@ -1,3 +1,23 @@
+# [5.0.0](https://github.com/FRSOURCE/frs-replace/compare/v4.1.1...v5.0.0) (2025-01-05)
+
+
+### Bug Fixes
+
+* **deps:** update all major dependency bump ([#185](https://github.com/FRSOURCE/frs-replace/issues/185)) ([5c9eaf0](https://github.com/FRSOURCE/frs-replace/commit/5c9eaf0a5eeb76198dfc06e2adca643a28773f14))
+* **deps:** update all minor dependency bump ([#201](https://github.com/FRSOURCE/frs-replace/issues/201)) ([d8a7f13](https://github.com/FRSOURCE/frs-replace/commit/d8a7f13496977a56e5ad507217d024b8cf9f2ca6))
+* **deps:** update all minor dependency bump ([#206](https://github.com/FRSOURCE/frs-replace/issues/206)) ([83de92f](https://github.com/FRSOURCE/frs-replace/commit/83de92f43b026cb51668f7e5550ac42e746188fe))
+* **deps:** update all minor dependency bump ([#212](https://github.com/FRSOURCE/frs-replace/issues/212)) ([04a3fd1](https://github.com/FRSOURCE/frs-replace/commit/04a3fd1a79acc115267f78029a11c689c98d191a))
+* **deps:** update all non-major dependency bump ([16e6891](https://github.com/FRSOURCE/frs-replace/commit/16e6891ddd1f5c224d1261a0bc47c68516cff2f7))
+* **deps:** update all non-major dependency bump ([7dd634e](https://github.com/FRSOURCE/frs-replace/commit/7dd634ed8985672f5ff628da101f434e8d5d1a12))
+
+
+* feat!: update frs-replace to modern ESM ([9243c63](https://github.com/FRSOURCE/frs-replace/commit/9243c63cbc5361e706f4fbddf4eb5ce80cbe9a43))
+
+
+### BREAKING CHANGES
+
+* drop support for Node lower than 20
+
 # Changelog
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
