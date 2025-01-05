@@ -51,7 +51,7 @@
     "release:ci": "pnpm release --yes",
     "test": "vitest",
     "coverage": "vitest --coverage",
-    "test:ci": "vitest run --coverage --allowOnly && vitest bench --run --allowOnly && TEST_TYPE=bench vitest run --allowOnly",
+    "test:ci": "vitest run --coverage && vitest bench --run && TEST_TYPE=bench vitest run --allowOnly",
     "eslint": "eslint .",
     "prettier": "prettier . --check",
     "lint": "pnpm eslint && pnpm prettier",
