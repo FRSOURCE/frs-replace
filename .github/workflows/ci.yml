@@ -28,6 +28,7 @@ jobs:
           node-version-file: '.nvmrc'
           cache: 'pnpm'
       - run: pnpm install
+
       - run: pnpm lint
       - name: Unit tests & coverage
         run: pnpm test:ci
