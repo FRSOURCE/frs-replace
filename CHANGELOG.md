@@ -1,3 +1,10 @@
+## [5.1.1](https://github.com/FRSOURCE/frs-replace/compare/v5.1.0...v5.1.1) (2025-01-06)
+
+
+### Bug Fixes
+
+* clean up package.json definition ([af28af5](https://github.com/FRSOURCE/frs-replace/commit/af28af5e0f62cf95e2c21abbdf4ca49ac6bbff2b))
+
 # [5.1.0](https://github.com/FRSOURCE/frs-replace/compare/v5.0.4...v5.1.0) (2025-01-06)
 
 
