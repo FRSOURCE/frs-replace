@@ -1,24 +1,27 @@
 import { sep, join, normalize, dirname } from 'path';
 import { readFileSync, writeFileSync, mkdirSync } from 'fs';
 import fastGlob from 'fast-glob';
-import { writeError, getReplaceFn } from './utils.js';
-import type {
-  Strategy,
-  InputStrategyFnSync,
-  OutputStrategyFnSync,
-  Args,
-  FileResult,
-} from './types.js';
+import { writeError, getReplaceFn } from './utils.mjs';
 
-const writeSync = (
-  path: string,
-  data: string,
-  options: Parameters<typeof writeFileSync>[2],
-) => {
+/**
+ * @typedef {import("./types.mjs").Strategy} Strategy
+ * @typedef {import("./types.mjs").InputStrategyFnSync} InputStrategyFnSync
+ * @typedef {import("./types.mjs").OutputStrategyFnSync} OutputStrategyFnSync
+ * @typedef {import("./types.mjs").Args} Args
+ * @typedef {import("./types.mjs").FileResult} FileResult
+ */
+
+/**
+ * @param {string} path
+ * @param {string} data
+ * @param {Parameters<typeof import('fs').writeFileSync>[2]} options
+ */
+const writeSync = (path, data, options) => {
   mkdirSync(dirname(path), { recursive: true });
   writeFileSync(path, data, options);
 };
 
+/** @satisfies {Record<Strategy, InputStrategyFnSync>} */
 const inputStrategyMap = {
   join: (results, outputJoinString) => {
     let result = results[0]?.[1] || '';
@@ -35,13 +38,10 @@ const inputStrategyMap = {
     return [results];
   },
   'preserve-structure': (...args) => args,
-} satisfies Record<Strategy, InputStrategyFnSync>;
+};
 
-const multipleFilesOutputStrategy: OutputStrategyFnSync = (
-  results,
-  output,
-  outputWriteOptions,
-) => {
+/** @type {OutputStrategyFnSync} */
+const multipleFilesOutputStrategy = (results, output, outputWriteOptions) => {
   for (let i = 0; i < results.length; ++i) {
     const result = results[i];
     result[0] = join(output, result[0]);
@@ -50,6 +50,7 @@ const multipleFilesOutputStrategy: OutputStrategyFnSync = (
   return results;
 };
 
+/** @satisfies {Record<Strategy, OutputStrategyFnSync>} */
 const outputStrategyMap = {
   join: (results, output, outputWriteOptions) => {
     writeSync(output, results[0][1], outputWriteOptions);
@@ -58,10 +59,12 @@ const outputStrategyMap = {
   },
   flatten: multipleFilesOutputStrategy,
   'preserve-structure': multipleFilesOutputStrategy,
-} satisfies Record<Strategy, OutputStrategyFnSync>;
+};
 
-export default ({ strategy = 'join', needle, replacement, ...args }: Args) => {
-  let results: FileResult[];
+/** @param {Args} args */
+export default ({ strategy = 'join', needle, replacement, ...args }) => {
+  /** @type {FileResult[]} */
+  let results;
   const replaceFn = getReplaceFn(needle, replacement);
 
   if ('content' in args && args.content !== undefined) {
@@ -93,8 +96,11 @@ export default ({ strategy = 'join', needle, replacement, ...args }: Args) => {
   const outputJoinString =
     ('outputJoinString' in args ? args.outputJoinString : undefined) ?? '\n';
 
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  [results] = inputStrategyMap[strategy](results!, outputJoinString);
+  [results] = inputStrategyMap[strategy](
+    // @ts-expect-error: False positive from TS - this variable is assigned already
+    results,
+    outputJoinString,
+  );
 
   if ('output' in args && args.output !== undefined) {
     args.outputWriteOptions ??= 'utf8';

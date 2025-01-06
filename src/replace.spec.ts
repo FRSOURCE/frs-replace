@@ -4,8 +4,8 @@ import fs from 'fs';
 import path from 'path';
 import glob from 'fast-glob';
 
-import * as replace from './index.js';
-import type { Args } from './types.js';
+import * as replace from './index.mjs';
+import type { Args } from './types.mjs';
 
 const tmpPrefixes = {
   input: 'frs-replace-replace-in',

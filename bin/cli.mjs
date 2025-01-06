@@ -2,7 +2,7 @@
 import { resolve } from 'path';
 import yargs from 'yargs/yargs';
 import { hideBin } from 'yargs/helpers';
-import { sync } from '../dist/index.mjs';
+import sync from '../src/sync.mjs';
 
 (~process.argv.indexOf('--no-stdin')
   ? Promise.resolve()

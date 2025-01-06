@@ -6,14 +6,11 @@
     "frs-replace": "./bin/cli.mjs"
   },
   "type": "module",
-  "source": "src/index.ts",
   "main": "dist/index.mjs",
-  "types": "dist/index.d.ts",
   "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "default": "./dist/index.mjs"
-    },
+    ".": "./src/index.mjs",
+    "./sync": "./src/sync.mjs",
+    "./async": "./src/async.mjs",
     "./*": "./*.mjs"
   },
   "repository": "https://github.com/FRSOURCE/frs-replace.git",
@@ -26,7 +23,7 @@
   "homepage": "https://github.com/FRSOURCE/frs-replace#readme",
   "files": [
     "bin/cli.mjs",
-    "dist",
+    "src/*.mjs",
     "package.json"
   ],
   "keywords": [
@@ -45,8 +42,7 @@
     "javascript"
   ],
   "scripts": {
-    "start": "pnpm clean && microbundle watch",
-    "build": "pnpm clean && microbundle src/index.ts --target node --compress -f modern",
+    "typecheck": "tsc --project tsconfig.json",
     "release": "semantic-release",
     "release:ci": "pnpm release --yes",
     "test": "vitest",
@@ -57,8 +53,7 @@
     "lint": "pnpm eslint && pnpm prettier",
     "fix": "pnpm eslint --fix && prettier . --write",
     "bench": "vitest bench",
-    "test:bench": "TEST_TYPE=bench vitest",
-    "clean": "rimraf dist"
+    "test:bench": "TEST_TYPE=bench vitest"
   },
   "devDependencies": {
     "@frsource/eslint-config": "1.33.0",
@@ -78,11 +73,9 @@
     "execa": "^9.5.2",
     "globals": "^15.14.0",
     "globals-vitest": "^1.6.0",
-    "microbundle": "^0.15.1",
     "prettier": "^3.2.5",
     "replace-in-file": "8.3.0",
     "replace-string": "4.0.0",
-    "rimraf": "^5.0.5",
     "semantic-release": "^23.0.8",
     "tmp-promise": "3.0.3",
     "typescript": "^5.4.5",

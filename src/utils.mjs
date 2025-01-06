@@ -1,12 +1,17 @@
-import type { Args } from './types.js';
+/** @typedef {import("./types.mjs").Args} Args */
 
-export const writeError = (msg: string) => {
+/** @param {string} msg */
+export const writeError = (msg) => {
   throw new Error(`@frsource/frs-replace :: ${msg}`);
 };
 
-export const getReplaceFn = (needle: Args['needle'], replacement: string) =>
+/**
+ * @param {Args['needle']} needle
+ * @param {string} replacement
+ */
+export const getReplaceFn = (needle, replacement) =>
   typeof needle === 'string'
-    ? (content: string) => {
+    ? /** @param {string} content */ (content) => {
         const needleLen = needle.length;
         let result = '';
         let i;
@@ -19,4 +24,5 @@ export const getReplaceFn = (needle: Args['needle'], replacement: string) =>
 
         return result + content.slice(endIndex, content.length);
       }
-    : (content: string) => content.replace(needle, replacement);
+    : /** @param {string} content */ (content) =>
+        content.replace(needle, replacement);

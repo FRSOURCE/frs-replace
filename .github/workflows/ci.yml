@@ -29,7 +29,6 @@ jobs:
           cache: 'pnpm'
       - run: pnpm install
       - run: pnpm lint
-      - run: pnpm build
       - name: Unit tests & coverage
         run: pnpm test:ci
       - if: github.event_name == 'push' && github.ref == 'refs/heads/main'

@@ -1,24 +1,27 @@
 import { sep, join, normalize, dirname } from 'path';
 import { readFile, promises as fs } from 'fs';
 import fastGlob from 'fast-glob';
-import { writeError, getReplaceFn } from './utils.js';
-import type {
-  Strategy,
-  InputStrategyFn,
-  OutputStrategyFn,
-  Args,
-  FileResult,
-} from './types.js';
+import { writeError, getReplaceFn } from './utils.mjs';
 
-const write = async (
-  path: string,
-  data: string,
-  options: Parameters<(typeof fs)['writeFile']>[2],
-) => {
+/**
+ * @typedef {import("./types.mjs").Strategy} Strategy
+ * @typedef {import("./types.mjs").InputStrategyFn} InputStrategyFn
+ * @typedef {import("./types.mjs").OutputStrategyFn} OutputStrategyFn
+ * @typedef {import("./types.mjs").Args} Args
+ * @typedef {import("./types.mjs").FileResult} FileResult
+ */
+
+/**
+ * @param {string} path
+ * @param {string} data
+ * @param {Parameters<typeof import('fs').writeFileSync>[2]} options
+ */
+const write = async (path, data, options) => {
   await fs.mkdir(dirname(path), { recursive: true });
   await fs.writeFile(path, data, options);
 };
 
+/** @satisfies {Record<Strategy, InputStrategyFn>} */
 const inputStrategyMap = {
   join: async (results, outputJoinString) => [
     await Promise.all(await results).then((results) => {
@@ -39,9 +42,10 @@ const inputStrategyMap = {
       }),
     ),
   'preserve-structure': async (results) => await Promise.all(await results),
-} satisfies Record<Strategy, InputStrategyFn>;
+};
 
-const multipleFilesOutputStrategy: OutputStrategyFn = async (
+/** @type {OutputStrategyFn} */
+const multipleFilesOutputStrategy = async (
   results,
   output,
   outputWriteOptions,
@@ -54,6 +58,7 @@ const multipleFilesOutputStrategy: OutputStrategyFn = async (
     }),
   );
 
+/** @satisfies {Record<Strategy, OutputStrategyFn>} */
 const outputStrategyMap = {
   join: async (results, output, outputWriteOptions) => {
     const result = (await results)[0];
@@ -63,22 +68,20 @@ const outputStrategyMap = {
   },
   flatten: multipleFilesOutputStrategy,
   'preserve-structure': multipleFilesOutputStrategy,
-} satisfies Record<Strategy, OutputStrategyFn>;
+};
 
-export default async ({
-  strategy = 'join',
-  needle,
-  replacement,
-  ...args
-}: Args) => {
-  let inputData: Parameters<InputStrategyFn>[0];
+/** @param {Args} args */
+export default async ({ strategy = 'join', needle, replacement, ...args }) => {
+  /** @type {Parameters<InputStrategyFn>[0]} */
+  let inputData;
   const replaceFn = getReplaceFn(needle, replacement);
 
   if ('content' in args && args.content !== undefined) {
     inputData = [['', replaceFn(args.content)]];
   } else if ('input' in args && args.input !== undefined) {
     args.inputReadOptions ??= 'utf8';
-    const replacePromises: Promise<FileResult>[] = [];
+    /** @type {Promise<FileResult>[]} */
+    const replacePromises = [];
 
     const fileStream = fastGlob.stream(args.input, args.inputGlobOptions);
     fileStream.on('error', writeError);
@@ -94,8 +97,8 @@ export default async ({
         ),
       ),
     );
-    inputData = new Promise<typeof replacePromises>((resolve) =>
-      fileStream.once('end', () => resolve(replacePromises)),
+    inputData = /** @type {Promise<typeof replacePromises>} */ new Promise(
+      (resolve) => fileStream.once('end', () => resolve(replacePromises)),
     ).catch(writeError);
   } else {
     writeError('at least one input source must be defined!');
@@ -109,8 +112,11 @@ export default async ({
   const outputJoinString =
     ('outputJoinString' in args ? args.outputJoinString : undefined) ?? '\n';
 
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  let results = await inputStrategyMap[strategy](inputData!, outputJoinString);
+  let results = await inputStrategyMap[strategy](
+    // @ts-expect-error: False positive from TS - this variable is assigned already
+    inputData,
+    outputJoinString,
+  );
 
   if ('output' in args && args.output !== undefined) {
     args.outputWriteOptions ??= 'utf8';

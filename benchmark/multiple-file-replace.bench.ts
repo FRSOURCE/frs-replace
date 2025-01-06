@@ -57,7 +57,7 @@ describe(`input as glob pattern [${inputFilesNo} files]`, () => {
   bench(
     '@frsource/frs-replace (async)',
     async () => {
-      const { async } = await import('../src/index.js');
+      const { async } = await import('../src/index.mjs');
       await async({
         needle: regex,
         replacement,
@@ -70,7 +70,7 @@ describe(`input as glob pattern [${inputFilesNo} files]`, () => {
   bench(
     '@frsource/frs-replace (sync)',
     async () => {
-      const { sync } = await import('../src/index.js');
+      const { sync } = await import('../src/index.mjs');
       sync({
         needle: regex,
         replacement,
@@ -111,7 +111,7 @@ describe('input & replacement as strings', () => {
   bench(
     '@frsource/frs-replace (async)',
     async () => {
-      const { async } = await import('../src/index.js');
+      const { async } = await import('../src/index.mjs');
       await async({
         needle: regex.source,
         replacement,
@@ -124,7 +124,7 @@ describe('input & replacement as strings', () => {
   bench(
     '@frsource/frs-replace (sync)',
     async () => {
-      const { sync } = await import('../src/index.js');
+      const { sync } = await import('../src/index.mjs');
       sync({
         needle: regex.source,
         replacement,
