@@ -1,3 +1,10 @@
+# [5.1.0](https://github.com/FRSOURCE/frs-replace/compare/v5.0.4...v5.1.0) (2025-01-06)
+
+
+### Features
+
+* trigger release after mjs rewrite ([220f472](https://github.com/FRSOURCE/frs-replace/commit/220f4721d0e895499b53742c86c8555730864c0b))
+
 ## [5.0.4](https://github.com/FRSOURCE/frs-replace/compare/v5.0.3...v5.0.4) (2025-01-06)
 
 ## [5.0.3](https://github.com/FRSOURCE/frs-replace/compare/v5.0.2...v5.0.3) (2025-01-06)
