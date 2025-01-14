@@ -85,5 +85,6 @@
   },
   "engines": {
     "node": ">=20.0.0"
-  }
+  },
+  "funding": "https://buymeacoffee.com/frsource"
 }
