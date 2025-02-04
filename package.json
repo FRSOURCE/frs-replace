@@ -6,11 +6,21 @@
     "frs-replace": "bin/cli.mjs"
   },
   "type": "module",
-  "main": "dist/index.mjs",
+  "main": "src/index.mjs",
+  "types": "dist/index.d.mts",
   "exports": {
-    ".": "./src/index.mjs",
-    "./sync": "./src/sync.mjs",
-    "./async": "./src/async.mjs",
+    ".": {
+      "default": "./src/index.mjs",
+      "types": "./dist/index.d.mts"
+    },
+    "./sync": {
+      "default": "./src/sync.mjs",
+      "types": "./dist/sync.d.mts"
+    },
+    "./async": {
+      "default": "./src/async.mjs",
+      "types": "./dist/async.d.mts"
+    },
     "./*": "./*.mjs"
   },
   "repository": {
@@ -25,6 +35,7 @@
   },
   "homepage": "https://github.com/FRSOURCE/frs-replace#readme",
   "files": [
+    "dist",
     "bin/cli.mjs",
     "src/*.mjs",
     "package.json"
@@ -45,9 +56,10 @@
     "javascript"
   ],
   "scripts": {
-    "typecheck": "tsc --project tsconfig.json",
+    "typecheck": "tsc --project tsconfig.json --noEmit",
     "release": "semantic-release",
     "release:ci": "pnpm release --yes",
+    "build": "tsc --project tsconfig.json --declaration --emitDeclarationOnly",
     "test": "vitest",
     "coverage": "vitest --coverage",
     "test:ci": "vitest run --coverage && vitest bench --run && TEST_TYPE=bench vitest run --allowOnly",

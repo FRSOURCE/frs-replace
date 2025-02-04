@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "target": "ESNext",
+    "outDir": "./dist",
     "strict": true,
     "strictFunctionTypes": true,
     "strictPropertyInitialization": true,
@@ -14,8 +15,7 @@
     "resolveJsonModule": true,
     "allowJs": true,
     "checkJs": true,
-    "skipLibCheck": true,
-    "noEmit": true
+    "skipLibCheck": true
   },
   "include": ["src/*.mjs"]
 }
