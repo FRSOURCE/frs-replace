@@ -1,3 +1,10 @@
+## [5.1.11](https://github.com/FRSOURCE/frs-replace/compare/v5.1.10...v5.1.11) (2025-02-04)
+
+
+### Bug Fixes
+
+* add missing type declarations ([8c9f3e7](https://github.com/FRSOURCE/frs-replace/commit/8c9f3e72b1c1a4077a0bb6e949a53953f0776003))
+
 ## [5.1.10](https://github.com/FRSOURCE/frs-replace/compare/v5.1.9...v5.1.10) (2025-01-27)
 
 ## [5.1.9](https://github.com/FRSOURCE/frs-replace/compare/v5.1.8...v5.1.9) (2025-01-27)
