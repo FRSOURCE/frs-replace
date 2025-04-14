@@ -245,15 +245,15 @@ const result = sync({
 
 | Rank | Library                       | Average latency [ms] | Difference percentage (comparing&nbsp;to&nbsp;best&nbsp;average&nbsp;latency) |
 | ---- | ----------------------------- | -------------------- | ----------------------------------------------------------------------------- |
-| 1    | @frsource/frs-replace (sync)  | 0.45 ± 1.06%         | +0.00%                                                                        |
-| 2    | replace-in-file (sync)        | 0.82 ± 1.30%         | +80.14%                                                                       |
-| 3    | @frsource/frs-replace (async) | 1.79 ± 1.12%         | +294.64%                                                                      |
-| 4    | replace-in-file (async)       | 3.11 ± 1.20%         | +583.53%                                                                      |
+| 1    | @frsource/frs-replace (sync)  | 0.46 ± 1.09%         | +0.00%                                                                        |
+| 2    | replace-in-file (sync)        | 0.82 ± 1.41%         | +78.94%                                                                       |
+| 3    | @frsource/frs-replace (async) | 1.80 ± 1.22%         | +294.65%                                                                      |
+| 4    | replace-in-file (async)       | 3.08 ± 1.12%         | +572.89%                                                                      |
 
 ### input & replacement as strings
 
 | Rank | Library                       | Average latency [ms] | Difference percentage (comparing&nbsp;to&nbsp;best&nbsp;average&nbsp;latency) |
 | ---- | ----------------------------- | -------------------- | ----------------------------------------------------------------------------- |
-| 1    | @frsource/frs-replace (sync)  | 0.01 ± 0.28%         | +0.00%                                                                        |
-| 2    | @frsource/frs-replace (async) | 0.01 ± 0.30%         | +15.09%                                                                       |
-| 3    | replaceString                 | 0.17 ± 0.94%         | +2041.78%                                                                     |
+| 1    | @frsource/frs-replace (sync)  | 0.01 ± 0.27%         | +0.00%                                                                        |
+| 2    | @frsource/frs-replace (async) | 0.01 ± 0.25%         | +11.09%                                                                       |
+| 3    | replaceString                 | 0.18 ± 1.02%         | +2151.61%                                                                     |
