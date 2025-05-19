@@ -1,6 +1,6 @@
 {
   "name": "@frsource/frs-replace",
-  "version": "5.1.42",
+  "version": "5.1.43",
   "description": "Simple wrapper around javascript replace with CLI usage support!",
   "bin": {
     "frs-replace": "bin/cli.mjs"
