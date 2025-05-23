@@ -386,7 +386,7 @@ describe('i-read-opts argument', async () => {
         result.parsedError,
         'stderr should complain wrong encoding argument',
       ).toContain(
-        'TypeError [ERR_INVALID_OPT_VALUE_ENCODING]: The value "incorrect-encoding" is invalid for option "encoding"',
+        "TypeError [ERR_INVALID_ARG_VALUE]: The argument 'encoding' is invalid encoding. Received 'incorrect-encoding'",
       );
     }
   });
