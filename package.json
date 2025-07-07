@@ -93,7 +93,7 @@
   "dependencies": {
     "fast-glob": "3.3.3",
     "get-stdin": "9.0.0",
-    "yargs": "17.7.2"
+    "yargs": "18.0.0"
   },
   "engines": {
     "node": ">=20.0.0"
