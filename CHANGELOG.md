@@ -1,3 +1,10 @@
+## [5.1.61](https://github.com/FRSOURCE/frs-replace/compare/v5.1.60...v5.1.61) (2025-07-10)
+
+
+### Bug Fixes
+
+* **deps:** update dependency yargs to v18 ([#293](https://github.com/FRSOURCE/frs-replace/issues/293)) ([7663ceb](https://github.com/FRSOURCE/frs-replace/commit/7663ceb74030e128704c911fe980ce2bf2a88906))
+
 ## [5.1.60](https://github.com/FRSOURCE/frs-replace/compare/v5.1.59...v5.1.60) (2025-06-30)
 
 ## [5.1.59](https://github.com/FRSOURCE/frs-replace/compare/v5.1.58...v5.1.59) (2025-06-30)
