@@ -71,8 +71,8 @@
     "test:bench": "TEST_TYPE=bench vitest"
   },
   "devDependencies": {
-    "@frsource/eslint-config": "1.56.0",
-    "@frsource/prettier-config": "1.31.0",
+    "@frsource/eslint-config": "1.57.0",
+    "@frsource/prettier-config": "1.32.0",
     "@frsource/semantic-release-config": "^1.37.0",
     "@types/node": "22.17.2",
     "@types/yargs": "^17.0.32",
