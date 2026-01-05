@@ -80,7 +80,7 @@
     "@vitest/ui": "4.0.16",
     "eslint": "^9.2.0",
     "execa": "^9.5.2",
-    "globals": "^16.0.0",
+    "globals": "^17.0.0",
     "globals-vitest": "^4.0.0",
     "prettier": "^3.2.5",
     "replace-in-file": "8.3.0",
