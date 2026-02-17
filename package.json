@@ -92,7 +92,7 @@
   },
   "dependencies": {
     "fast-glob": "3.3.3",
-    "get-stdin": "9.0.0",
+    "get-stdin": "10.0.0",
     "yargs": "18.0.0"
   },
   "engines": {
