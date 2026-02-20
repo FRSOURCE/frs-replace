@@ -78,7 +78,7 @@
     "@types/yargs": "^17.0.32",
     "@vitest/coverage-v8": "4.0.18",
     "@vitest/ui": "4.0.18",
-    "eslint": "^9.2.0",
+    "eslint": "^10.0.0",
     "execa": "^9.5.2",
     "globals": "^17.0.0",
     "globals-vitest": "^4.0.0",
