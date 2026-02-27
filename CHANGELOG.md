@@ -1,3 +1,10 @@
+## [5.1.92](https://github.com/FRSOURCE/frs-replace/compare/v5.1.91...v5.1.92) (2026-02-27)
+
+
+### Bug Fixes
+
+* **deps:** update dependency get-stdin to v10 ([#341](https://github.com/FRSOURCE/frs-replace/issues/341)) ([bd05172](https://github.com/FRSOURCE/frs-replace/commit/bd05172c4953a13d3f89d51a42bda651bfd9b860))
+
 ## [5.1.91](https://github.com/FRSOURCE/frs-replace/compare/v5.1.90...v5.1.91) (2025-12-08)
 
 ## [5.1.90](https://github.com/FRSOURCE/frs-replace/compare/v5.1.89...v5.1.90) (2025-12-01)
