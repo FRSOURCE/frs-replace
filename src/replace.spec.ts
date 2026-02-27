@@ -311,7 +311,7 @@ describe('argument validation', () => {
     afterEach(cleanInputs);
 
     it('with output dir set', async () => {
-      const output = tmp.tmpNameSync({ prefix: tmpPrefixes.output, dir });
+      output = tmp.tmpNameSync({ prefix: tmpPrefixes.output, dir });
       const expectedOutput = [
         [output, getExpectedOutput()[0][1]],
       ] as replace.FileResult[];
@@ -397,7 +397,7 @@ describe('argument validation', () => {
     });
 
     it('with output dir set and outputWriteOptions as object', async () => {
-      const output = tmp.tmpNameSync({ prefix: tmpPrefixes.output, dir });
+      output = tmp.tmpNameSync({ prefix: tmpPrefixes.output, dir });
       const expectedOutput = getExpectedOutput();
       expectedOutput[0][0] = output;
       await testSyncAsync(
@@ -418,7 +418,7 @@ describe('argument validation', () => {
   });
 
   it('replacement as function', async () => {
-    const output = tmp.tmpNameSync({ prefix: tmpPrefixes.output, dir });
+    output = tmp.tmpNameSync({ prefix: tmpPrefixes.output, dir });
     const expectedOutput = getExpectedOutput();
     expectedOutput[0] = [output, content.replace(needle, replaceFn)];
     await testSyncAsync(
