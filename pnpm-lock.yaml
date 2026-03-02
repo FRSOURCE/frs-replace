@@ -50,7 +50,7 @@ importers:
         version: 17.3.0
       globals-vitest:
         specifier: ^4.0.0
-        version: 4.0.15(vitest@4.0.18)
+        version: 4.0.18(vitest@4.0.18)
       prettier:
         specifier: ^3.2.5
         version: 3.8.1
@@ -1256,10 +1256,10 @@ packages:
     resolution: {integrity: sha512-nFR0zLpU2YCaRxwoCJvL6UvCH2JFyFVIvwTLsIf21AuHlMskA1hhTdk+LlYJtOlYt9v6dvszD2BGRqBL+iQK9Q==}
     deprecated: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
 
-  globals-vitest@4.0.15:
-    resolution: {integrity: sha512-ayidMaaGFVdTff+gCcf9ibAznS+Au/6MV1bIkm98tK6l+9l/hzfyQb/VF7iOYKTXgDONGTloa6ocBbT1QIqyNg==}
+  globals-vitest@4.0.18:
+    resolution: {integrity: sha512-7Wz0aVmr+em2PHZXThaB328rQrLsPKjgzSjdWfz/a6w2mBMXT4LHoXqNDQzB43hw1lT9OOGZKOMnEAwc64AAtA==}
     peerDependencies:
-      vitest: 4.0.15
+      vitest: 4.0.18
 
   globals@17.3.0:
     resolution: {integrity: sha512-yMqGUQVVCkD4tqjOJf3TnrvaaHDMYp4VlUSObbkIiuCPe/ofdMBFIAcBbCSRFWOnos6qRiTVStDwqPLUclaxIw==}
@@ -3729,7 +3729,7 @@ snapshots:
       once: 1.4.0
       path-is-absolute: 1.0.1
 
-  globals-vitest@4.0.15(vitest@4.0.18):
+  globals-vitest@4.0.18(vitest@4.0.18):
     dependencies:
       vitest: 4.0.18(@types/node@24.10.13)(@vitest/ui@4.0.18)(terser@5.31.0)
 
