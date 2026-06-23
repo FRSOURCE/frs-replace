@@ -29,7 +29,7 @@
   },
   "author": "Jakub Freisler <FRSgit@users.noreply.github.com>",
   "license": "MIT",
-  "packageManager": "pnpm@10.33.4",
+  "packageManager": "pnpm@10.34.4",
   "bugs": {
     "url": "https://github.com/FRSOURCE/frs-replace/issues"
   },
@@ -71,10 +71,10 @@
     "test:bench": "TEST_TYPE=bench vitest"
   },
   "devDependencies": {
-    "@frsource/eslint-config": "1.81.0",
-    "@frsource/prettier-config": "1.44.0",
+    "@frsource/eslint-config": "1.84.0",
+    "@frsource/prettier-config": "1.46.0",
     "@frsource/semantic-release-config": "^1.37.0",
-    "@types/node": "24.12.4",
+    "@types/node": "24.13.2",
     "@types/yargs": "^17.0.32",
     "@vitest/coverage-v8": "4.1.9",
     "@vitest/ui": "4.1.9",
