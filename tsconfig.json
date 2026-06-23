@@ -2,6 +2,7 @@
   "compilerOptions": {
     "target": "ESNext",
     "outDir": "./dist",
+    "rootDir": "./src",
     "strict": true,
     "strictFunctionTypes": true,
     "strictPropertyInitialization": true,
