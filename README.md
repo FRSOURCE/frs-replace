@@ -146,12 +146,8 @@ frs-replace a b --content abcd -o foo_replaced.js
 ```javascript
 import { sync, async } from '@frsource/frs-replace';
 
-sync({
-  /* options */
-});
-await async({
-  /* options */
-});
+sync({/* options */});
+await async({/* options */});
 ```
 
 Where `/* options */` is an object containing:
