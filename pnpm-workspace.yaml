@@ -3,4 +3,4 @@ allowBuilds:
 onlyBuiltDependencies:
   - esbuild
 overrides:
-  prettier: 3.9.3
+  prettier: 3.9.4
