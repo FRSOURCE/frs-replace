@@ -53,7 +53,7 @@ importers:
         version: 17.7.0
       globals-vitest:
         specifier: ^4.0.0
-        version: 4.1.9(vitest@4.1.9)
+        version: 4.1.10(vitest@4.1.9)
       prettier:
         specifier: 3.9.4
         version: 3.9.4
@@ -1057,10 +1057,10 @@ packages:
     resolution: {integrity: sha512-Wjlyrolmm8uDpm/ogGyXZXb1Z+Ca2B8NbJwqBVg0axK9GbBeoS7yGV6vjXnYdGm6X53iehEuxxbyiKp8QmN4Vw==}
     engines: {node: 18 || 20 || >=22}
 
-  globals-vitest@4.1.9:
-    resolution: {integrity: sha512-xfaA1UxSE55EANjxEV0ympNJbGpfK/qRwU6fzHbKkHDuzh2zqPtFCCbLbia87Y+ubk4DqQXDwQ75HdMNI9h2XQ==}
+  globals-vitest@4.1.10:
+    resolution: {integrity: sha512-ql0B7hLVmVXkeP+Dk6eNstxsOedOpnY7H7PCD5tc/8LYS0I5elFhp8xJMMW0VYT2lIMZkENnofD4enhLw8kxtg==}
     peerDependencies:
-      vitest: 4.1.9
+      vitest: 4.1.10
 
   globals@17.7.0:
     resolution: {integrity: sha512-Czmyns5dUsq4seFBR/Kdydhmo8y9kC79hiSkPn0YcGtNnYWnrgt0vjrSjx9tspoDGWm2CMarffRuLjM4xUz8xg==}
@@ -3347,7 +3347,7 @@ snapshots:
       minipass: 7.1.3
       path-scurry: 2.0.2
 
-  globals-vitest@4.1.9(vitest@4.1.9):
+  globals-vitest@4.1.10(vitest@4.1.9):
     dependencies:
       vitest: 4.1.9(@types/node@24.13.3)(@vitest/coverage-v8@4.1.9)(@vitest/ui@4.1.9)(vite@8.1.0(@types/node@24.13.3))
 
