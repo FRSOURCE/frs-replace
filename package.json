@@ -29,7 +29,7 @@
   },
   "author": "Jakub Freisler <FRSgit@users.noreply.github.com>",
   "license": "MIT",
-  "packageManager": "pnpm@11.10.0",
+  "packageManager": "pnpm@11.18.0",
   "bugs": {
     "url": "https://github.com/FRSOURCE/frs-replace/issues"
   },
@@ -93,7 +93,7 @@
   "dependencies": {
     "fast-glob": "3.3.3",
     "get-stdin": "10.0.0",
-    "yargs": "18.0.0"
+    "yargs": "18.1.0"
   },
   "engines": {
     "node": ">=20.0.0"
