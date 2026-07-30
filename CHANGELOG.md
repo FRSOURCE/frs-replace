@@ -1,3 +1,10 @@
+## [5.1.125](https://github.com/FRSOURCE/frs-replace/compare/v5.1.124...v5.1.125) (2026-07-30)
+
+
+### Bug Fixes
+
+* **deps:** update all minor dependency bump ([#389](https://github.com/FRSOURCE/frs-replace/issues/389)) ([4310732](https://github.com/FRSOURCE/frs-replace/commit/431073252abc57a5520b972b612e200e9566854a))
+
 ## [5.1.124](https://github.com/FRSOURCE/frs-replace/compare/v5.1.123...v5.1.124) (2026-07-30)
 
 ## [5.1.123](https://github.com/FRSOURCE/frs-replace/compare/v5.1.122...v5.1.123) (2026-07-27)
