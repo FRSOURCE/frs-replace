@@ -83,7 +83,7 @@
     "globals": "^17.0.0",
     "globals-vitest": "^4.0.0",
     "prettier": "^3.2.5",
-    "replace-in-file": "8.4.0",
+    "replace-in-file": "9.0.0",
     "replace-string": "4.0.0",
     "semantic-release": "^25.0.0",
     "tmp-promise": "3.0.3",
