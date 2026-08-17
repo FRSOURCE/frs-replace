@@ -50,7 +50,7 @@ importers:
         version: 10.0.1
       globals:
         specifier: ^17.0.0
-        version: 17.8.0
+        version: 17.11.0
       globals-vitest:
         specifier: ^4.0.0
         version: 4.1.10(vitest@4.1.10)
@@ -1053,8 +1053,8 @@ packages:
     peerDependencies:
       vitest: 4.1.10
 
-  globals@17.8.0:
-    resolution: {integrity: sha512-Zz/LMDZScFmkakeL2cTHzf+PbWKdpU3uclqkZT7TjDG58j5WPt0PpA+n9uPI24fZtlw07q0OtEi84K+umsRzqQ==}
+  globals@17.11.0:
+    resolution: {integrity: sha512-Z2I8hM+PbJDXQDq3Icgpzv+mPdwr68iZUU9d5WW4FuXfDUQfkZaZuvjMv42/5crNyw154+9+VWXbYrUgDXbxNw==}
     engines: {node: '>=18'}
 
   graceful-fs@4.2.10:
@@ -2320,7 +2320,7 @@ snapshots:
       '@typescript-eslint/parser': 8.65.0(eslint@10.8.1(supports-color@7.2.0))(supports-color@7.2.0)(typescript@6.0.3)
       eslint: 10.8.1(supports-color@7.2.0)
       eslint-config-prettier: 10.1.8(eslint@10.8.1(supports-color@7.2.0))
-      globals: 17.8.0
+      globals: 17.11.0
       typescript: 6.0.3
       typescript-eslint: 8.65.0(eslint@10.8.1(supports-color@7.2.0))(supports-color@7.2.0)(typescript@6.0.3)
     transitivePeerDependencies:
@@ -3284,7 +3284,7 @@ snapshots:
     dependencies:
       vitest: 4.1.10(@types/node@24.13.3)(@vitest/coverage-v8@4.1.10)(@vitest/ui@4.1.10)(vite@8.1.0(@types/node@24.13.3))
 
-  globals@17.8.0: {}
+  globals@17.11.0: {}
 
   graceful-fs@4.2.10: {}
 
