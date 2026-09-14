@@ -74,7 +74,7 @@
     "@frsource/eslint-config": "1.85.10",
     "@frsource/prettier-config": "1.47.9",
     "@frsource/semantic-release-config": "^1.37.0",
-    "@types/node": "24.13.3",
+    "@types/node": "24.13.4",
     "@types/yargs": "^17.0.32",
     "@vitest/coverage-v8": "4.1.11",
     "@vitest/ui": "4.1.11",
