@@ -7,7 +7,7 @@
  * }} CommonArgs
  * @typedef {{
  *    input: Parameters<typeof import('fast-glob').sync>[0];
- *    inputReadOptions?: Parameters<typeof import('fs').readFileSync>[1];
+ *    inputReadOptions?: Parameters<typeof import('fs').readFileSync>[1] | BufferEncoding;
  *    inputGlobOptions?: Parameters<typeof import('fast-glob').sync>[1];
  *  }
  *  | { content: string }
