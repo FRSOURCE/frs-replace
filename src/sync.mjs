@@ -79,7 +79,16 @@ export default ({ strategy = 'join', needle, replacement, ...args }) => {
       const filePath = files[i];
       results.push([
         filePath,
-        replaceFn(readFileSync(filePath, args.inputReadOptions).toString()),
+        replaceFn(
+          readFileSync(
+            filePath,
+            // readFileSync accepts both an encoding string and an options object at
+            // runtime, but TS can't resolve an overload for the union type
+            /** @type {import('fs').ReadFileSyncOptions} */ (
+              args.inputReadOptions
+            ),
+          ).toString(),
+        ),
       ]);
     }
   } else {
