@@ -5,7 +5,7 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
-  prettier: 3.9.9
+  prettier: 3.9.10
 
 importers:
 
@@ -26,7 +26,7 @@ importers:
         version: 1.85.13(eslint@10.11.0(supports-color@7.2.0))(supports-color@7.2.0)(typescript@6.0.3)
       '@frsource/prettier-config':
         specifier: 1.47.12
-        version: 1.47.12(prettier@3.9.9)
+        version: 1.47.12(prettier@3.9.10)
       '@frsource/semantic-release-config':
         specifier: ^1.37.0
         version: 1.116.23(semantic-release@25.0.9(supports-color@7.2.0)(typescript@6.0.3))(supports-color@7.2.0)
@@ -55,8 +55,8 @@ importers:
         specifier: ^5.0.0
         version: 5.0.5(vitest@4.1.11)
       prettier:
-        specifier: 3.9.9
-        version: 3.9.9
+        specifier: 3.9.10
+        version: 3.9.10
       replace-in-file:
         specifier: 9.0.0
         version: 9.0.0
@@ -182,7 +182,7 @@ packages:
   '@frsource/prettier-config@1.47.12':
     resolution: {integrity: sha512-x7lCqTGOXEukJvrJrW73pa37Px+RVdAUyinKGt+3F+3yi4WWfhK7glmVDZtTQQn+2ff5wGROC69lN5jFjMw7ZQ==}
     peerDependencies:
-      prettier: 3.9.9
+      prettier: 3.9.10
 
   '@frsource/semantic-release-config@1.116.23':
     resolution: {integrity: sha512-oa2/X+cA+o545h7vmVgPR5/Bjtju2vAivAx+WQhoM28CddiEA7ZgtIYQZh16KTVfKImrwKZj7MJyLKmwDYSlJA==}
@@ -1728,8 +1728,8 @@ packages:
     resolution: {integrity: sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==}
     engines: {node: '>= 0.8.0'}
 
-  prettier@3.9.9:
-    resolution: {integrity: sha512-Z/CJHIkdujO/OtN7nXUii0Rf3VT5SRuhjBA82Xvu2XhBUgX3nhP67T0LHceBdQLex7OOFGTox+Q5Yg8Jk2Qivg==}
+  prettier@3.9.10:
+    resolution: {integrity: sha512-skGHTH1Yb9QvaTC4hWnRTzEYtCpApF0UMBPz+t/0ZPzP8ihefo/btKd+QA7pUE0fEwA1SbS/NmhyEcstdXOIdA==}
     engines: {node: '>=14'}
     hasBin: true
 
@@ -2384,9 +2384,9 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@frsource/prettier-config@1.47.12(prettier@3.9.9)':
+  '@frsource/prettier-config@1.47.12(prettier@3.9.10)':
     dependencies:
-      prettier: 3.9.9
+      prettier: 3.9.10
 
   '@frsource/semantic-release-config@1.116.23(semantic-release@25.0.9(supports-color@7.2.0)(typescript@6.0.3))(supports-color@7.2.0)':
     dependencies:
@@ -3890,7 +3890,7 @@ snapshots:
 
   prelude-ls@1.2.1: {}
 
-  prettier@3.9.9: {}
+  prettier@3.9.10: {}
 
   pretty-ms@9.3.0:
     dependencies:
