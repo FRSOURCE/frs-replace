@@ -1,3 +1,5 @@
+## [5.1.153](https://github.com/FRSOURCE/frs-replace/compare/v5.1.152...v5.1.153) (2026-11-02)
+
 ## [5.1.152](https://github.com/FRSOURCE/frs-replace/compare/v5.1.151...v5.1.152) (2026-10-26)
 
 ## [5.1.151](https://github.com/FRSOURCE/frs-replace/compare/v5.1.150...v5.1.151) (2026-10-19)
